@@ -96,6 +96,8 @@ class PrintScriptLexer : Lexer {
         val tokenType = when (identifier) {
             "println" -> TypeEnum.PRINT
             "let" -> TypeEnum.VARIABLE_KEYWORD
+            "String" -> TypeEnum.STRING_TYPE
+            "Number" -> TypeEnum.NUMBER_TYPE
             else -> TypeEnum.VALUE_IDENTIFIER
         }
 
