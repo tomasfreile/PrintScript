@@ -5,7 +5,7 @@ import org.example.token.TypeEnum
 class DeclarationParse(){
     private var actual = 0
 
-    fun parse(tokenList: List<Token>): Node{
+    fun parse(tokenList: List<Token>): Node{ //Y si es una operación aritmetica?
         return recursiveParse(tokenList)
     }
 
