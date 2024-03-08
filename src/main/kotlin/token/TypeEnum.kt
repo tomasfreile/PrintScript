@@ -27,4 +27,5 @@ enum class TypeEnum {
     VALUE_IDENTIFIER, //let VALUE_IDENTIFIER: STRING
     STRING, // "hola"
     NUMBER, // 123
+
 }
