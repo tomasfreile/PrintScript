@@ -21,4 +21,6 @@ enum class TypeEnum {
     VARIABLE_KEYWORD, // VARIABLE_KEYWORD name: String
     NUMBER_TYPE, // Number
     STRING_TYPE, // String
+    STRING, // "hola"
+    NUMBER, // 123
 }
