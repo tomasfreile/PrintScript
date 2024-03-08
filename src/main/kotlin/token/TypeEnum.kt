@@ -12,5 +12,6 @@ enum class TypeEnum {
     DIVISION, // /
     NUMBER,
     STRING,
-    TISTA
+    TISTA,
+    TOKENTON
 }

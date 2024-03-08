@@ -2,16 +2,12 @@ package org.example.parser
 
 import org.example.token.Token
 
-data class ASTBinaryNode(val right: ASTBinaryNode?, val left: ASTBinaryNode?, val token: Token)
-class AST(val head: ASTBinaryNode) {
+//ES UN NODO AST BINARIO PORQUE SOPORTA DOS OPERACIONES Y EL TOKEN
+interface Node{
+    val token: Token
+}
+data class ASTBinaryNode(val right: Node?, val left: Node?, override val token: Token): Node
+data class ASTSingleNode(val node: Node?, override val token: Token): Node
 
-    fun getRight(): ASTBinaryNode?{
-        return head.right
-    }
-    fun getLeft(): ASTBinaryNode?{
-        return head.left
-    }
-    fun getHead(): ASTBinaryNode? {
-        return head
-    }
+class AST {
 }
