@@ -6,11 +6,10 @@ fun main() {
     println("Hello World!")
 
     val lexer = PrintScriptLexer()
-    val tokens = lexer.lex("print('Hello World!')")
+    val tokens = lexer.lex("println('Hello World!') let function = 123 + 2 * 3 - 4 / 5 println(function)")
 
     tokens.forEach {
-        println(it.type)
-        println(it.value)
+        println("${it.type} -> ${it.value}")
 
     }
 }

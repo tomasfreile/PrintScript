@@ -57,7 +57,7 @@ class PrintScriptLexer : Lexer {
                             continue
                         }
                         char.isLetter() -> {
-                            column = readIdentifier(line, column, input, tokens)
+                            column = readWord(line, column, input, tokens)
                             continue
                         }
                         else -> {
@@ -85,14 +85,21 @@ class PrintScriptLexer : Lexer {
         return column1 + 1
     }
 
-    private fun readIdentifier(line: Int,column: Int, input: String, tokens: MutableList<Token>): Int {
+    private fun readWord(line: Int, column: Int, input: String, tokens: MutableList<Token>): Int {
         var endIndex = column
         val startIndex = endIndex
         while (input[endIndex].isLetter()) {
             endIndex++
         }
         val identifier = input.substring(startIndex, endIndex)
-        tokens.add(PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, identifier, Coordinate(line, startIndex), Coordinate(line, endIndex)))
+
+        val tokenType = when (identifier) {
+            "println" -> TypeEnum.PRINT
+            "let" -> TypeEnum.VARIABLE_KEYWORD
+            else -> TypeEnum.VALUE_IDENTIFIER
+        }
+
+        tokens.add(PrintScriptToken(tokenType, identifier, Coordinate(line, startIndex), Coordinate(line, endIndex)))
         return endIndex
     }
 
