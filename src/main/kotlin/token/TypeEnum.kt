@@ -19,6 +19,6 @@ enum class TypeEnum {
     // Literals
     VALUE_IDENTIFIER, //let VALUE_IDENTIFIER: STRING
     VARIABLE_KEYWORD, // VARIABLE_KEYWORD name: String
-    NUMBER,
-    STRING,
+    NUMBER_TYPE, // Number
+    STRING_TYPE, // String
 }
