@@ -10,7 +10,7 @@ class DeclarationParse(){
     }
 
     private fun recursiveParse(tokenList: List<Token>): Node{
-        if(tokenList.size == 1){ //Nodo hoja
+        if(tokenList.size == 1) { //Nodo hoja
             return ASTSingleNode(null, tokenList.first())
         }
         return ASTSingleNode(recursiveParse(tokenList.subList(1, tokenList.size)), tokenList.first())
