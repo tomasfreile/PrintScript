@@ -21,6 +21,7 @@ class DeclarationParse(){
     }
 
     private fun isLeaf(tokenList: List<Token>): Boolean{
+        if(tokenList.isEmpty()){ return true }
         when(tokenList.first().type){
             TypeEnum.PLUS, TypeEnum.MINUS, TypeEnum.STAR, TypeEnum.SLASH -> { return false }
             else -> { return true }
