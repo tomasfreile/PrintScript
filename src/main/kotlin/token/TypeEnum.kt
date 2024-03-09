@@ -12,7 +12,7 @@ enum class TypeEnum {
 
     // Separators
     SEMICOLON, // ;
-    DOUBLE_DOT, //:
+    COLON, //:
 
     // Keywords
     PRINT, // print
