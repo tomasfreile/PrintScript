@@ -12,7 +12,7 @@ class DeclarationParse(){
     private fun recursiveParse(tokenList: List<Token>): Node{
         val token: Token = tokenList.first()
         when(token.type){
-            TypeEnum.SEMICOLON -> {  return ASTSingleNode(null, tokenList.first()) }
+            TypeEnum.SEMICOLON -> {  return ASTSingleNode(null, tokenList.first()) } //break recursion because of semicolon
             TypeEnum.NUMBER, TypeEnum.STRING -> { return handleLiteral(tokenList) }
             else -> {  return ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first()) }
         }
@@ -21,12 +21,21 @@ class DeclarationParse(){
     private fun handleLiteral(tokenList: List<Token>): Node{
         return if(hasBinaryOperation(tokenSubList(tokenList))){ //there is a Literal, might be a binary operation
             hanldeBinaryOperation(tokenList) //it is binary operation, so let's do it ;)
-        } else{ // it is not binary, so keep going until semiColon
-            ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first())
+        } else{ // it is not binary, so keep going until semiColon or break recursion
+            if( isBreakRecursion(tokenList) ){
+                ASTSingleNode(null, tokenList.first()) //break recursion because of literal on right side!! open for update
+            } else {
+                ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first())
+            }
         }
     }
 
+    private fun isBreakRecursion(tokenList: List<Token>): Boolean {
+        return tokenList.size == 1
+    }
+
     private fun hasBinaryOperation(tokenList: List<Token>): Boolean{
+        if(tokenList.isEmpty()){ return false }
         when(tokenList.first().type){ //checks if should stop
             TypeEnum.SEMICOLON -> { return false } //if next is semicolon, stop
             TypeEnum.PLUS, TypeEnum.MINUS, TypeEnum.STAR, TypeEnum.SLASH -> { return true } // at least there is a binary Operation
@@ -61,18 +70,26 @@ class DeclarationParse(){
     }
 
     private fun isSplit(tokenList: List<Token>): Boolean{
-        val plusIndex = getAritmeticOperatorIndex(tokenList, TypeEnum.PLUS)
-        val minusIndex = getAritmeticOperatorIndex(tokenList, TypeEnum.MINUS)
+        val plusIndex = getArithmeticOperatorIndex(tokenList, TypeEnum.PLUS)
+        val minusIndex = getArithmeticOperatorIndex(tokenList, TypeEnum.MINUS)
         return plusIndex > 0 || minusIndex > 0 //verify if there is a sign for split
     }
 
-    private fun split(tokenList: List<Token>): Node{ // I should check which comes first, Minus or Plus
-        val plusIndex = getAritmeticOperatorIndex(tokenList, TypeEnum.PLUS)
-        val minusIndex = getAritmeticOperatorIndex(tokenList, TypeEnum.MINUS)
-        return if(plusIndex < minusIndex){ // if plus index comes first
-                constructSplitNode(tokenList, plusIndex)
-        } else{                            // else minus index comes first
+    private fun split(tokenList: List<Token>): Node{ // I should check which comes first, Minus or Plus, at least one of each > 0 because of split condition
+        val plusIndex = getArithmeticOperatorIndex(tokenList, TypeEnum.PLUS)
+        val minusIndex = getArithmeticOperatorIndex(tokenList, TypeEnum.MINUS)
+        return when{
+            plusIndex > 0 && minusIndex > 0 -> { splitWhenBothIndexesPositive(tokenList, minusIndex, plusIndex) }
+            plusIndex > 0 -> { constructSplitNode(tokenList, plusIndex) }
+            else -> { constructSplitNode(tokenList, minusIndex) } //minusIndex > 0
+        }
+    }
+
+    private fun splitWhenBothIndexesPositive(tokenList: List<Token>, minusIndex: Int, plusIndex: Int): Node{
+        return if(plusIndex > minusIndex){
             constructSplitNode(tokenList, minusIndex)
+        } else{
+            constructSplitNode(tokenList, plusIndex)
         }
     }
 
@@ -88,7 +105,7 @@ class DeclarationParse(){
         return tokenList.subList(1, tokenList.size)
     }
 
-    private fun getAritmeticOperatorIndex(tokenList: List<Token>, type: TypeEnum): Int{ //gets first found
+    private fun getArithmeticOperatorIndex(tokenList: List<Token>, type: TypeEnum): Int{ //gets first found
         var position = 0
         for (token in tokenList){
             when(token.type){
