@@ -27,4 +27,22 @@ class ParserTest {
 
     }
 
+    @Test
+    fun BinaryDeclarationTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "sum", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.DOUBLE_DOT, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STRING_TYPE, "Number", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STRING, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "4", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        val parser: Parser = Parser()
+        val node: Node? = parser.parse(tokenList)
+        assertNotNull(node)
+        assertEquals(node?.token?.type, TypeEnum.VARIABLE_KEYWORD)
+    }
 }
