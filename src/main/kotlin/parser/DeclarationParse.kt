@@ -13,43 +13,46 @@ class DeclarationParse(){
         when(token.type){
             TypeEnum.SEMICOLON -> {  return ASTSingleNode(null, tokenList.first()) }
             TypeEnum.NUMBER, TypeEnum.STRING -> {
-                if(thereIsOtherOperation(tokenSubList(tokenList))){ return binaryOperation(tokenList) }
+                if(!isLeaf(tokenSubList(tokenList))){ return binaryOperation(tokenList) }
                 else{ return ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first())}
             }
             else -> {  return ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first()) }
         }
     }
 
-    private fun thereIsOtherOperation(tokenList: List<Token>): Boolean{
+    private fun isLeaf(tokenList: List<Token>): Boolean{
         when(tokenList.first().type){
-            TypeEnum.PLUS, TypeEnum.MINUS, TypeEnum.STAR, TypeEnum.SLASH -> { return true }
-            else -> { return false }
+            TypeEnum.PLUS, TypeEnum.MINUS, TypeEnum.STAR, TypeEnum.SLASH -> { return false }
+            else -> { return true }
         }
     }
 
     private fun binaryOperation(tokenList: List<Token>): Node{
         val token: Token = tokenList.first()
         when(token.type){
-            TypeEnum.STRING, TypeEnum.NUMBER -> {
-                if(thereIsOtherOperation(tokenSubList(tokenList))){ return consturctBinaryNode(tokenList) } //there is another one
+            TypeEnum.STRING, TypeEnum.NUMBER -> { //Possible leaf?
+                if(!isLeaf(tokenSubList(tokenList))){ return consturctBinaryNode(tokenList) } //there is another one
                 else { return ASTSingleNode(null, token)} // end
             } //it is a literal
-            TypeEnum.PLUS -> { return ASTBinaryNode(null, null, token)} //NOT DONEE
-            else -> { return ASTSingleNode(null, token)} //NOT DONEEE
+            else -> { return ASTSingleNode(null, token)} //should be SemiColon
         }
     }
 
     private fun consturctBinaryNode(tokenList: List<Token>): Node{
-        val plusIndex = plusFinder(tokenList)
+        val plusIndex = getAritmeticOperatorIndex(tokenList, TypeEnum.PLUS)
         if(plusIndex != -1){ //there is a Plus symbol so split operations
             return ASTBinaryNode(
-                binaryOperation(tokenList.subList(0, plusIndex)),
                 binaryOperation(tokenList.subList(plusIndex + 1, tokenList.size)),
+                binaryOperation(tokenList.subList(0, plusIndex)),
                 tokenList.get(plusIndex)
             )
         }
-        else{
-            return ASTSingleNode(null, tokenList.first()) //NOT DONEEE!!!
+        else{//if the operator is not plus, does not matter the order
+            return ASTBinaryNode(
+                binaryOperation(tokenList.subList(0,1)),
+                binaryOperation(tokenList.subList(2, tokenList.size)),
+                tokenList.get(2)
+            )
         }
     }
 
@@ -57,13 +60,13 @@ class DeclarationParse(){
         return tokenList.subList(1, tokenList.size)
     }
 
-    private fun plusFinder(tokenList: List<Token>): Int {
+    private fun getAritmeticOperatorIndex(tokenList: List<Token>, type: TypeEnum): Int{
         var position = 0
         for (token in tokenList){
             when(token.type){
-                TypeEnum.PLUS -> return position
+                type -> return position
                 else -> {
-                    position += 1
+                    position +=1
                     continue
                 }
             }
