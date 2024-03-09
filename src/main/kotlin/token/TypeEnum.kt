@@ -9,6 +9,8 @@ enum class TypeEnum {
     MINUS, // -
     STAR,// *
     SLASH, // /
+
+    // Separators
     SEMICOLON, // ;
     DOUBLE_DOT, //:
 
@@ -16,12 +18,13 @@ enum class TypeEnum {
     PRINT, // print
     IF, // if
     ELSE, // else
+    NUMBER_TYPE, // Number
+    STRING_TYPE, // String
+    VARIABLE_KEYWORD, // VARIABLE_KEYWORD name: String
 
     // Literals
     VALUE_IDENTIFIER, //let VALUE_IDENTIFIER: STRING
-    VARIABLE_KEYWORD, // VARIABLE_KEYWORD name: String let
-    NUMBER_TYPE, // Number
-    STRING_TYPE, // String
     STRING, // "hola"
     NUMBER, // 123
+
 }
