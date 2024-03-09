@@ -6,7 +6,6 @@ import org.example.token.TypeEnum
 import org.junit.jupiter.api.Test
 import org.example.parser.Parser
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.TestFactory
 
 class ParserTest {
 
@@ -15,7 +14,7 @@ class ParserTest {
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "name", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.DOUBLE_DOT, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING_TYPE, "String", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING, "marcos", Coordinate(2,3), Coordinate(2,3)),
@@ -33,7 +32,7 @@ class ParserTest {
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "sum", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.DOUBLE_DOT, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING_TYPE, "Number", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING, "3", Coordinate(2,3), Coordinate(2,3)),
@@ -52,7 +51,7 @@ class ParserTest {
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "sum", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.DOUBLE_DOT, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING, "3", Coordinate(2,3), Coordinate(2,3)),
@@ -73,11 +72,11 @@ class ParserTest {
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "product", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.DOUBLE_DOT, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING, "3", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.PLUS, "*", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STAR, "*", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.NUMBER, "4", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
@@ -92,7 +91,7 @@ class ParserTest {
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "product", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.DOUBLE_DOT, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING, "3", Coordinate(2,3), Coordinate(2,3)),
@@ -108,6 +107,21 @@ class ParserTest {
 
     @Test
     fun BinarySubstractTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "product", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STRING_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STRING, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.MINUS, "-", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "4", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        val parser: Parser = Parser()
+        val node: Node? = parser.parse(tokenList)
+        assertNotNull(node)
+        assertEquals(node?.token?.type, TypeEnum.VARIABLE_KEYWORD)
 
     }
 
