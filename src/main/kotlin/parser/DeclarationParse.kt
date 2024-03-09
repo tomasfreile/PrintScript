@@ -2,6 +2,8 @@ package org.example.parser
 
 import org.example.token.Token
 import org.example.token.TypeEnum
+import kotlin.math.min
+
 class DeclarationParse(){
 
     fun parse(tokenList: List<Token>): Node{ //Y si es una operación aritmetica?
@@ -13,8 +15,10 @@ class DeclarationParse(){
         when(token.type){
             TypeEnum.SEMICOLON -> {  return ASTSingleNode(null, tokenList.first()) }
             TypeEnum.NUMBER, TypeEnum.STRING -> {
-                if(!isLeaf(tokenSubList(tokenList))){ return binaryOperation(tokenList) }
-                else{ return ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first())}
+                return if(!isLeaf(tokenSubList(tokenList))){
+                    binaryOperation(tokenList)
+                } else{
+                        ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first())}
             }
             else -> {  return ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first()) }
         }
@@ -40,21 +44,39 @@ class DeclarationParse(){
     }
 
     private fun consturctBinaryNode(tokenList: List<Token>): Node{
-        val plusIndex = getAritmeticOperatorIndex(tokenList, TypeEnum.PLUS)
-        if(plusIndex != -1){ //there is a Plus symbol so split operations
-            return ASTBinaryNode(
-                binaryOperation(tokenList.subList(plusIndex + 1, tokenList.size)),
-                binaryOperation(tokenList.subList(0, plusIndex)),
-                tokenList.get(plusIndex)
-            )
-        }
-        else{//if the operator is not plus, does not matter the order
-            return ASTBinaryNode(
+        return if (isSplit(tokenList)) { //At least there is a sum or a minus in the expression
+            split(tokenList)
+        } else{//if the operator is not plus, does not matter the order
+            ASTBinaryNode(
                 binaryOperation(tokenList.subList(0,1)),
                 binaryOperation(tokenList.subList(2, tokenList.size)),
                 tokenList.get(2)
             )
         }
+    }
+
+    private fun isSplit(tokenList: List<Token>): Boolean{
+        val plusIndex = getAritmeticOperatorIndex(tokenList, TypeEnum.PLUS)
+        val minusIndex = getAritmeticOperatorIndex(tokenList, TypeEnum.MINUS)
+        return plusIndex > 0 || minusIndex > 0 //verify if there is a sign for split
+    }
+
+    private fun split(tokenList: List<Token>): Node{
+        val plusIndex = getAritmeticOperatorIndex(tokenList, TypeEnum.PLUS)
+        val minusIndex = getAritmeticOperatorIndex(tokenList, TypeEnum.MINUS)
+        return if(plusIndex < minusIndex){ // plus index comes first
+                constructSplitNode(tokenList, plusIndex)
+        } else{                            // minus index comes first
+            constructSplitNode(tokenList, minusIndex)
+        }
+    }
+
+    private fun constructSplitNode(tokenList: List<Token>, splitIndex: Int): Node{
+        return ASTBinaryNode(
+            binaryOperation(tokenList.subList(splitIndex + 1, tokenList.size)),
+            binaryOperation(tokenList.subList(0, splitIndex)),
+            tokenList.get(splitIndex)
+        )
     }
 
     private fun tokenSubList(tokenList: List<Token>): List<Token>{
