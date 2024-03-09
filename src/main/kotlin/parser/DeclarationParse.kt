@@ -11,11 +11,18 @@ class DeclarationParse(){
 
     private fun recursiveParse(tokenList: List<Token>): Node{
         val token: Token = tokenList.first()
-        when(token.type){
-            TypeEnum.SEMICOLON -> {  return ASTSingleNode(null, tokenList.first()) } //break recursion because of semicolon
-            TypeEnum.NUMBER, TypeEnum.STRING -> { return handleLiteral(tokenList) }
-            else -> {  return ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first()) }
+        return when(token.type){
+            TypeEnum.SEMICOLON -> {  ASTSingleNode(null, tokenList.first()) } //break recursion because of semicolon
+            TypeEnum.LEFT_PAREN -> { handleLeftParen(tokenList) } //solve inner problem
+            TypeEnum.RIGHT_PAREN -> { recursiveParse(tokenSubList(tokenList)) } //ignore right paren, just for logic problems
+            TypeEnum.NUMBER, TypeEnum.STRING -> { handleLiteral(tokenList) }
+            else -> { ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first()) }
         }
+    }
+
+    private fun handleLeftParen(tokenList: List<Token>): Node{
+        val rightParenIndex = getArithmeticOperatorIndex(tokenList, TypeEnum.RIGHT_PAREN)
+        return parse(tokenList.subList(1, rightParenIndex - 1)) // Parse what is inside the parenthesis
     }
 
     private fun handleLiteral(tokenList: List<Token>): Node{
