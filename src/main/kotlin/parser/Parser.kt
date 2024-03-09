@@ -8,7 +8,7 @@ class Parser {
         if(!tokenList.isEmpty()){
             val token = tokenList.first()
             when(token.type){
-                TypeEnum.VARIABLE_KEYWORD -> DeclarationParse().parse(tokenList)
+                TypeEnum.VARIABLE_KEYWORD -> return DeclarationParse().parse(tokenList)
                 else -> {}
             }
         }
