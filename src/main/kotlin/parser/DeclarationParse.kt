@@ -29,7 +29,7 @@ class DeclarationParse(){
                 tokenList.get(rightParenIndex + 1) // * the operator
             )
         }else{
-            parse(tokenList.subList(1, rightParenIndex))   // No contempla el SEMICOLON?? Cómo los saco? Y si elimino el semicolon de la lista de tokens?? mas simple??
+            parse(tokenList.subList(1, tokenList.size))   // No contempla el SEMICOLON?? Cómo los saco? Y si elimino el semicolon de la lista de tokens?? mas simple??
         } // Parse what is inside the parenthesis
     }
 
