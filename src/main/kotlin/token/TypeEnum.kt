@@ -1,19 +1,18 @@
 package org.example.token
 
 enum class TypeEnum {
-
-    // Operators
+    // Single-character tokens.
+    ASSIGNATION, // =
+    LEFT_PAREN,
+    RIGHT_PAREN,
     PLUS, // +
     MINUS, // -
     STAR,// *
     SLASH, // /
-    ASSIGNATION, // =
 
     // Separators
     SEMICOLON, // ;
-    LEFT_PAREN, // (
-    RIGHT_PAREN, // )
-    COLON, // :
+    COLON, //:
 
     // Keywords
     PRINT, // print
