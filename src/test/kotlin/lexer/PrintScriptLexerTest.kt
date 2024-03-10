@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 class PrintScriptLexerTest {
 
-    val lexer = PrintScriptLexer()
+    private val lexer = PrintScriptLexer()
     @Test
     fun testSimpleExpression() {
 
