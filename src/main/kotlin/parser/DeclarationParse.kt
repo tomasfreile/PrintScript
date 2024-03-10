@@ -11,11 +11,26 @@ class DeclarationParse(){
 
     private fun recursiveParse(tokenList: List<Token>): Node{
         val token: Token = tokenList.first()
-        when(token.type){
-            TypeEnum.SEMICOLON -> {  return ASTSingleNode(null, tokenList.first()) } //break recursion because of semicolon
-            TypeEnum.NUMBER, TypeEnum.STRING -> { return handleLiteral(tokenList) }
-            else -> {  return ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first()) }
+        return when(token.type){
+            TypeEnum.SEMICOLON -> {  ASTSingleNode(null, tokenList.first()) } //break recursion because of semicolon
+            TypeEnum.LEFT_PAREN -> { handleLeftParen(tokenList) } //solve inner problem
+            TypeEnum.RIGHT_PAREN -> { recursiveParse(tokenSubList(tokenList)) } //ignore right paren, just for logic problems
+            TypeEnum.NUMBER, TypeEnum.STRING -> { handleLiteral(tokenList) }
+            else -> { ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first()) }
         }
+    }
+
+    private fun handleLeftParen(tokenList: List<Token>): Node{
+        val rightParenIndex = getArithmeticOperatorIndex(tokenList, TypeEnum.RIGHT_PAREN)
+        return if(hasBinaryOperation(tokenList.subList(rightParenIndex + 1, tokenList.size))){ //maybe is (3 + 5) * 3
+            ASTBinaryNode(
+                parse(tokenList.subList(rightParenIndex + 2, tokenList.size)), // 3
+                parse(tokenList.subList(1, rightParenIndex)), //  3 + 5
+                tokenList.get(rightParenIndex + 1) // *
+            )
+        }else{
+            parse(tokenList.subList(1, rightParenIndex))
+        } // Parse what is inside the parenthesis
     }
 
     private fun handleLiteral(tokenList: List<Token>): Node{
@@ -25,7 +40,7 @@ class DeclarationParse(){
             if( isBreakRecursion(tokenList) ){
                 ASTSingleNode(null, tokenList.first()) //break recursion because of literal on right side!! open for update
             } else {
-                ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first())
+                ASTSingleNode(parse(tokenSubList(tokenList)), tokenList.first())
             }
         }
     }
@@ -50,7 +65,7 @@ class DeclarationParse(){
                 return if(hasBinaryOperation(tokenSubList(tokenList))){ // maybe there is another binary opeartion
                     bakeBinaryNode(tokenList)  //bake a binary the node!!!
                 } else { //is just a literal and next should be a SemiColon -> " ; "
-                    recursiveParse(tokenList) //start again, next should just be a Semicolon -> " ; ", keep it as possible update
+                    parse(tokenList) //start again, next should just be a Semicolon -> " ; ", keep it as possible update
                 } // end
             }
             else -> { return ASTSingleNode(null, token)} //should be SemiColon. Not sure if is it reachable, keep it as possible update
@@ -95,8 +110,8 @@ class DeclarationParse(){
 
     private fun constructSplitNode(tokenList: List<Token>, splitIndex: Int): Node{
         return ASTBinaryNode(
-            recursiveParse(tokenList.subList(splitIndex + 1, tokenList.size)), //start new parse with the partition
-            recursiveParse(tokenList.subList(0, splitIndex)), //start new parse with the partition
+            parse(tokenList.subList(splitIndex + 1, tokenList.size)), //start new parse with the partition
+            parse(tokenList.subList(0, splitIndex)), //start new parse with the partition
             tokenList.get(splitIndex) //Papa node
         )
     }
