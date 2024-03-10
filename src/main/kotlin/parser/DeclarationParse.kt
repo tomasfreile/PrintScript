@@ -14,9 +14,9 @@ class DeclarationParse(){
         return when(token.type){
             TypeEnum.SEMICOLON -> {  ASTSingleNode(null, tokenList.first()) } //break recursion because of semicolon
             TypeEnum.LEFT_PAREN -> { handleLeftParen(tokenList) } //solve inner problem
-            TypeEnum.RIGHT_PAREN -> { recursiveParse(tokenSubList(tokenList)) } //ignore right paren, just for logic problems
+            TypeEnum.RIGHT_PAREN -> { parse(tokenSubList(tokenList)) } //ignore right paren, just for logic problems
             TypeEnum.NUMBER, TypeEnum.STRING -> { handleLiteral(tokenList) }
-            else -> { ASTSingleNode(recursiveParse(tokenSubList(tokenList)), tokenList.first()) }
+            else -> { ASTSingleNode(parse(tokenSubList(tokenList)), tokenList.first()) }
         }
     }
 
@@ -24,12 +24,12 @@ class DeclarationParse(){
         val rightParenIndex = getArithmeticOperatorIndex(tokenList, TypeEnum.RIGHT_PAREN)
         return if(hasBinaryOperation(tokenList.subList(rightParenIndex + 1, tokenList.size))){ //maybe is (3 + 5) * 3
             ASTBinaryNode(
-                parse(tokenList.subList(rightParenIndex + 2, tokenList.size)), // 3
-                parse(tokenList.subList(1, rightParenIndex)), //  3 + 5
-                tokenList.get(rightParenIndex + 1) // *
+                parse(tokenList.subList(rightParenIndex + 2, tokenList.size)), // 3 the operation
+                parse(tokenList.subList(1, rightParenIndex)), //  3 + 5 the operation
+                tokenList.get(rightParenIndex + 1) // * the operator
             )
         }else{
-            parse(tokenList.subList(1, rightParenIndex))
+            parse(tokenList.subList(1, rightParenIndex))   // No contempla el SEMICOLON?? Cómo los saco? Y si elimino el semicolon de la lista de tokens?? mas simple??
         } // Parse what is inside the parenthesis
     }
 
@@ -51,24 +51,24 @@ class DeclarationParse(){
 
     private fun hasBinaryOperation(tokenList: List<Token>): Boolean{
         if(tokenList.isEmpty()){ return false }
-        when(tokenList.first().type){ //checks if should stop
-            TypeEnum.SEMICOLON -> { return false } //if next is semicolon, stop
-            TypeEnum.PLUS, TypeEnum.MINUS, TypeEnum.STAR, TypeEnum.SLASH -> { return true } // at least there is a binary Operation
+        return when(tokenList.first().type){ //checks if should stop
+            TypeEnum.SEMICOLON -> { false } //if next is semicolon, stop
+            TypeEnum.PLUS, TypeEnum.MINUS, TypeEnum.STAR, TypeEnum.SLASH -> { true } // at least there is a binary Operation
             else -> { return false } // smth different? keep it open for update
         }
     }
 
     private fun hanldeBinaryOperation(tokenList: List<Token>): Node{
         val token: Token = tokenList.first()
-        when(token.type){
+        return when(token.type){
             TypeEnum.STRING, TypeEnum.NUMBER -> { //Is a Literal
-                return if(hasBinaryOperation(tokenSubList(tokenList))){ // maybe there is another binary opeartion
+                if(hasBinaryOperation(tokenSubList(tokenList))){ // maybe there is another binary opeartion
                     bakeBinaryNode(tokenList)  //bake a binary the node!!!
                 } else { //is just a literal and next should be a SemiColon -> " ; "
                     parse(tokenList) //start again, next should just be a Semicolon -> " ; ", keep it as possible update
                 } // end
             }
-            else -> { return ASTSingleNode(null, token)} //should be SemiColon. Not sure if is it reachable, keep it as possible update
+            else -> { ASTSingleNode(null, token)} //should be SemiColon. Not sure if is it reachable, keep it as possible update
         }
     }
 
