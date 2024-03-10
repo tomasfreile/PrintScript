@@ -209,4 +209,54 @@ class ParserTest {
         assertNotNull(node)
         assertEquals(node?.token?.type, TypeEnum.VARIABLE_KEYWORD)
     }
+
+    @Test
+    fun parenSimplePlusProductOperationTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "combination", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STRING_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.LEFT_PAREN, "(", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "5", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STRING, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STAR,"*", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "4", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        val parser: Parser = Parser()
+        val node: Node? = parser.parse(tokenList)
+        assertNotNull(node)
+        assertEquals(node?.token?.type, TypeEnum.VARIABLE_KEYWORD)
+    }
+
+    @Test
+    fun doubleParenSimplePlusProductOperationTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "combination", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STRING_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.LEFT_PAREN, "(", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "5", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STRING, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STAR, "*", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.LEFT_PAREN, "(", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "8", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STRING, "9", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        val parser: Parser = Parser()
+        val node: Node? = parser.parse(tokenList)
+        assertNotNull(node)
+        assertEquals(node?.token?.type, TypeEnum.VARIABLE_KEYWORD)
+    }
 }
