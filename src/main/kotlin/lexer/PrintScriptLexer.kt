@@ -7,7 +7,7 @@ import org.example.token.TypeEnum
 
 class PrintScriptLexer : Lexer {
     override fun lex(input: String): List<Token> {
-        val tokens = mutableListOf<Token>()
+        val tokens = ArrayList<Token>()
         var column = 0
         var line = 0
         while (column < input.length) {
@@ -33,6 +33,9 @@ class PrintScriptLexer : Lexer {
                 }
                 ';' -> {
                     tokens.add(PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(line, column), Coordinate(line, column + 1)))
+                }
+                ':' -> {
+                    tokens.add(PrintScriptToken(TypeEnum.COLON, ":", Coordinate(line, column), Coordinate(line, column + 1)))
                 }
                 '=' -> {
                     tokens.add(PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(line, column), Coordinate(line, column + 1)))
@@ -72,23 +75,22 @@ class PrintScriptLexer : Lexer {
     }
 
     private fun readString(column: Int, input: String, tokens: MutableList<Token>, line: Int, endChar: Char): Int {
-        var column1 = column
-        var endIndex = column1 + 1
+        var endIndex = column + 1
         val startIndex = endIndex
 
-        while (input[endIndex] != endChar) {
+        while (endIndex < input.length && input[endIndex] != endChar) {
             endIndex++
         }
         val string = input.substring(startIndex, endIndex)
         tokens.add(PrintScriptToken(TypeEnum.STRING, string, Coordinate(line, startIndex), Coordinate(line, endIndex)))
-        column1 = endIndex
-        return column1 + 1
+
+        return endIndex + 1
     }
 
     private fun readWord(line: Int, column: Int, input: String, tokens: MutableList<Token>): Int {
         var endIndex = column
         val startIndex = endIndex
-        while (input[endIndex].isLetter()) {
+        while (endIndex < input.length && isValidValueIdentifierCharacter(input, endIndex)) {
             endIndex++
         }
         val identifier = input.substring(startIndex, endIndex)
@@ -105,10 +107,14 @@ class PrintScriptLexer : Lexer {
         return endIndex
     }
 
+    private fun isValidValueIdentifierCharacter(input: String, endIndex: Int) =
+        (input[endIndex].isLetter() || input[endIndex].isDigit() || input[endIndex] == '_')
+
     private fun readNumber(line: Int, column: Int, input: String, tokens: MutableList<Token>): Int {
         var endIndex = column
         val startIndex = endIndex
-        while (input[endIndex].isDigit()) {
+
+        while (endIndex < input.length && input[endIndex].isDigit()) {
             endIndex++
         }
         val number = input.substring(startIndex, endIndex)
