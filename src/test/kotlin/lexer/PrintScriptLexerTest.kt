@@ -104,12 +104,23 @@ class PrintScriptLexerTest {
 
     @Test
     fun testMultipleLineInput(){
-        val input = "let\n num"
+        val input = "let num: Number = 123\nprintln(num) \n println(num)"
         val expectedTokens = listOf(
             PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(0, 0), Coordinate(0, 3)),
-            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "num", Coordinate(1, 1), Coordinate(1, 4))
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "num", Coordinate(0, 4), Coordinate(0, 7)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(0, 7), Coordinate(0, 8)),
+            PrintScriptToken(TypeEnum.NUMBER_TYPE, "Number", Coordinate(0, 9), Coordinate(0, 15)),
+            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(0, 16), Coordinate(0, 17)),
+            PrintScriptToken(TypeEnum.NUMBER, "123", Coordinate(0, 18), Coordinate(0, 21)),
+            PrintScriptToken(TypeEnum.PRINT, "println", Coordinate(1, 0), Coordinate(1, 7)),
+            PrintScriptToken(TypeEnum.LEFT_PAREN, "(", Coordinate(1, 7), Coordinate(1, 8)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "num", Coordinate(1, 8), Coordinate(1, 11)),
+            PrintScriptToken(TypeEnum.RIGHT_PAREN, ")", Coordinate(1, 11), Coordinate(1, 12)),
+            PrintScriptToken(TypeEnum.PRINT, "println", Coordinate(2, 1), Coordinate(2, 8)),
+            PrintScriptToken(TypeEnum.LEFT_PAREN, "(", Coordinate(2, 8), Coordinate(2, 9)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "num", Coordinate(2, 9), Coordinate(2, 12)),
+            PrintScriptToken(TypeEnum.RIGHT_PAREN, ")", Coordinate(2, 12), Coordinate(2, 13))
         )
-
 
         compareExpectedWithOutput(input, expectedTokens)
     }

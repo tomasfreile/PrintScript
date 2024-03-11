@@ -11,13 +11,17 @@ class PrintScriptLexer : Lexer {
         var index = 0
         var line = 0
         var column = 0
+
+        fun processString(character: Char) {
+            val result = readString(index, input, tokens, line, column, character)
+            val charIncrement = result - index
+            index += charIncrement
+            column += charIncrement
+        }
+
         while (index < input.length) {
             val char = input[index]
             when (char) {
-                '\n' -> {
-                    line++
-                    column = - 1
-                }
                 '(' -> {
                     tokens.add(PrintScriptToken(TypeEnum.LEFT_PAREN, "(", Coordinate(line, column), Coordinate(line, column + 1)))
                 }
@@ -46,20 +50,17 @@ class PrintScriptLexer : Lexer {
                     tokens.add(PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(line, column), Coordinate(line, column + 1)))
                 }
                 '"' -> {
-                    val result = readString(index, input, tokens, line, column, '"')
-                    val charIncrement = result - index
-                    index += charIncrement
-                    column += charIncrement
-                    continue
+                    processString('"')
                 }
                 '\'' -> {
-                    val result = readString(index, input, tokens, line, column, '\'')
-                    val charIncrement = result - index
-                    index += charIncrement
-                    column += charIncrement
-                    continue
+                    processString('\'')
+                }
+                '\n' -> {
+                    line++
+                    column = - 1
                 }
                 ' ' -> {
+                    //do nothing
                 }
                 else -> {
                     when {
@@ -83,6 +84,7 @@ class PrintScriptLexer : Lexer {
                     }
                 }
             }
+
             index++
             column++
         }
@@ -92,13 +94,15 @@ class PrintScriptLexer : Lexer {
     private fun readString(index: Int, input: String, tokens: MutableList<Token>, line: Int, column: Int, endChar: Char): Int { //returns the index of the endChar
         var endIndex = index + 1
         var endColumn = column
+        val stringBuilder = StringBuilder().append(endChar)
 
         while (endIndex < input.length && input[endIndex] != endChar) {
+            stringBuilder.append(input[endIndex])
             endIndex++
             endColumn++
         }
-        val string = input.substring(index, endIndex + 1)
-        println(string)
+        stringBuilder.append(endChar)
+        val string = stringBuilder.toString()
 
         tokens.add(PrintScriptToken(TypeEnum.STRING, string, Coordinate(line, column), Coordinate(line, endColumn + 1)))
 
@@ -108,12 +112,14 @@ class PrintScriptLexer : Lexer {
     private fun readWord(line: Int, column: Int, index: Int, input: String, tokens: MutableList<Token>): Int {  //returns the index of the last character of the word
         var endIndex = index
         var endColumn = column
+        val stringBuilder = StringBuilder()
 
         while (endIndex < input.length && isValidValueIdentifierCharacter(input, endIndex)) {
+            stringBuilder.append(input[endIndex])
             endIndex++
             endColumn++
         }
-        val identifier = input.substring(index, endIndex)
+        val identifier = stringBuilder.toString()
 
         val tokenType = when (identifier) {
             "println" -> TypeEnum.PRINT
@@ -128,20 +134,20 @@ class PrintScriptLexer : Lexer {
     }
 
     private fun isValidValueIdentifierCharacter(input: String, endIndex: Int) =
-        (input[endIndex].isLetter() || input[endIndex].isDigit() || input[endIndex] == '_')
+        (input[endIndex].isLetterOrDigit() || input[endIndex] == '_')
 
     private fun readNumber(line: Int, column: Int, index: Int, input: String, tokens: MutableList<Token>): Int { //returns the index of the last character of the number
         var endIndex = index
         var endColumn = column
+        val stringBuilder = StringBuilder()
 
         while (endIndex < input.length && input[endIndex].isDigit()) {
+            stringBuilder.append(input[endIndex])
             endIndex++
             endColumn++
         }
-        val number = input.substring(index, endIndex)
+        val number = stringBuilder.toString()
         tokens.add(PrintScriptToken(TypeEnum.NUMBER, number, Coordinate(line, column), Coordinate(line, endColumn)))
         return endIndex
     }
-
-
 }
