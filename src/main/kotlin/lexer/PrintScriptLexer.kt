@@ -4,123 +4,34 @@ import org.example.token.Coordinate
 import org.example.token.PrintScriptToken
 import org.example.token.Token
 import org.example.token.TypeEnum
+import java.util.*
+import java.util.regex.Pattern
 
-class PrintScriptLexer : Lexer {
-    override fun lex(input: String): List<Token> {
+class PrintScriptLexer(val tokenMap: EnumMap<TypeEnum, Pattern>) {
+    fun lex(input: String): List<Token>{
         val tokens = ArrayList<Token>()
-        var column = 0
+        val tokenTypes = tokenMap.keys.toList()
         var line = 0
-        while (column < input.length) {
-            val char = input[column]
-            when (char) {
-                '(' -> {
-                    tokens.add(PrintScriptToken(TypeEnum.LEFT_PAREN, "(", Coordinate(line, column), Coordinate(line, column + 1)))
-                }
-                ')' -> {
-                    tokens.add(PrintScriptToken(TypeEnum.RIGHT_PAREN, ")", Coordinate(line, column), Coordinate(line, column + 1)))
-                }
-                '+' -> {
-                    tokens.add(PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(line, column), Coordinate(line, column + 1)))
-                }
-                '-' -> {
-                    tokens.add(PrintScriptToken(TypeEnum.MINUS, "-", Coordinate(line, column), Coordinate(line, column + 1)))
-                }
-                '*' -> {
-                    tokens.add(PrintScriptToken(TypeEnum.STAR, "*", Coordinate(line, column), Coordinate(line, column + 1)))
-                }
-                '/' -> {
-                    tokens.add(PrintScriptToken(TypeEnum.SLASH, "/", Coordinate(line, column), Coordinate(line, column + 1)))
-                }
-                ';' -> {
-                    tokens.add(PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(line, column), Coordinate(line, column + 1)))
-                }
-                ':' -> {
-                    tokens.add(PrintScriptToken(TypeEnum.COLON, ":", Coordinate(line, column), Coordinate(line, column + 1)))
-                }
-                '=' -> {
-                    tokens.add(PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(line, column), Coordinate(line, column + 1)))
-                }
-                '"' -> {
-                    column = readString(column, input, tokens, line, '"')
-                    continue
-                }
-                '\'' -> {
-                    column = readString(column, input, tokens, line, '\'')
-                    continue
-                }
-                ' ' -> {
-                }
-                '\n' -> {
-                    line++
-                }
-                else -> {
-                    when {
-                        char.isDigit() -> {
-                            column = readNumber(line, column, input, tokens)
-                            continue
-                        }
-                        char.isLetter() -> {
-                            column = readWord(line, column, input, tokens)
-                            continue
-                        }
-                        else -> {
-                            throw IllegalArgumentException("Unexpected character $char at $line:$column")
-                        }
-                    }
-                }
-            }
-            column++
+
+        input.lines().forEach {
+            tokens.addAll(getTokensByLine(it, tokenTypes, line))
+            line++
         }
+
         return tokens
     }
 
-    private fun readString(column: Int, input: String, tokens: MutableList<Token>, line: Int, endChar: Char): Int {
-        var endIndex = column + 1
-        val startIndex = endIndex
-
-        while (endIndex < input.length && input[endIndex] != endChar) {
-            endIndex++
+    private fun getTokensByLine(input: String, types: List<TypeEnum>, line: Int): List<Token>{
+        val tokens = ArrayList<Token>()
+        val matcher = tokenMap.values.joinToString("|").toRegex().toPattern().matcher(input)
+        while (matcher.find()){
+            val token = matcher.group()
+            val type = types[tokenMap.values.indexOfFirst { it.matcher(token).matches() }]
+            val start = matcher.start()
+            val end = matcher.end()
+            tokens.add(PrintScriptToken(type, token, Coordinate(line, start), Coordinate(line, end)))
         }
-        val string = input.substring(startIndex, endIndex)
-        tokens.add(PrintScriptToken(TypeEnum.STRING, string, Coordinate(line, startIndex), Coordinate(line, endIndex)))
-
-        return endIndex + 1
+        return tokens
     }
-
-    private fun readWord(line: Int, column: Int, input: String, tokens: MutableList<Token>): Int {
-        var endIndex = column
-        val startIndex = endIndex
-        while (endIndex < input.length && isValidValueIdentifierCharacter(input, endIndex)) {
-            endIndex++
-        }
-        val identifier = input.substring(startIndex, endIndex)
-
-        val tokenType = when (identifier) {
-            "println" -> TypeEnum.PRINT
-            "let" -> TypeEnum.VARIABLE_KEYWORD
-            "String" -> TypeEnum.STRING_TYPE
-            "Number" -> TypeEnum.NUMBER_TYPE
-            else -> TypeEnum.VALUE_IDENTIFIER
-        }
-
-        tokens.add(PrintScriptToken(tokenType, identifier, Coordinate(line, startIndex), Coordinate(line, endIndex)))
-        return endIndex
-    }
-
-    private fun isValidValueIdentifierCharacter(input: String, endIndex: Int) =
-        (input[endIndex].isLetter() || input[endIndex].isDigit() || input[endIndex] == '_')
-
-    private fun readNumber(line: Int, column: Int, input: String, tokens: MutableList<Token>): Int {
-        var endIndex = column
-        val startIndex = endIndex
-
-        while (endIndex < input.length && input[endIndex].isDigit()) {
-            endIndex++
-        }
-        val number = input.substring(startIndex, endIndex)
-        tokens.add(PrintScriptToken(TypeEnum.NUMBER, number, Coordinate(line, startIndex), Coordinate(line, endIndex)))
-        return endIndex
-    }
-
 
 }
