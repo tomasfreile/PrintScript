@@ -6,6 +6,7 @@ import org.example.token.Token
 import org.example.token.TypeEnum
 
 class ParenInterpreter:Interpreter {
+
     override fun interpret(
         node: Node?,
         interpreters: Map<TypeEnum, Interpreter>,

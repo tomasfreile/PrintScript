@@ -12,8 +12,12 @@ class PrintInterpreter:Interpreter {
         symbolTable: Map<String, Token>
     ): Any? {
         if(node is ASTSingleNode){
-            println(interpreters[node.node?.token?.type]?.interpret(node.node, interpreters, symbolTable))
-        }
+            val stringToPrint = interpreters[node.node?.token?.type]?.interpret(node.node, interpreters, symbolTable)
+            println(stringToPrint)
+            return stringToPrint
+        } else {
         throw UnsupportedOperationException("No value after print")
+        }
+
     }
 }
