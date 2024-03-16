@@ -1,0 +1,9 @@
+formatting:
+  colon:
+    before: false
+    after: false
+  assignation:
+    before: false
+    after: false
+  print:
+    jump: 0
