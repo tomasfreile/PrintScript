@@ -5,6 +5,7 @@ import org.example.parser.ASTSingleNode
 import org.example.sca.rules.PrintShouldNotContainExpressions
 import org.example.sca.StaticCodeAnalyzerImpl
 import org.example.sca.rules.VariableNamesShouldBeCamelCase
+import org.example.sca.rules.VariableNamesShouldBeSnakeCase
 import org.example.token.Coordinate
 import org.example.token.PrintScriptToken
 import org.example.token.TokenType
@@ -15,8 +16,10 @@ class ScaTest {
 
     private val printRule = PrintShouldNotContainExpressions()
     private val camelCaseRule = VariableNamesShouldBeCamelCase()
+    private val snakeCaseRule = VariableNamesShouldBeSnakeCase()
     private val printSca = StaticCodeAnalyzerImpl(listOf(printRule))
     private val camelCaseSca = StaticCodeAnalyzerImpl(listOf(camelCaseRule))
+    private val snakeCaseSca = StaticCodeAnalyzerImpl(listOf(snakeCaseRule))
 
     @Test
     fun `should return empty when no rules are set`(){
@@ -56,7 +59,6 @@ class ScaTest {
                 )
 
         val result = printSca.analyze(ast)
-        printAST(ast)
         assert(result.size == 1)
     }
 
@@ -84,7 +86,6 @@ class ScaTest {
             )
 
         val result = printSca.analyze(ast)
-        printAST(ast)
         assert(result.size == 1)
     }
 
@@ -106,7 +107,6 @@ class ScaTest {
             )
 
         val result = printSca.analyze(ast)
-        printAST(ast)
         assert(result.size == 1)
     }
 
@@ -138,7 +138,36 @@ class ScaTest {
                 )
             )
         val result = camelCaseSca.analyze(ast)
-        println(result)
+        assert(result.size == 1)
+    }
+
+    @Test
+    fun shouldReturnEmptyWhenVariableNamesAreSnakeCase(){
+        val ast =
+            ASTSingleNode(
+                ASTSingleNode(
+                    null, PrintScriptToken(TokenType.VALUE_IDENTIFIER, "snake_case", Coordinate(2, 3), Coordinate(2, 3)
+                    )
+                ),
+                PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2, 3)
+                )
+            )
+        val result = snakeCaseSca.analyze(ast)
+        assert(result.isEmpty())
+    }
+
+    @Test
+    fun shouldReturnWarningWhenVariableNamesAreNotSnakeCase(){
+        val ast =
+            ASTSingleNode(
+                ASTSingleNode(
+                    null, PrintScriptToken(TokenType.VALUE_IDENTIFIER, "notSnakeCase", Coordinate(2, 3), Coordinate(2, 3)
+                    )
+                ),
+                PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2, 3)
+                )
+            )
+        val result = snakeCaseSca.analyze(ast)
         assert(result.size == 1)
     }
 
