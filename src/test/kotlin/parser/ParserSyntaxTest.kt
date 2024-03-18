@@ -1,7 +1,8 @@
 package parser
 
-import org.example.parser.Parser
-import org.example.parser.sintactic.*
+import org.example.parser.sintactic.declarative.hasNoneConsecutiveValue
+import org.example.parser.sintactic.declarative.hasOperatorOnProperWay
+import org.example.parser.sintactic.declarative.isDeclarative
 import org.example.token.Coordinate
 import org.example.token.PrintScriptToken
 import org.example.token.Token
@@ -40,7 +41,107 @@ class ParserSyntaxTest {
     }
 
     @Test
-    fun isStringBinaryOperationValidTest(){
+    fun hasPlusOnProperWayValidTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "name", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        assertTrue(hasOperatorOnProperWay().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun hasPlusOnProperWayInvlaidTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "name", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        assertFalse(hasOperatorOnProperWay().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun hasPlusPlusOnProperWayInvlaidTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "name", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        assertFalse(hasOperatorOnProperWay().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun hasOperatorOnProperWayStarValidTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "name", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STAR, "*", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        assertTrue(hasOperatorOnProperWay().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun hasOperatorOnProperWayMinusInvalidTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "name", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STAR, "*", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STAR, "-", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        assertFalse(hasOperatorOnProperWay().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun hasOperatorOnProperWayStrangeCaseInvalidTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "name", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER_TYPE, "Int", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STAR, "*", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.STAR, "*", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        assertFalse(hasOperatorOnProperWay().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun hasNoneConsecutiveValidTest(){
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "name", Coordinate(2,3), Coordinate(2,3)),
@@ -52,11 +153,11 @@ class ParserSyntaxTest {
             PrintScriptToken(TypeEnum.STRING, "Rosada", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        assertTrue(isStringOperation().checkSyntax(tokenList))
+        assertTrue(hasNoneConsecutiveValue().checkSyntax(tokenList))
     }
 
     @Test
-    fun isStringBinaryOperationInvalidTest(){
+    fun hasNoneConsecutiveValueInvalidTest(){
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "name", Coordinate(2,3), Coordinate(2,3)),
@@ -64,27 +165,10 @@ class ParserSyntaxTest {
             PrintScriptToken(TypeEnum.NUMBER_TYPE, "String", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING, "Micalea", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.STRING, "Rosada", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        assertFalse(isStringOperation().checkSyntax(tokenList))
-    }
-
-    @Test
-    fun isStringBinaryOperationWithNumberTest(){
-        val tokenList: List<Token> = listOf(
-            PrintScriptToken(TypeEnum.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.VALUE_IDENTIFIER, "name", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.COLON, ":", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.NUMBER_TYPE, "String", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.NUMBER, "5", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.STRING, "Rosada", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TypeEnum.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
-        )
-        assertFalse(isStringOperation().checkSyntax(tokenList))
+        assertFalse(hasNoneConsecutiveValue().checkSyntax(tokenList))
     }
 }

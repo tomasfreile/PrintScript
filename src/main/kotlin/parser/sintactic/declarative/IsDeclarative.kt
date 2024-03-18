@@ -1,5 +1,6 @@
-package org.example.parser.sintactic
+package org.example.parser.sintactic.declarative
 
+import org.example.parser.sintactic.SintacticChecker
 import org.example.token.Token
 import org.example.token.TypeEnum
 
