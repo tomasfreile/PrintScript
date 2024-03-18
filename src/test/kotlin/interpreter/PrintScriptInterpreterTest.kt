@@ -8,6 +8,7 @@ import org.example.interpreter.operation.StarOperation
 import org.example.parser.ASTSingleNode
 import org.example.token.Coordinate
 import org.example.token.PrintScriptToken
+import org.example.token.Token
 import org.example.token.TypeEnum
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -54,7 +55,8 @@ class PrintScriptInterpreterTest {
                     PrintScriptToken(TypeEnum.LEFT_PAREN,"(", Coordinate(2, 3), Coordinate(2, 3))),
             PrintScriptToken(TypeEnum.PRINT, "println", Coordinate(2,3), Coordinate(2, 3)))
 
-        val interpreter = PrintScriptInterpreter(interpreterMap);
+        val symbolTable = emptyMap<String, Token>()
+        val interpreter = PrintScriptInterpreter(interpreterMap, symbolTable);
 
         val outputStream = ByteArrayOutputStream()
         System.setOut(PrintStream(outputStream))
