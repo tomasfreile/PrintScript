@@ -1,7 +1,10 @@
 package org.example.parser
 
+import org.example.parser.semantic.NumberTypeDeclaration
 import org.example.token.Token
 import org.example.token.TypeEnum
+data class InvalidSyntaxError(override val message: String): Exception(message)
+data class InvalidSemanticError(override val message: String): Exception(message)
 
 class DeclarationParse(): Parse{
 
@@ -13,10 +16,19 @@ class DeclarationParse(): Parse{
         val token: Token = tokenList.first()
         return when(token.type){
             TypeEnum.SEMICOLON -> {  ASTSingleNode(null, tokenList.first()) } //break recursion because of semicolon
+            TypeEnum.NUMBER_TYPE -> { handleNumberTypeSemantic(tokenList) }
             TypeEnum.LEFT_PAREN -> { handleLeftParen(tokenList) } //solve inner problem
             TypeEnum.RIGHT_PAREN -> { parse(tokenSubList(tokenList)) } //ignore right paren, just for logic problems
             TypeEnum.NUMBER, TypeEnum.STRING -> { handleLiteral(tokenList) }
             else -> { ASTSingleNode(parse(tokenSubList(tokenList)), tokenList.first()) }
+        }
+    }
+
+    private fun handleNumberTypeSemantic(tokenList: List<Token>): Node{ //first is Number_Type
+        return if(NumberTypeDeclaration().checkSemantic(tokenList)){
+            ASTSingleNode(recursiveParse(tokenList.subList(1, tokenList.size)), tokenList.first())
+        }else{
+            throw InvalidSemanticError("Invalid semantic for NumberType")
         }
     }
 
