@@ -171,9 +171,45 @@ class ScaTest {
         assert(result.size == 1)
     }
 
+    @Test
+    fun variableNameRulesShouldNotAffectPrintStatements(){
+        val ast =
+            ASTSingleNode(
+                ASTBinaryNode(
+                    ASTSingleNode(
+                        null, PrintScriptToken(TokenType.NUMBER, "1", Coordinate(2, 3), Coordinate(2, 3)
+                        )
+                    ),
+                    ASTSingleNode(
+                        null, PrintScriptToken(TokenType.NUMBER, "2", Coordinate(2, 3), Coordinate(2, 3)
+                        )
+                    ),
+                    PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)
+                    )
+                ),
+                PrintScriptToken(TokenType.PRINT, "println", Coordinate(2,3), Coordinate(2, 3)
+                )
+            )
+        val result = camelCaseSca.analyze(ast)
+        val result2 = snakeCaseSca.analyze(ast)
+        assert(result.isEmpty())
+        assert(result2.isEmpty())
+    }
 
-
-
+    @Test
+    fun printRulesShouldNotAffectVariableNames(){
+        val ast =
+            ASTSingleNode(
+                ASTSingleNode(
+                    null, PrintScriptToken(TokenType.VALUE_IDENTIFIER, "not_camel_case", Coordinate(2, 3), Coordinate(2, 3)
+                    )
+                ),
+                PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2, 3)
+                )
+            )
+        val result = printSca.analyze(ast)
+        assert(result.isEmpty())
+    }
 
 
 }
