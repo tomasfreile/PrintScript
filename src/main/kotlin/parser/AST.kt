@@ -9,5 +9,6 @@ interface Node{
 data class ASTBinaryNode(val right: Node?, val left: Node?, override val token: Token): Node
 data class ASTSingleNode(val node: Node?, override val token: Token): Node
 
-class AST {
+class AST() {
+
 }

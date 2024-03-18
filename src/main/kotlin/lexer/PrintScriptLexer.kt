@@ -3,12 +3,12 @@ package org.example.lexer
 import org.example.token.Coordinate
 import org.example.token.PrintScriptToken
 import org.example.token.Token
-import org.example.token.TypeEnum
+import org.example.token.TokenType
 import java.util.*
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 
-class PrintScriptLexer(private val tokenMap: EnumMap<TypeEnum, Pattern>) {
+class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) {
     fun lex(input: String): List<Token>{
         val tokens = ArrayList<Token>()
         var line = 0
@@ -21,7 +21,7 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TypeEnum, Pattern>) {
         return tokens
     }
 
-    private fun getTokensByLine(input: String, tokenMap: EnumMap<TypeEnum, Pattern>, line: Int): List<Token>{
+    private fun getTokensByLine(input: String, tokenMap: EnumMap<TokenType, Pattern>, line: Int): List<Token>{
         val tokens = ArrayList<Token>()
         val types = tokenMap.keys.toList()
         val matcher = tokenMap.values.joinToString("|").toRegex().toPattern().matcher(input)
