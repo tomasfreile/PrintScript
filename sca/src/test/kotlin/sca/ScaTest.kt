@@ -20,6 +20,7 @@ class ScaTest {
     private val camelCaseSca = StaticCodeAnalyzerImpl(listOf(camelCaseRule))
     private val snakeCaseSca = StaticCodeAnalyzerImpl(listOf(snakeCaseRule))
 
+
     @Test
     fun `should return empty when no rules are set`(){
         val sca = StaticCodeAnalyzerImpl(listOf())
@@ -54,10 +55,11 @@ class ScaTest {
                     ),
                     PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3))
                 ),
-                PrintScriptToken(TokenType.PRINT, "println", Coordinate(2,3), Coordinate(2, 3))
+                PrintScriptToken(TokenType.PRINT, "println", Coordinate(0,0), Coordinate(0, 7))
             )
 
         val result = printSca.analyze(ast)
+        println(result)
         assert(result.size == 1)
     }
 
@@ -130,13 +132,14 @@ class ScaTest {
         val ast =
             ASTSingleNode(
                 ASTSingleNode(
-                    null, PrintScriptToken(TokenType.VALUE_IDENTIFIER, "not_camel_case", Coordinate(2, 3), Coordinate(2, 3)
+                    null, PrintScriptToken(TokenType.VALUE_IDENTIFIER, "not_camel_case", Coordinate(2, 5), Coordinate(2, 9)
                     )
                 ),
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2,3), Coordinate(2, 3)
                 )
             )
         val result = camelCaseSca.analyze(ast)
+        println(result)
         assert(result.size == 1)
     }
 

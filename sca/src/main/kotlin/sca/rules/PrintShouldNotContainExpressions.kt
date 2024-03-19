@@ -12,7 +12,7 @@ class PrintShouldNotContainExpressions : Rule {
         if (ast is ASTSingleNode && ast.token.type == TokenType.PRINT ) {
             // If the node is a print statement
             if (containsExpressions(ast.node)) {
-                return StaticCodeAnalyzerResult.Error(errorMessage)
+                return StaticCodeAnalyzerResult.Error(errorMessage + ". Position ${ast.token.start.string()}")
             }
         }
         return StaticCodeAnalyzerResult.Ok

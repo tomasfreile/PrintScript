@@ -16,9 +16,9 @@ class VariableNamingRule(private val namingConvention: NamingConvention) : Rule 
 
     private fun validateVariableNames(node: ASTSingleNode, regex: String, errorMessage: String): StaticCodeAnalyzerResult {
         if (isVariableKeywordNode(node)) {
-            val variableName = node.node?.token?.value
-            if (variableName != null && !variableName.matches(Regex(regex))) {
-                return StaticCodeAnalyzerResult.Error("Variable $variableName should be $errorMessage")
+            val identifierNode = node.node
+            if (identifierNode != null && !identifierNode.token.value.matches(Regex(regex))) {
+                return StaticCodeAnalyzerResult.Error("Variable ${identifierNode.token.value} should be $errorMessage. Position ${identifierNode.token.start.string()}")
             }
         }
         return StaticCodeAnalyzerResult.Ok

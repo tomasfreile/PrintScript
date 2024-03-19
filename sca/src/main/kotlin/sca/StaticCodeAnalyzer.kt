@@ -23,3 +23,5 @@ class StaticCodeAnalyzerImpl(private val rules : List<Rule>) : StaticCodeAnalyze
 }
 
 
+
+
