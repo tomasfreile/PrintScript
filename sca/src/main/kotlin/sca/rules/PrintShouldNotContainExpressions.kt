@@ -3,18 +3,19 @@ package sca.rules
 import ast.ASTBinaryNode
 import ast.ASTSingleNode
 import ast.Node
+import sca.StaticCodeAnalyzerResult
 import token.TokenType
 
 class PrintShouldNotContainExpressions : Rule {
-    override fun validate(ast: Node): String? {
+    override fun validate(ast: Node): StaticCodeAnalyzerResult {
         val errorMessage = "Print statement should not contain expressions"
         if (ast is ASTSingleNode && ast.token.type == TokenType.PRINT ) {
             // If the node is a print statement
             if (containsExpressions(ast.node)) {
-                return errorMessage
+                return StaticCodeAnalyzerResult.Error(errorMessage)
             }
         }
-        return null
+        return StaticCodeAnalyzerResult.Ok
     }
 
     private fun containsExpressions(node: Node?): Boolean {
