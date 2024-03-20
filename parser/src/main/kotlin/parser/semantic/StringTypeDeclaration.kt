@@ -1,6 +1,7 @@
 package org.example.parser.semantic
 
-import org.example.token.Token
+import token.Token
+
 
 class StringTypeDeclaration: SemanticChecker {
     override fun checkSemantic(tokenList: List<Token>): Boolean {

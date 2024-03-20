@@ -1,6 +1,7 @@
 package org.example.parser.semantic
 
-import org.example.token.Token
+import token.Token
+
 
 interface SemanticChecker {
     fun checkSemantic(tokenList: List<Token>): Boolean

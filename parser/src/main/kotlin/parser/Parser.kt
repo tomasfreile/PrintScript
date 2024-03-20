@@ -1,12 +1,11 @@
 package parser
 
 import ast.Node
+import org.example.parser.PrintParse
 import token.Token
 import token.TokenType
 import org.example.parser.semantic.SemanticChecker
 import org.example.parser.sintactic.SintacticChecker
-import org.example.token.Token
-import org.example.token.TokenType
 
 data class InvalidTokenInput(override val message: String): Exception(message)
 class Parser(
@@ -34,6 +33,16 @@ class Parser(
         if (semanticRules != null) {
             for(rule in semanticRules){
                 if(rule.checkSemantic(tokenList)) continue
+                else return false
+            }
+        }
+        return true
+    }
+
+    private fun hasGoodSyntax(tokenList: List<Token>): Boolean{
+        if (syntaxRules != null) {
+            for(rule in syntaxRules){
+                if(rule.checkSyntax(tokenList)) continue
                 else return false
             }
         }

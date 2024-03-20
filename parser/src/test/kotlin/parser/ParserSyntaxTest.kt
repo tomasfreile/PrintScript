@@ -1,15 +1,16 @@
 package parser
 
+import org.example.parser.sintactic.assignation.isAssignation
 import org.example.parser.sintactic.declarative.hasNoneConsecutiveValue
 import org.example.parser.sintactic.declarative.hasOperatorOnProperWay
 import org.example.parser.sintactic.declarative.isDeclarative
-import org.example.parser.sintactic.print.hasCombination
+import parser.sintactic.commons.hasCombination
 import org.example.parser.sintactic.print.isPrint
-import org.example.token.Coordinate
-import org.example.token.PrintScriptToken
-import org.example.token.Token
-import org.example.token.TokenType
 import org.junit.jupiter.api.Test
+import token.Coordinate
+import token.PrintScriptToken
+import token.Token
+import token.TokenType
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -334,4 +335,53 @@ class ParserSyntaxTest {
         )
         assertFalse(hasCombination().checkSyntax(tokenList))
     }
+
+    @Test
+    fun isAssignationTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        assertTrue(isAssignation().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun invalidLentghForAssignationTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TokenType.PRINT, "print", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        assertFalse(isAssignation().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun invalidAssignationTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TokenType.VARIABLE_KEYWORD, "a", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        assertFalse(isAssignation().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun validAssignationCombinatedTest(){
+        val tokenList: List<Token> = listOf(
+            PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
+        )
+        assertTrue(isAssignation().checkSyntax(tokenList))
+    }
+
+
 }

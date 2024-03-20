@@ -1,8 +1,8 @@
-package org.example.parser.sintactic.print
+package parser.sintactic.commons
 
 import org.example.parser.sintactic.SintacticChecker
-import org.example.token.Token
-import org.example.token.TokenType
+import token.Token
+import token.TokenType
 
 class justHaveNumber: SintacticChecker {
     override fun checkSyntax(tokenList: List<Token>): Boolean {

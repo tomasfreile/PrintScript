@@ -1,6 +1,7 @@
 package org.example.parser.sintactic
 
-import org.example.token.Token
+import token.Token
+
 
 interface SintacticChecker {
 

@@ -1,7 +1,7 @@
 package org.example.parser.semantic
 
-import org.example.token.Token
-import org.example.token.TokenType
+import token.Token
+import token.TokenType
 
 class NumberTypeDeclaration: SemanticChecker {
     override fun checkSemantic(tokenList: List<Token>): Boolean {

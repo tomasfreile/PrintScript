@@ -1,16 +1,14 @@
 package parser
 
 import org.example.parser.semantic.NumberTypeDeclaration
-import org.example.token.Token
-import org.example.token.TypeEnum
-data class InvalidSyntaxError(override val message: String): Exception(message)
-data class InvalidSemanticError(override val message: String): Exception(message)
 import ast.ASTBinaryNode
 import ast.ASTSingleNode
 import ast.Node
 import token.Token
 import token.TokenType
 
+data class InvalidSemanticError(override val message: String): Exception(message)
+data class InvalidSyntaxError(override val message: String): Exception(message)
 
 class DeclarationParse(): Parse {
 

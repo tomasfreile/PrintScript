@@ -11,6 +11,7 @@ import token.TokenType
 
 class ParserTest {
 
+    val parser = Parser(null, null)
     @Test
     fun StringDeclarationTest(){
         val tokenList: List<Token> = listOf(
@@ -22,7 +23,6 @@ class ParserTest {
             PrintScriptToken(TokenType.STRING, "marcos", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
@@ -42,7 +42,6 @@ class ParserTest {
             PrintScriptToken(TokenType.NUMBER, "4", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
@@ -63,7 +62,6 @@ class ParserTest {
             PrintScriptToken(TokenType.NUMBER, "5", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser: Parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
@@ -82,7 +80,6 @@ class ParserTest {
             PrintScriptToken(TokenType.NUMBER, "4", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
@@ -101,7 +98,6 @@ class ParserTest {
             PrintScriptToken(TokenType.NUMBER, "4", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser: Parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
@@ -120,7 +116,6 @@ class ParserTest {
             PrintScriptToken(TokenType.NUMBER, "4", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser: Parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
@@ -141,7 +136,6 @@ class ParserTest {
             PrintScriptToken(TokenType.NUMBER, "5", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser: Parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
@@ -162,7 +156,6 @@ class ParserTest {
             PrintScriptToken(TokenType.NUMBER, "5", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser: Parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
@@ -183,7 +176,6 @@ class ParserTest {
             PrintScriptToken(TokenType.NUMBER, "5", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser: Parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
@@ -206,7 +198,6 @@ class ParserTest {
             PrintScriptToken(TokenType.NUMBER, "5", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser: Parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
@@ -229,7 +220,6 @@ class ParserTest {
             PrintScriptToken(TokenType.NUMBER, "4", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser: Parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
@@ -256,7 +246,6 @@ class ParserTest {
             PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
-        val parser: Parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)

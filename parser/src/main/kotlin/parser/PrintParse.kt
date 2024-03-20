@@ -1,10 +1,13 @@
 package org.example.parser
 
-import org.example.token.Token
-import org.example.token.TypeEnum
+import ast.ASTSingleNode
+import ast.Node
+import parser.Parse
+import token.Token
+import token.TokenType
 
 class InvalidSyntaxException(message: String): Exception(message)
-class PrintParse: Parse{
+class PrintParse: Parse {
     override fun parse(tokenList: List<Token>): Node {
         return recursiveParse(tokenList)
     }
@@ -23,13 +26,13 @@ class PrintParse: Parse{
     private fun handleContent(tokenList: List<Token>): Node{
         val token = tokenList.first()
         return when(token.type){
-            TokenType.STRING, TypeEnum.NUMBER -> { handleLiteral(tokenList) }
+            TokenType.STRING, TokenType.NUMBER -> { handleLiteral(tokenList) }
             else -> { throw InvalidSyntaxException("Invalid syntax, should print String") }
         }
     }
 
     private fun isConcatenate(tokenList: List<Token>): Boolean{
-        return tokenList.first().type == TypeEnum.PLUS
+        return tokenList.first().type == TokenType.PLUS
     }
 
     private fun handleLiteral(tokenList: List<Token>): Node{

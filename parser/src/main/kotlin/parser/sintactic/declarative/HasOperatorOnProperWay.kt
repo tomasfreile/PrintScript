@@ -1,8 +1,9 @@
 package org.example.parser.sintactic.declarative
 
 import org.example.parser.sintactic.SintacticChecker
-import org.example.token.Token
-import org.example.token.TokenType
+import token.Token
+import token.TokenType
+
 
 class hasOperatorOnProperWay: SintacticChecker {
     override fun checkSyntax(tokenList: List<Token>): Boolean {

@@ -1,8 +1,8 @@
 package org.example.parser.sintactic.declarative
 
 import org.example.parser.sintactic.SintacticChecker
-import org.example.token.Token
-import org.example.token.TokenType
+import token.Token
+import token.TokenType
 
 class hasNoneConsecutiveValue: SintacticChecker {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
@@ -28,7 +28,7 @@ class hasNoneConsecutiveValue: SintacticChecker {
         return true
     }
 
-    private fun findType(tokenList: List<Token>): TokenType{
+    private fun findType(tokenList: List<Token>): TokenType {
         return tokenList[5].type
     }
 

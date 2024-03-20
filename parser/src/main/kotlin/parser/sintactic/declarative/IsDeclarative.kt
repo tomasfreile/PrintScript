@@ -1,8 +1,8 @@
 package org.example.parser.sintactic.declarative
 
 import org.example.parser.sintactic.SintacticChecker
-import org.example.token.Token
-import org.example.token.TokenType
+import token.Token
+import token.TokenType
 
 class isDeclarative: SintacticChecker {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
@@ -15,14 +15,21 @@ class isDeclarative: SintacticChecker {
 
     private fun checkStructure(tokenList: List<Token>): Int{
         var points = 0
-        if(tokenList.get(0).type == TokenType.VARIABLE_KEYWORD) points += 1
-        if(tokenList.get(1).type == TokenType.VALUE_IDENTIFIER) points += 1
-        if(tokenList.get(2).type == TokenType.COLON) points += 1
-        if((tokenList.get(3).type == TokenType.NUMBER_TYPE) || (tokenList.get(3).type == TokenType.STRING_TYPE)) points += 1
-        if(tokenList.get(4).type == TokenType.ASSIGNATION) points += 1
-        if((tokenList.get(5).type == TokenType.STRING) || (tokenList.get(5).type == TokenType.NUMBER)) points += 1
-        if(tokenList.get(tokenList.size - 1).type == TokenType.SEMICOLON) points += 1
+        if(tokenList[0].type == TokenType.VARIABLE_KEYWORD) points += 1
+        if(tokenList[1].type == TokenType.VALUE_IDENTIFIER) points += 1
+        if(tokenList[2].type == TokenType.COLON) points += 1
+        if(isLiteral(tokenList[3].type)) points += 1
+        if(tokenList[4].type == TokenType.ASSIGNATION) points += 1
+        if((tokenList[5].type == TokenType.STRING) || (tokenList.get(5).type == TokenType.NUMBER)) points += 1
+        if(tokenList[tokenList.size - 1].type == TokenType.SEMICOLON) points += 1
         return points
+    }
+
+    private fun isLiteral(type: TokenType): Boolean{
+        return when(type){
+            TokenType.NUMBER, TokenType.STRING, TokenType.VALUE_IDENTIFIER -> true
+            else -> false
+        }
     }
 
     private fun hasEnoughLength(tokenList: List<Token>): Boolean{
