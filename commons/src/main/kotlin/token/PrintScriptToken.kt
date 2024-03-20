@@ -1,7 +1,7 @@
-package org.example.token
+package token
 
 class PrintScriptToken(
-    override val type: TypeEnum,
+    override val type: TokenType,
     override val value: String,
     override val start: Coordinate,
     override val end: Coordinate

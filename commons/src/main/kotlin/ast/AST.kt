@@ -1,6 +1,6 @@
-package org.example.parser
+package ast
 
-import org.example.token.Token
+import token.Token
 
 //ES UN NODO AST BINARIO PORQUE SOPORTA DOS OPERACIONES Y EL TOKEN
 interface Node{
@@ -9,5 +9,6 @@ interface Node{
 data class ASTBinaryNode(val right: Node?, val left: Node?, override val token: Token): Node
 data class ASTSingleNode(val node: Node?, override val token: Token): Node
 
-class AST {
+class AST() {
+
 }

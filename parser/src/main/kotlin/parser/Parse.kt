@@ -1,6 +1,8 @@
-package org.example.parser
+package parser
 
-import org.example.token.Token
+import ast.Node
+import token.Token
+
 
 interface Parse {
     fun parse(tokenList: List<Token>): Node

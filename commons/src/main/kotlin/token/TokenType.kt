@@ -1,6 +1,6 @@
-package org.example.token
+package token
 
-enum class TypeEnum {
+enum class TokenType {
     // Single-character tokens.
     ASSIGNATION, // =
     LEFT_PAREN,

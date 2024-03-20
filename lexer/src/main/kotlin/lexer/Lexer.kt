@@ -1,6 +1,7 @@
-package org.example.lexer
+package lexer
 
-import org.example.token.Token
+import token.Token
+
 
 interface Lexer {
     fun lex(input: String): List<Token>

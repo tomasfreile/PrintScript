@@ -1,5 +1,8 @@
-package org.example.parser
+package parser
 
+import ast.Node
+import token.Token
+import token.TokenType
 import org.example.parser.semantic.SemanticChecker
 import org.example.parser.sintactic.SintacticChecker
 import org.example.token.Token
@@ -25,16 +28,6 @@ class Parser(
             TokenType.PRINT -> return PrintParse().parse(tokenList)
             else -> { throw InvalidTokenInput("Invalid TokenInput") }
         }
-    }
-
-    private fun hasGoodSyntax(tokenList: List<Token>): Boolean{
-        if (syntaxRules != null) {
-            for(rule in syntaxRules){
-                if(rule.checkSyntax(tokenList)) continue
-                else return false
-            }
-        }
-        return true
     }
 
     private fun hasGoodSemantic(tokenList: List<Token>): Boolean{

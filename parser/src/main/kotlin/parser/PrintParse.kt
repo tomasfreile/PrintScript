@@ -12,10 +12,10 @@ class PrintParse: Parse{
     private fun recursiveParse(tokenList: List<Token>): Node{
         val token = tokenList.first()
         return when(token.type){
-            TypeEnum.SEMICOLON -> ASTSingleNode(null, token)
-            TypeEnum.PRINT -> ASTSingleNode(parse(tokenList.subList(1, tokenList.size)), token)
-            TypeEnum.LEFT_PAREN -> handleContent(tokenList.subList(1, tokenList.size))
-            TypeEnum.RIGHT_PAREN -> recursiveParse(tokenList.subList(1, tokenList.size))
+            TokenType.SEMICOLON -> ASTSingleNode(null, token)
+            TokenType.PRINT -> ASTSingleNode(parse(tokenList.subList(1, tokenList.size)), token)
+            TokenType.LEFT_PAREN -> handleContent(tokenList.subList(1, tokenList.size))
+            TokenType.RIGHT_PAREN -> recursiveParse(tokenList.subList(1, tokenList.size))
             else -> throw InvalidSyntaxException("Invalid syntax for print function")
         }
     }
@@ -23,7 +23,7 @@ class PrintParse: Parse{
     private fun handleContent(tokenList: List<Token>): Node{
         val token = tokenList.first()
         return when(token.type){
-            TypeEnum.STRING, TypeEnum.NUMBER -> { handleLiteral(tokenList) }
+            TokenType.STRING, TypeEnum.NUMBER -> { handleLiteral(tokenList) }
             else -> { throw InvalidSyntaxException("Invalid syntax, should print String") }
         }
     }

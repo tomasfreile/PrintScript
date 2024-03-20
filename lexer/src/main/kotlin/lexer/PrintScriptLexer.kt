@@ -1,28 +1,31 @@
-package org.example.lexer
+package lexer
 
-import org.example.token.Coordinate
-import org.example.token.PrintScriptToken
-import org.example.token.Token
-import org.example.token.TypeEnum
+
+import token.Coordinate
+import token.PrintScriptToken
+import token.Token
+import token.TokenType
+
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 
-class PrintScriptLexer(val tokenMap: EnumMap<TypeEnum, Pattern>) {
+class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) {
     fun lex(input: String): List<Token>{
         val tokens = ArrayList<Token>()
-        val tokenTypes = tokenMap.keys.toList()
         var line = 0
 
         input.lines().forEach {
-            tokens.addAll(getTokensByLine(it, tokenTypes, line))
+            tokens.addAll(getTokensByLine(it, tokenMap, line))
             line++
         }
 
         return tokens
     }
 
-    private fun getTokensByLine(input: String, types: List<TypeEnum>, line: Int): List<Token>{
+    private fun getTokensByLine(input: String, tokenMap: EnumMap<TokenType, Pattern>, line: Int): List<Token>{
         val tokens = ArrayList<Token>()
+        val types = tokenMap.keys.toList()
         val matcher = tokenMap.values.joinToString("|").toRegex().toPattern().matcher(input)
         while (matcher.find()){
             val token = matcher.group()
