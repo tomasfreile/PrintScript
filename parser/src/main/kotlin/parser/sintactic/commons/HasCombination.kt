@@ -10,7 +10,7 @@ import token.Token
 import token.TokenType
 
 class hasCombination:SintacticChecker {
-    override fun checkSyntax(tokenList: List<Token>): Boolean {
+    override fun checkSyntax(tokenList: List<Token>): Boolean { //If length is not enough, it will be NIL
         var type = checkParseType(tokenList)
         return when(type){
             ParseType.ASSIGNATION -> checkStructure(tokenList, 2, tokenList.size - 1)
