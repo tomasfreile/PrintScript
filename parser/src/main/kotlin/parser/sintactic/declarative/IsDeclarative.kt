@@ -18,9 +18,9 @@ class isDeclarative: SintacticChecker {
         if(tokenList[0].type == TokenType.VARIABLE_KEYWORD) points += 1
         if(tokenList[1].type == TokenType.VALUE_IDENTIFIER) points += 1
         if(tokenList[2].type == TokenType.COLON) points += 1
-        if(isLiteral(tokenList[3].type)) points += 1
+        if(tokenList[3].type == TokenType.NUMBER_TYPE || tokenList[3].type == TokenType.STRING_TYPE) points += 1
         if(tokenList[4].type == TokenType.ASSIGNATION) points += 1
-        if((tokenList[5].type == TokenType.STRING) || (tokenList.get(5).type == TokenType.NUMBER)) points += 1
+        if(isLiteral(tokenList[5].type)) points += 1
         if(tokenList[tokenList.size - 1].type == TokenType.SEMICOLON) points += 1
         return points
     }
