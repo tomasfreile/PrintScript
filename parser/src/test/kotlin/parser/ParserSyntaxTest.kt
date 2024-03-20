@@ -214,10 +214,10 @@ class ParserSyntaxTest {
     fun hasStringCombinationJustOneStringTest(){
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TokenType.PRINT, "print", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.STRING, "Hola, Mundo", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.COLON, ":", Coordinate(2,3), Coordinate(2,3))
+            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
         assertFalse(hasCombination().checkSyntax(tokenList))
     }
@@ -226,12 +226,12 @@ class ParserSyntaxTest {
     fun hasStringCombinationBinaryTest(){
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TokenType.PRINT, "print", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.STRING, "Hola, Mundo", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.STRING, "Cómo estas?", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.COLON, ":", Coordinate(2,3), Coordinate(2,3))
+            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
         assertTrue(hasCombination().checkSyntax(tokenList))
     }
@@ -254,18 +254,18 @@ class ParserSyntaxTest {
     fun hasStringCombiantionWithStringAndNumber(){
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TokenType.PRINT, "print", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.STRING, "Hola, Mundo", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.PLUS, "+", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.COLON, ":", Coordinate(2,3), Coordinate(2,3))
+            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
         assertTrue(hasCombination().checkSyntax(tokenList))
     }
 
     @Test
-    fun hasCombinationWithIdentifier(){
+    fun hasCombinationWithInvalidIdentifier(){
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TokenType.PRINT, "print", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
@@ -275,19 +275,19 @@ class ParserSyntaxTest {
             PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.COLON, ":", Coordinate(2,3), Coordinate(2,3))
         )
-        assertTrue(hasCombination().checkSyntax(tokenList))
+        assertFalse(hasCombination().checkSyntax(tokenList))
     }
 
     @Test
     fun hasNumberCombinationTest(){
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TokenType.PRINT, "print", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SLASH, "/", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.COLON, ":", Coordinate(2,3), Coordinate(2,3))
+            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
         assertTrue(hasCombination().checkSyntax(tokenList))
     }
@@ -296,12 +296,12 @@ class ParserSyntaxTest {
     fun hasNumberCombinationWithIdentifierTest(){
         val tokenList: List<Token> = listOf(
             PrintScriptToken(TokenType.PRINT, "print", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
+            PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SLASH, "/", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.COLON, ":", Coordinate(2,3), Coordinate(2,3))
+            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
         assertTrue(hasCombination().checkSyntax(tokenList))
     }
@@ -316,7 +316,7 @@ class ParserSyntaxTest {
             PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SLASH, "/", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.COLON, ":", Coordinate(2,3), Coordinate(2,3))
+            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
         assertFalse(hasCombination().checkSyntax(tokenList))
     }
@@ -331,7 +331,7 @@ class ParserSyntaxTest {
             PrintScriptToken(TokenType.STRING, "a", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.SLASH, "+", Coordinate(2,3), Coordinate(2,3)),
             PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2,3), Coordinate(2,3)),
-            PrintScriptToken(TokenType.COLON, ":", Coordinate(2,3), Coordinate(2,3))
+            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2,3), Coordinate(2,3))
         )
         assertFalse(hasCombination().checkSyntax(tokenList))
     }

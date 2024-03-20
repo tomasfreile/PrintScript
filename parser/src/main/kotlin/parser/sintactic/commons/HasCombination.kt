@@ -29,6 +29,7 @@ class hasCombination:SintacticChecker {
     }
 
     private fun checkContent(tokenList: List<Token>): Boolean{
+        if(tokenList.size == 1) return false //is just a simple expression, no combination!!!
         var index = 0
         while(index < tokenList.size){
             when(tokenList[index].type){
