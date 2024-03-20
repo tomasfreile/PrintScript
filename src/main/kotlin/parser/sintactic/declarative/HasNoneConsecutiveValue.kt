@@ -2,7 +2,7 @@ package org.example.parser.sintactic.declarative
 
 import org.example.parser.sintactic.SintacticChecker
 import org.example.token.Token
-import org.example.token.TypeEnum
+import org.example.token.TokenType
 
 class hasNoneConsecutiveValue: SintacticChecker {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
@@ -13,11 +13,11 @@ class hasNoneConsecutiveValue: SintacticChecker {
         }
     }
 
-    private fun checkValues(tokenList: List<Token>, type: TypeEnum): Boolean{
+    private fun checkValues(tokenList: List<Token>, type: TokenType): Boolean{
         var previus = tokenList[5]
         var next = tokenList[7]
         var index = 6
-        while(next.type != TypeEnum.SEMICOLON){
+        while(next.type != TokenType.SEMICOLON){
             if(previus.type == type && tokenList[index].type == type) return false //let a:Int = 3 3;
             else{
                 previus = tokenList[index]
@@ -28,7 +28,7 @@ class hasNoneConsecutiveValue: SintacticChecker {
         return true
     }
 
-    private fun findType(tokenList: List<Token>): TypeEnum{
+    private fun findType(tokenList: List<Token>): TokenType{
         return tokenList[5].type
     }
 

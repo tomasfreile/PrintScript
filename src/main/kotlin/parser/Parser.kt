@@ -3,7 +3,7 @@ package org.example.parser
 import org.example.parser.semantic.SemanticChecker
 import org.example.parser.sintactic.SintacticChecker
 import org.example.token.Token
-import org.example.token.TypeEnum
+import org.example.token.TokenType
 
 data class InvalidTokenInput(override val message: String): Exception(message)
 class Parser(
@@ -21,8 +21,8 @@ class Parser(
     private fun chooseParse(tokenList: List<Token>): Node{
         val token = tokenList.first()
         when(token.type){
-            TypeEnum.VARIABLE_KEYWORD -> return DeclarationParse().parse(tokenList)
-            TypeEnum.PRINT -> return PrintParse().parse(tokenList)
+            TokenType.VARIABLE_KEYWORD -> return DeclarationParse().parse(tokenList)
+            TokenType.PRINT -> return PrintParse().parse(tokenList)
             else -> { throw InvalidTokenInput("Invalid TokenInput") }
         }
     }

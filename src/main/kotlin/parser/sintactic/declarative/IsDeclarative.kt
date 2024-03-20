@@ -2,7 +2,7 @@ package org.example.parser.sintactic.declarative
 
 import org.example.parser.sintactic.SintacticChecker
 import org.example.token.Token
-import org.example.token.TypeEnum
+import org.example.token.TokenType
 
 class isDeclarative: SintacticChecker {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
@@ -15,13 +15,13 @@ class isDeclarative: SintacticChecker {
 
     private fun checkStructure(tokenList: List<Token>): Int{
         var points = 0
-        if(tokenList.get(0).type == TypeEnum.VARIABLE_KEYWORD) points += 1
-        if(tokenList.get(1).type == TypeEnum.VALUE_IDENTIFIER) points += 1
-        if(tokenList.get(2).type == TypeEnum.COLON) points += 1
-        if((tokenList.get(3).type == TypeEnum.NUMBER_TYPE) || (tokenList.get(3).type == TypeEnum.STRING_TYPE)) points += 1
-        if(tokenList.get(4).type == TypeEnum.ASSIGNATION) points += 1
-        if((tokenList.get(5).type == TypeEnum.STRING) || (tokenList.get(5).type == TypeEnum.NUMBER)) points += 1
-        if(tokenList.get(tokenList.size - 1).type == TypeEnum.SEMICOLON) points += 1
+        if(tokenList.get(0).type == TokenType.VARIABLE_KEYWORD) points += 1
+        if(tokenList.get(1).type == TokenType.VALUE_IDENTIFIER) points += 1
+        if(tokenList.get(2).type == TokenType.COLON) points += 1
+        if((tokenList.get(3).type == TokenType.NUMBER_TYPE) || (tokenList.get(3).type == TokenType.STRING_TYPE)) points += 1
+        if(tokenList.get(4).type == TokenType.ASSIGNATION) points += 1
+        if((tokenList.get(5).type == TokenType.STRING) || (tokenList.get(5).type == TokenType.NUMBER)) points += 1
+        if(tokenList.get(tokenList.size - 1).type == TokenType.SEMICOLON) points += 1
         return points
     }
 

@@ -2,7 +2,7 @@ package org.example.parser.sintactic.declarative
 
 import org.example.parser.sintactic.SintacticChecker
 import org.example.token.Token
-import org.example.token.TypeEnum
+import org.example.token.TokenType
 
 class hasOperatorOnProperWay: SintacticChecker {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
@@ -13,12 +13,12 @@ class hasOperatorOnProperWay: SintacticChecker {
         }
     }
 
-    private fun checkPlusOperator(tokenList: List<Token>, type: TypeEnum): Boolean{
+    private fun checkPlusOperator(tokenList: List<Token>, type: TokenType): Boolean{
         var previus = tokenList[5]
         var next = tokenList[7]
         if(isOperator(previus) || isOperator(next)) return false
         var index = 6
-        while(next.type != TypeEnum.SEMICOLON){
+        while(next.type != TokenType.SEMICOLON){
             if(previus.type == type && next.type == type){
                 if(!isOperator(tokenList[index])) return false
                 else{
@@ -33,12 +33,12 @@ class hasOperatorOnProperWay: SintacticChecker {
 
     private fun isOperator(token: Token): Boolean{
         return when(token.type){
-            TypeEnum.PLUS, TypeEnum.STAR, TypeEnum.SLASH, TypeEnum.MINUS -> true
+            TokenType.PLUS, TokenType.STAR, TokenType.SLASH, TokenType.MINUS -> true
             else -> false
         }
     }
 
-    private fun findType(tokenList: List<Token>): TypeEnum{
+    private fun findType(tokenList: List<Token>): TokenType{
         return tokenList[5].type
     }
 
