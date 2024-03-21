@@ -13,9 +13,9 @@ class StaticCodeAnalyzerImpl(private val rules: List<Rule>) : StaticCodeAnalyzer
         for (rule in rules) {
             when (val result = rule.validate(ast)) {
                 is StaticCodeAnalyzerResult.Error -> report.add(result.message)
-                is StaticCodeAnalyzerResult.Ok -> continue // hola
+                is StaticCodeAnalyzerResult.Ok -> continue
             }
         }
-        return report // hola
-    } // hola
-} // hola
+        return report
+    }
+}
