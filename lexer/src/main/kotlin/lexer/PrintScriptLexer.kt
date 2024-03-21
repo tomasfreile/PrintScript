@@ -10,6 +10,7 @@ import java.util.regex.Pattern
 class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexer {
     override fun lex(input: String): List<Token> {
         val tokens = ArrayList<Token>()
+
         var line = 0
 
         input.lines().forEach {
