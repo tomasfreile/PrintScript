@@ -4,7 +4,7 @@ import token.Coordinate
 import token.PrintScriptToken
 import token.Token
 import token.TokenType
-import java.util.*
+import java.util.EnumMap
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 

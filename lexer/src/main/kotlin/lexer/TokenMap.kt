@@ -1,7 +1,7 @@
 package lexer
 
 import token.TokenType
-import java.util.*
+import java.util.EnumMap
 import java.util.regex.Pattern
 
 fun getTokenMap(): EnumMap<TokenType, Pattern> {
