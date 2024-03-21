@@ -1,4 +1,3 @@
-
 rootProject.name = 'PrintScript'
 include('commons','sca','lexer','parser')
 

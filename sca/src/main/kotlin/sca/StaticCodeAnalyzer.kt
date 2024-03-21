@@ -12,8 +12,7 @@ class StaticCodeAnalyzerImpl(private val rules : List<Rule>) : StaticCodeAnalyze
     override fun analyze(ast : Node): List<String> {
         val report = mutableListOf<String>()
         for (rule in rules) {
-            val result = rule.validate(ast)
-            when (result) {
+            when (val result = rule.validate(ast)) {
                 is StaticCodeAnalyzerResult.Error -> report.add(result.message)
                 is StaticCodeAnalyzerResult.Ok -> continue
             }
