@@ -1,9 +1,9 @@
-package org.example.formatter
+package formatter
 
-import org.example.parser.ASTBinaryNode
-import org.example.parser.ASTSingleNode
-import org.example.parser.Node
-import org.example.token.TypeEnum
+
+import ast.ASTBinaryNode
+import ast.ASTSingleNode
+import ast.Node
 import org.yaml.snakeyaml.Yaml
 import java.io.File
 import java.io.FileInputStream
@@ -34,7 +34,7 @@ class Formatter() {
 
     fun readYaml(): Map<String,Any> {
         val yaml = Yaml()
-        val inputStream = FileInputStream(File("/home/marcos/Documentos/Projects/IngSis/PrintScript/src/main/kotlin/formatter/formatter.yaml"))
+        val inputStream = FileInputStream(File("src/main/resources/formatter.yaml"))
         return inputStream.use { stream ->
             yaml.load(stream)
         }
