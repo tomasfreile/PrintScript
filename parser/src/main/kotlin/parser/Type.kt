@@ -1,6 +1,6 @@
 package parser
 
-enum class ParseType {
+enum class Type {
     PRINT,
     ASSIGNATION,
     DECLARATION,

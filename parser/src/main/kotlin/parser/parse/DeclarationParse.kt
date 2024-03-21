@@ -1,4 +1,4 @@
-package parser
+package parser.parse
 
 import org.example.parser.semantic.NumberTypeDeclaration
 import ast.ASTBinaryNode

@@ -1,4 +1,4 @@
-package org.example.parser.sintactic.print
+package parser.sintactic
 
 import org.example.parser.sintactic.SintacticChecker
 import token.Token
