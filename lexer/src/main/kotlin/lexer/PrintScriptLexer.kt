@@ -4,9 +4,8 @@ import token.Coordinate
 import token.PrintScriptToken
 import token.Token
 import token.TokenType
-import java.util.EnumMap
+import java.util.*
 import java.util.regex.Pattern
-import kotlin.collections.ArrayList
 
 class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexer {
     override fun lex(input: String): List<Token> {
