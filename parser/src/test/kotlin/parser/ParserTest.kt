@@ -1,7 +1,8 @@
 package parser
 
 import ast.Node
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import token.Coordinate
 import token.PrintScriptToken
@@ -10,7 +11,7 @@ import token.TokenType
 
 class ParserTest {
     @Test
-    fun StringDeclarationTest()  {
+    fun stringDeclarationTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
@@ -28,7 +29,7 @@ class ParserTest {
     }
 
     @Test
-    fun BinaryDeclarationTest()  {
+    fun binaryDeclarationTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
@@ -48,7 +49,7 @@ class ParserTest {
     }
 
     @Test
-    fun TripleSumDeclarationTest()  {
+    fun tripleSumDeclarationTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
@@ -70,7 +71,7 @@ class ParserTest {
     }
 
     @Test
-    fun BinaryProductTest()  {
+    fun binaryProductTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
@@ -90,7 +91,7 @@ class ParserTest {
     }
 
     @Test
-    fun BinaryDivisionTest()  {
+    fun binaryDivisionTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
@@ -110,7 +111,7 @@ class ParserTest {
     }
 
     @Test
-    fun BinarySubstractTest()  {
+    fun binarySubstractTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
@@ -130,7 +131,7 @@ class ParserTest {
     }
 
     @Test
-    fun PlusComesFirstThanMinusTest()  {
+    fun plusComesFirstThanMinusTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
@@ -145,14 +146,14 @@ class ParserTest {
                 PrintScriptToken(TokenType.NUMBER, "5", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val parser: Parser = Parser()
+        val parser = Parser()
         val node: Node? = parser.parse(tokenList)
         assertNotNull(node)
         assertEquals(node?.token?.type, TokenType.VARIABLE_KEYWORD)
     }
 
     @Test
-    fun MinusComeFistThanPlusTest()  {
+    fun minusComeFistThanPlusTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
@@ -174,7 +175,7 @@ class ParserTest {
     }
 
     @Test
-    fun NumberPlusProductTest()  {
+    fun numberPlusProductTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
@@ -196,7 +197,7 @@ class ParserTest {
     }
 
     @Test
-    fun ProductPlusPrudctTest()  {
+    fun productPlusPrudctTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
@@ -220,7 +221,7 @@ class ParserTest {
     }
 
     @Test
-    fun parenSimplePlusProductOperationTest()  {
+    fun parenSimplePlusProductOperationTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
@@ -244,7 +245,7 @@ class ParserTest {
     }
 
     @Test
-    fun doubleParenSimplePlusProductOperationTest()  {
+    fun doubleParenSimplePlusProductOperationTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),

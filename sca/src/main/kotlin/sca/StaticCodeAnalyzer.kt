@@ -7,9 +7,8 @@ interface StaticCodeAnalyzer {
     fun analyze(ast: Node): List<String>
 }
 
-class StaticCodeAnalyzerImpl(private val rules : List<Rule>) : StaticCodeAnalyzer {
-
-    override fun analyze(ast : Node): List<String> {
+class StaticCodeAnalyzerImpl(private val rules: List<Rule>) : StaticCodeAnalyzer {
+    override fun analyze(ast: Node): List<String> {
         val report = mutableListOf<String>()
         for (rule in rules) {
             when (val result = rule.validate(ast)) {
@@ -20,5 +19,3 @@ class StaticCodeAnalyzerImpl(private val rules : List<Rule>) : StaticCodeAnalyze
         return report
     }
 }
-
-
