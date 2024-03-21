@@ -1,6 +1,6 @@
 package sca
 
-import ast.*
+import ast.Node
 import sca.rules.Rule
 
 interface StaticCodeAnalyzer {
@@ -13,7 +13,7 @@ class StaticCodeAnalyzerImpl(private val rules: List<Rule>) : StaticCodeAnalyzer
         for (rule in rules) {
             when (val result = rule.validate(ast)) {
                 is StaticCodeAnalyzerResult.Error -> report.add(result.message)
-                is StaticCodeAnalyzerResult.Ok -> continue
+                is StaticCodeAnalyzerResult.Ok -> continue // joj
             }
         }
         return report
