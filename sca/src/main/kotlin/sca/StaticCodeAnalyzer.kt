@@ -17,5 +17,5 @@ class StaticCodeAnalyzerImpl(private val rules: List<Rule>) : StaticCodeAnalyzer
             }
         }
         return report
-    }
+    } // hola
 } // hola
