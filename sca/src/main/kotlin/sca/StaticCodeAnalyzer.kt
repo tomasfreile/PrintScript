@@ -1,6 +1,6 @@
 package sca
 
-import ast.Node
+import ast.*
 import sca.rules.Rule
 
 interface StaticCodeAnalyzer {
