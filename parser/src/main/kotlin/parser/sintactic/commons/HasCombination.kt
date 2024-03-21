@@ -1,22 +1,21 @@
 package parser.sintactic.commons
 
 import org.example.parser.sintactic.SintacticChecker
-import org.example.parser.sintactic.assignation.isAssignation
+import parser.sintactic.isAssignation
 import org.example.parser.sintactic.declarative.isDeclarative
-import org.example.parser.sintactic.print.isPrint
-import parser.Parse
-import parser.ParseType
+import parser.sintactic.isPrint
+import parser.Type
 import token.Token
 import token.TokenType
 
 class hasCombination:SintacticChecker {
     override fun checkSyntax(tokenList: List<Token>): Boolean { //If length is not enough, it will be NIL
-        var type = checkParseType(tokenList)
+        val type = checkParseType(tokenList)
         return when(type){
-            ParseType.ASSIGNATION -> checkStructure(tokenList, 2, tokenList.size - 1)
-            ParseType.PRINT -> checkStructure(tokenList, 2, tokenList.size - 2)
-            ParseType.DECLARATION -> checkStructure(tokenList, 5, tokenList.size - 1)
-            ParseType.NIL -> false
+            Type.ASSIGNATION -> checkStructure(tokenList, 2, tokenList.size - 1)
+            Type.PRINT -> checkStructure(tokenList, 2, tokenList.size - 2)
+            Type.DECLARATION -> checkStructure(tokenList, 5, tokenList.size - 1)
+            Type.NIL -> false
         }
     }
 
@@ -42,6 +41,7 @@ class hasCombination:SintacticChecker {
     }
 
     private fun checkNumberContent(tokenList: List<Token>): Boolean{
+        if(tokenList.size == 1) return false
         var index = 0
         while(index < tokenList.size){
             when(tokenList[index].type){
@@ -66,12 +66,12 @@ class hasCombination:SintacticChecker {
         }
     }
 
-    private fun checkParseType(tokenList: List<Token>): ParseType{
+    private fun checkParseType(tokenList: List<Token>): Type{
         return when{
-            isDeclarative().checkSyntax(tokenList) -> ParseType.DECLARATION
-            isPrint().checkSyntax(tokenList) -> ParseType.PRINT
-            isAssignation().checkSyntax(tokenList) -> ParseType.ASSIGNATION
-            else -> ParseType.NIL
+            isDeclarative().checkSyntax(tokenList) -> Type.DECLARATION
+            isPrint().checkSyntax(tokenList) -> Type.PRINT
+            isAssignation().checkSyntax(tokenList) -> Type.ASSIGNATION
+            else -> Type.NIL
         }
     }
 }
