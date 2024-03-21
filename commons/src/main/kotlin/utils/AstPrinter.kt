@@ -8,7 +8,6 @@ fun printAST(
     ast: Node,
     depth: Int = 0,
 ) {
-
     val indent = "  ".repeat(depth)
     when (ast) {
         is ASTSingleNode -> {

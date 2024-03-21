@@ -54,7 +54,7 @@ class PrintScriptLexerTest {
     }
 
     @Test
-    fun stringType()  {
+    fun stringType() {
         val input = "let str: String = 'Hello, World!'"
         val expectedTokens =
             listOf(
@@ -70,7 +70,7 @@ class PrintScriptLexerTest {
     }
 
     @Test
-    fun numberType()  {
+    fun numberType() {
         val input = "let num: Number = 123"
         val expectedTokens =
             listOf(
@@ -118,7 +118,7 @@ class PrintScriptLexerTest {
     }
 
     @Test
-    fun multipleLineInput()  {
+    fun multipleLineInput() {
         val input = "123\nprintln(1) \n let"
         val expectedTokens =
             listOf(

@@ -4,7 +4,7 @@ import token.TokenType
 import java.util.*
 import java.util.regex.Pattern
 
-fun getTokenMap(): EnumMap<TokenType, Pattern>  {
+fun getTokenMap(): EnumMap<TokenType, Pattern> {
     val tokenMap = EnumMap<TokenType, Pattern>(TokenType::class.java)
 
     // Single-character tokens.

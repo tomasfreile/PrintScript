@@ -11,7 +11,7 @@ class DeclarationParse() : Parse {
         return recursiveParse(tokenList)
     }
 
-    private fun recursiveParse(tokenList: List<Token>): Node  {
+    private fun recursiveParse(tokenList: List<Token>): Node {
         val token: Token = tokenList.first()
         return when (token.type) {
             TokenType.SEMICOLON -> {
@@ -32,47 +32,41 @@ class DeclarationParse() : Parse {
         }
     }
 
-    private fun handleLeftParen(tokenList: List<Token>): Node  {
+    private fun handleLeftParen(tokenList: List<Token>): Node {
         val rightParenIndex = getArithmeticOperatorIndex(tokenList, TokenType.RIGHT_PAREN)
-        return if (hasBinaryOperation(tokenList.subList(rightParenIndex + 1, tokenList.size)))
-            { // maybe is (3 + 5) * 3
-                ASTBinaryNode(
-                    parse(tokenList.subList(rightParenIndex + 2, tokenList.size)), // 3 the operation
-                    parse(tokenList.subList(1, rightParenIndex)), //  3 + 5 the operation
-                    tokenList.get(rightParenIndex + 1), // * the operator
-                )
-            } else
-            {
-                parse(
-                    tokenList.subList(1, tokenList.size),
-                ) // No contempla el SEMICOLON?? Cómo los saco? Y si elimino el semicolon de la lista de tokens?? mas simple??
-            } // Parse what is inside the parenthesis
+        return if (hasBinaryOperation(tokenList.subList(rightParenIndex + 1, tokenList.size))) { // maybe is (3 + 5) * 3
+            ASTBinaryNode(
+                parse(tokenList.subList(rightParenIndex + 2, tokenList.size)), // 3 the operation
+                parse(tokenList.subList(1, rightParenIndex)), //  3 + 5 the operation
+                tokenList.get(rightParenIndex + 1), // * the operator
+            )
+        } else {
+            parse(
+                tokenList.subList(1, tokenList.size),
+            ) // No contempla el SEMICOLON?? Cómo los saco? Y si elimino el semicolon de la lista de tokens?? mas simple??
+        } // Parse what is inside the parenthesis
     }
 
-    private fun handleLiteral(tokenList: List<Token>): Node  {
-        return if (hasBinaryOperation(tokenSubList(tokenList)))
-            { // there is a Literal, might be a binary operation
-                hanldeBinaryOperation(tokenList) // it is binary operation, so let's do it ;)
-            } else
-            { // it is not binary, so keep going until semiColon or break recursion
-                if (isBreakRecursion(tokenList))
-                    {
-                        ASTSingleNode(null, tokenList.first()) // break recursion because of literal on right side!! open for update
-                    } else {
-                    ASTSingleNode(parse(tokenSubList(tokenList)), tokenList.first())
-                }
+    private fun handleLiteral(tokenList: List<Token>): Node {
+        return if (hasBinaryOperation(tokenSubList(tokenList))) { // there is a Literal, might be a binary operation
+            hanldeBinaryOperation(tokenList) // it is binary operation, so let's do it ;)
+        } else { // it is not binary, so keep going until semiColon or break recursion
+            if (isBreakRecursion(tokenList)) {
+                ASTSingleNode(null, tokenList.first()) // break recursion because of literal on right side!! open for update
+            } else {
+                ASTSingleNode(parse(tokenSubList(tokenList)), tokenList.first())
             }
+        }
     }
 
     private fun isBreakRecursion(tokenList: List<Token>): Boolean {
         return tokenList.size == 1
     }
 
-    private fun hasBinaryOperation(tokenList: List<Token>): Boolean  {
-        if (tokenList.isEmpty())
-            {
-                return false
-            }
+    private fun hasBinaryOperation(tokenList: List<Token>): Boolean {
+        if (tokenList.isEmpty()) {
+            return false
+        }
         return when (tokenList.first().type) { // checks if should stop
             TokenType.SEMICOLON -> {
                 false
@@ -86,14 +80,13 @@ class DeclarationParse() : Parse {
         }
     }
 
-    private fun hanldeBinaryOperation(tokenList: List<Token>): Node  {
+    private fun hanldeBinaryOperation(tokenList: List<Token>): Node {
         val token: Token = tokenList.first()
         return when (token.type) {
             TokenType.STRING, TokenType.NUMBER -> { // Is a Literal
-                if (hasBinaryOperation(tokenSubList(tokenList)))
-                    { // maybe there is another binary opeartion
-                        bakeBinaryNode(tokenList) // bake a binary the node!!!
-                    } else { // is just a literal and next should be a SemiColon -> " ; "
+                if (hasBinaryOperation(tokenSubList(tokenList))) { // maybe there is another binary opeartion
+                    bakeBinaryNode(tokenList) // bake a binary the node!!!
+                } else { // is just a literal and next should be a SemiColon -> " ; "
                     parse(tokenList) // start again, next should just be a Semicolon -> " ; ", keep it as possible update
                 } // end
             }
@@ -103,26 +96,25 @@ class DeclarationParse() : Parse {
         }
     }
 
-    private fun bakeBinaryNode(tokenList: List<Token>): Node  {
+    private fun bakeBinaryNode(tokenList: List<Token>): Node {
         return if (isSplit(tokenList)) { // If there is a Plus or Minus, should split the terms
             split(tokenList)
-        } else
-            { // if the operator is not plus, does not matter the order
-                ASTBinaryNode(
-                    recursiveParse(tokenList.subList(2, tokenList.size)), //
-                    recursiveParse(tokenList.subList(0, 1)),
-                    tokenList.get(1), // Papa node
-                )
-            }
+        } else { // if the operator is not plus, does not matter the order
+            ASTBinaryNode(
+                recursiveParse(tokenList.subList(2, tokenList.size)), //
+                recursiveParse(tokenList.subList(0, 1)),
+                tokenList.get(1), // Papa node
+            )
+        }
     }
 
-    private fun isSplit(tokenList: List<Token>): Boolean  {
+    private fun isSplit(tokenList: List<Token>): Boolean {
         val plusIndex = getArithmeticOperatorIndex(tokenList, TokenType.PLUS)
         val minusIndex = getArithmeticOperatorIndex(tokenList, TokenType.MINUS)
         return plusIndex > 0 || minusIndex > 0 // verify if there is a sign for split
     }
 
-    private fun split(tokenList: List<Token>): Node  { // I should check which comes first, Minus or Plus, at least one of each > 0 because of split condition
+    private fun split(tokenList: List<Token>): Node { // I should check which comes first, Minus or Plus, at least one of each > 0 because of split condition
         val plusIndex = getArithmeticOperatorIndex(tokenList, TokenType.PLUS)
         val minusIndex = getArithmeticOperatorIndex(tokenList, TokenType.MINUS)
         return when {
@@ -142,20 +134,18 @@ class DeclarationParse() : Parse {
         tokenList: List<Token>,
         minusIndex: Int,
         plusIndex: Int,
-    ): Node  {
-        return if (plusIndex > minusIndex)
-            {
-                constructSplitNode(tokenList, minusIndex)
-            } else
-            {
-                constructSplitNode(tokenList, plusIndex)
-            }
+    ): Node {
+        return if (plusIndex > minusIndex) {
+            constructSplitNode(tokenList, minusIndex)
+        } else {
+            constructSplitNode(tokenList, plusIndex)
+        }
     }
 
     private fun constructSplitNode(
         tokenList: List<Token>,
         splitIndex: Int,
-    ): Node  {
+    ): Node {
         return ASTBinaryNode(
             parse(tokenList.subList(splitIndex + 1, tokenList.size)), // start new parse with the partition
             parse(tokenList.subList(0, splitIndex)), // start new parse with the partition
@@ -163,14 +153,14 @@ class DeclarationParse() : Parse {
         )
     }
 
-    private fun tokenSubList(tokenList: List<Token>): List<Token>  {
+    private fun tokenSubList(tokenList: List<Token>): List<Token> {
         return tokenList.subList(1, tokenList.size)
     }
 
     private fun getArithmeticOperatorIndex(
         tokenList: List<Token>,
         type: TokenType,
-    ): Int  { // gets first found
+    ): Int { // gets first found
         var position = 0
         for (token in tokenList) {
             when (token.type) {

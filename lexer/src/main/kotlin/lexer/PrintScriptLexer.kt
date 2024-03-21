@@ -8,8 +8,8 @@ import java.util.*
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 
-class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexer{
-    override fun lex(input: String): List<Token>  {
+class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexer {
+    override fun lex(input: String): List<Token> {
         val tokens = ArrayList<Token>()
         var line = 0
 
@@ -25,7 +25,7 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
         input: String,
         tokenMap: EnumMap<TokenType, Pattern>,
         line: Int,
-    ): List<Token>  {
+    ): List<Token> {
         val tokens = ArrayList<Token>()
         val types = tokenMap.keys.toList()
         val matcher = tokenMap.values.joinToString("|").toRegex().toPattern().matcher(input)
