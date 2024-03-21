@@ -13,7 +13,7 @@ class PrintParse: Parse {
     override fun parse(tokenList: List<Token>): Node {
         val token = tokenList.first()
         return when(token.type){
-            TokenType.STAR, TokenType.SLASH, TokenType.MINUS -> throw InvalidSyntax("Invalid operator")
+            TokenType.STAR, TokenType.SLASH, TokenType.MINUS -> throw InvalidSyntax("Invalid operator") //Si es solo numerico?!!
             TokenType.SEMICOLON -> ASTSingleNode(null, token) //break
             TokenType.PRINT -> {
                 if(hasCombination().checkSyntax(tokenList)){
@@ -38,7 +38,7 @@ class PrintParse: Parse {
     }
 
     private fun handleLiteral(tokenList: List<Token>): Node{
-        val plusIndex = getPlusIndex(tokenList)
+        val plusIndex = getArithmeticOperatorIndex(tokenList, TokenType.PLUS)
         return if(plusIndex != -1){
             ASTBinaryNode(
                 buildBinaryNode(tokenList.subList(plusIndex + 1, tokenList.size)),
@@ -54,15 +54,19 @@ class PrintParse: Parse {
         }
     }
 
-    private fun getPlusIndex(tokenList: List<Token>): Int{
-        var index = 0
-        for(token in tokenList){
+    private fun getArithmeticOperatorIndex(tokenList: List<Token>, type: TokenType): Int{ //gets first found
+        var position = 0
+        for (token in tokenList){
             when(token.type){
-                TokenType.PLUS -> return index
-                else -> index += 1
+                type -> return position
+                else -> {
+                    position +=1
+                    continue
+                }
             }
         }
         return -1
     }
+
 
 }
