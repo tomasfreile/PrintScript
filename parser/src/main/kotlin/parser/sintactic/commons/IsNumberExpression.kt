@@ -1,10 +1,10 @@
 package parser.sintactic.commons
 
 import org.example.parser.sintactic.SintacticChecker
-import org.example.parser.sintactic.assignation.isAssignation
+import parser.sintactic.isAssignation
 import org.example.parser.sintactic.declarative.isDeclarative
-import org.example.parser.sintactic.print.isPrint
-import parser.ParseType
+import parser.sintactic.isPrint
+import parser.Type
 import token.Token
 import token.TokenType
 
@@ -12,10 +12,10 @@ class justHaveNumber: SintacticChecker {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
         var type = checkParseType(tokenList)
         return when(type){
-            ParseType.ASSIGNATION -> checkContent(tokenList, 2, tokenList.size - 1) //content position depends on the type of parse
-            ParseType.PRINT -> checkContent(tokenList, 2, tokenList.size - 2)
-            ParseType.DECLARATION -> checkContent(tokenList, 5, tokenList.size - 1)
-            ParseType.NIL -> false
+            Type.ASSIGNATION -> checkContent(tokenList, 2, tokenList.size - 1) //content position depends on the type of parse
+            Type.PRINT -> checkContent(tokenList, 2, tokenList.size - 2)
+            Type.DECLARATION -> checkContent(tokenList, 5, tokenList.size - 1)
+            Type.NIL -> false
         }
     }
 
@@ -48,12 +48,12 @@ class justHaveNumber: SintacticChecker {
         }
     }
 
-    private fun checkParseType(tokenList: List<Token>): ParseType {
+    private fun checkParseType(tokenList: List<Token>): Type {
         return when{
-            isDeclarative().checkSyntax(tokenList) -> ParseType.DECLARATION
-            isPrint().checkSyntax(tokenList) -> ParseType.PRINT
-            isAssignation().checkSyntax(tokenList) -> ParseType.ASSIGNATION
-            else -> ParseType.NIL
+            isDeclarative().checkSyntax(tokenList) -> Type.DECLARATION
+            isPrint().checkSyntax(tokenList) -> Type.PRINT
+            isAssignation().checkSyntax(tokenList) -> Type.ASSIGNATION
+            else -> Type.NIL
         }
     }
 }
