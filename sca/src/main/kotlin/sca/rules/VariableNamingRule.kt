@@ -14,7 +14,11 @@ class VariableNamingRule(private val namingConvention: NamingConvention) : Rule 
         return StaticCodeAnalyzerResult.Ok
     }
 
-    private fun validateVariableNames(node: ASTSingleNode, regex: String, errorMessage: String): StaticCodeAnalyzerResult {
+    private fun validateVariableNames(
+        node: ASTSingleNode,
+        regex: String,
+        errorMessage: String,
+    ): StaticCodeAnalyzerResult {
         if (isVariableKeywordNode(node)) {
             val variableName = node.node?.token?.value
             if (variableName != null && !variableName.matches(Regex(regex))) {
@@ -29,5 +33,5 @@ class VariableNamingRule(private val namingConvention: NamingConvention) : Rule 
 
 enum class NamingConvention(val regex: String, val errorMessage: String) {
     SNAKE_CASE("[a-z][a-z_0-9]*", "in snake case"),
-    CAMEL_CASE("^[a-z][a-zA-Z0-9]*$", "in camel case")
+    CAMEL_CASE("^[a-z][a-zA-Z0-9]*$", "in camel case"),
 }
