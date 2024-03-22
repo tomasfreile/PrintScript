@@ -17,3 +17,19 @@ test {
     useJUnitPlatform()
 }
 
+tasks.register('installGitHook', Copy) {
+    description = 'Install pre-commit git hook'
+    from(new File(rootProject.rootDir, 'pre-commit'))
+    into { new File(rootProject.rootDir, '.git/hooks') }
+    fileMode 0777
+
+    doLast {
+        println 'Git pre-commit hook installed successfully.'
+    }
+}
+
+tasks.named('build') {
+    dependsOn 'installGitHook'
+}
+
+
