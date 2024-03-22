@@ -3,13 +3,13 @@ package org.example.interpreter
 import org.example.parser.ASTSingleNode
 import org.example.parser.Node
 import org.example.token.Token
-import org.example.token.TypeEnum
+import org.example.token.TokenType
 
 class ParenInterpreter:Interpreter {
 
     override fun interpret(
         node: Node?,
-        interpreters: Map<TypeEnum, Interpreter>,
+        interpreters: Map<TokenType, Interpreter>,
         symbolTable: Map<String, Token>
     ): Any? {
         if (node is ASTSingleNode) {
