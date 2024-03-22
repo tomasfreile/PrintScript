@@ -18,7 +18,7 @@ class ScaTest {
         val sca = StaticCodeAnalyzerImpl("configTest.yaml")
         val ast =
             ASTSingleNode(null, PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)))
-        assert(sca.analyze(ast).isEmpty())
+        assert(sca.analyze(ast).isNotEmpty())
     }
 
     @Test

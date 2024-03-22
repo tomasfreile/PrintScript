@@ -1,9 +1,40 @@
-#!/bin/sh
-./gradlew ktlintCheck ktlintFormat --daemon --parallel --continue
-if [ $? -ne 0 ]; then
-    echo "Ktlint check failed. Try again after fixing the issues"
+#!/bin/bash
 
-    exit 1
-fi
-echo "ktlint check passed. Committing..."
-exit 0
+# Function to run tests
+run_tests() {
+    echo "Running tests..."
+    ./gradlew test --daemon --parallel --continue
+    return $?
+}
+
+# Function to run ktlint checks
+run_ktlint_checks() {
+    echo "Running ktlint checks..."
+    ./gradlew ktlintCheck ktlintFormat --daemon --parallel --continue
+    return $?
+}
+
+# Main function
+main() {
+    run_tests
+    tests_result=$?
+
+    if [ $tests_result -ne 0 ]; then
+        echo "Tests failed. Please fix the issues before committing."
+        exit $tests_result
+    fi
+
+    run_ktlint_checks
+    ktlint_result=$?
+
+    if [ $ktlint_result -ne 0 ]; then
+        echo "Ktlint check failed. Please fix the issues before committing."
+        exit $ktlint_result
+    fi
+
+    echo "Tests and ktlint checks passed. Committing..."
+    exit 0
+}
+
+# Run main function
+main
