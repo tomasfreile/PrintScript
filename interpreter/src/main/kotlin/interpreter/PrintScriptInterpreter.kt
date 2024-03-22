@@ -1,8 +1,12 @@
 package org.example.interpreter
 
-import org.example.parser.Node
-import org.example.token.Token
-import org.example.token.TokenType
+import ast.ASTBinaryNode
+import ast.ASTSingleNode
+import ast.Node
+import token.Coordinate
+import token.PrintScriptToken
+import token.Token
+import token.TokenType
 
 class PrintScriptInterpreter(private val interpreters: Map<TokenType, Interpreter>, val symbolTable: Map<String, Token>) {
      fun interpret(node: Node?) : PrintScriptInterpreter {

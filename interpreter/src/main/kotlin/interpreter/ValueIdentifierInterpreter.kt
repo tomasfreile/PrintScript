@@ -1,10 +1,10 @@
 package org.example.interpreter
 
-import jdk.jshell.UnresolvedReferenceException
-import org.example.parser.ASTSingleNode
-import org.example.parser.Node
-import org.example.token.Token
-import org.example.token.TokenType
+import ast.ASTSingleNode
+import ast.Node
+import interpreter.exception.UnresolvedReferenceException
+import token.Token
+import token.TokenType
 
 class ValueIdentifierInterpreter:Interpreter {
     override fun interpret(
@@ -14,7 +14,7 @@ class ValueIdentifierInterpreter:Interpreter {
     ): Any? {
         node as ASTSingleNode
         val valueIdentifier = node.token.value
-        val value = symbolTable[valueIdentifier]?.value ?: throw org.example.interpreter.exception.UnresolvedReferenceException("Variable $valueIdentifier not declared")
+        val value = symbolTable[valueIdentifier]?.value ?: throw UnresolvedReferenceException("Variable $valueIdentifier not declared")
         return value
     }
 }

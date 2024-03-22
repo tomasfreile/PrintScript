@@ -1,12 +1,13 @@
-package org.example.interpreter
+package interpreter
 
-import org.example.interpreter.exception.UnresolvedReferenceException
-import org.example.parser.ASTBinaryNode
-import org.example.parser.Node
-import org.example.token.Coordinate
-import org.example.token.PrintScriptToken
-import org.example.token.Token
-import org.example.token.TokenType
+import ast.ASTBinaryNode
+import ast.Node
+import org.example.interpreter.Interpreter
+import org.example.interpreter.PrintScriptInterpreter
+import token.Coordinate
+import token.PrintScriptToken
+import token.Token
+import token.TokenType
 
 class AssignationInterpreter : Interpreter {
     override fun interpret(
