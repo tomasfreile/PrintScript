@@ -1,0 +1,9 @@
+plugins {
+    id 'printscript.gradle.kotlin-common-conventions'
+}
+
+dependencies {
+    implementation project(':commons')
+    implementation ("org.yaml:snakeyaml:2.2")
+}
+
