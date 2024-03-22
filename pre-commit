@@ -2,14 +2,14 @@
 
 # Function to run tests
 run_tests() {
-    echo "Running tests..."
+    echo "**********Running tests...**********"
     ./gradlew test --daemon --parallel --continue
     return $?
 }
 
 # Function to run ktlint checks
 run_ktlint_checks() {
-    echo "Running ktlint checks..."
+    echo "**********Running ktlint checks...**********"
     ./gradlew ktlintCheck ktlintFormat --daemon --parallel --continue
     return $?
 }
@@ -20,7 +20,7 @@ main() {
     tests_result=$?
 
     if [ $tests_result -ne 0 ]; then
-        echo "Tests failed. Please fix the issues before committing."
+        echo "**********Tests failed. Please fix the issues before committing.**********"
         exit $tests_result
     fi
 
@@ -28,11 +28,11 @@ main() {
     ktlint_result=$?
 
     if [ $ktlint_result -ne 0 ]; then
-        echo "Ktlint check failed. Please fix the issues before committing."
+        echo "**********Ktlint check failed. Please fix the issues before committing.**********"
         exit $ktlint_result
     fi
 
-    echo "Tests and ktlint checks passed. Committing..."
+    echo "**********Tests and ktlint checks passed. Committing...**********"
     exit 0
 }
 
