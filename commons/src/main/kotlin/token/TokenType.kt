@@ -7,12 +7,12 @@ enum class TokenType {
     RIGHT_PAREN,
     PLUS, // +
     MINUS, // -
-    STAR,// *
+    STAR, // *
     SLASH, // /
 
     // Separators
     SEMICOLON, // ;
-    COLON, //:
+    COLON, // :
 
     // Keywords
     PRINT, // print
@@ -23,8 +23,7 @@ enum class TokenType {
     VARIABLE_KEYWORD, // VARIABLE_KEYWORD name: String
 
     // Literals
-    VALUE_IDENTIFIER, //let VALUE_IDENTIFIER: STRING
+    VALUE_IDENTIFIER, // let VALUE_IDENTIFIER: STRING
     STRING, // "hola"
     NUMBER, // 123
-
 }
