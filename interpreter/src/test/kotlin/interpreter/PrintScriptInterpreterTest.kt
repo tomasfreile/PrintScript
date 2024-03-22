@@ -1,21 +1,20 @@
 package interpreter
 
+import ast.ASTBinaryNode
+import ast.ASTSingleNode
 import org.example.interpreter.*
 import org.example.interpreter.operation.MinusOperation
 import org.example.interpreter.operation.PlusOperation
 import org.example.interpreter.operation.SlashOperation
 import org.example.interpreter.operation.StarOperation
-import org.example.parser.ASTBinaryNode
-import org.example.parser.ASTSingleNode
-import org.example.token.Coordinate
-import org.example.token.PrintScriptToken
-import org.example.token.Token
-import org.example.token.TokenType
 import org.junit.jupiter.api.Test
+import token.Coordinate
+import token.PrintScriptToken
+import token.Token
+import token.TokenType
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import kotlin.test.assertEquals
-
 
 class PrintScriptInterpreterTest {
 
