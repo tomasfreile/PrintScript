@@ -88,4 +88,96 @@ class ScaTest {
 
         assert(printExpressionsAndSnake.analyze(ast).isEmpty())
     }
+
+    @Test
+    fun shouldReturnEmptyWhenCaseConventionIsCamelCaseAndVariableNamesAreCamelCase() {
+        val ast =
+            ASTSingleNode(
+                ASTSingleNode(
+                    null,
+                    PrintScriptToken(
+                        TokenType.VALUE_IDENTIFIER,
+                        "camelCase",
+                        Coordinate(2, 5),
+                        Coordinate(2, 9),
+                    ),
+                ),
+                PrintScriptToken(
+                    TokenType.VARIABLE_KEYWORD,
+                    "let",
+                    Coordinate(2, 3),
+                    Coordinate(2, 3),
+                ),
+            )
+        assert(noPrintExpressionsAndCamel.analyze(ast).isEmpty())
+    }
+
+    @Test
+    fun shouldReturnWarningWhenCaseConventionIsCamelCaseAndVariableNamesAreSnakeCase() {
+        val ast =
+            ASTSingleNode(
+                ASTSingleNode(
+                    null,
+                    PrintScriptToken(
+                        TokenType.VALUE_IDENTIFIER,
+                        "snake_case",
+                        Coordinate(2, 5),
+                        Coordinate(2, 9),
+                    ),
+                ),
+                PrintScriptToken(
+                    TokenType.VARIABLE_KEYWORD,
+                    "let",
+                    Coordinate(2, 3),
+                    Coordinate(2, 3),
+                ),
+            )
+        assert(noPrintExpressionsAndCamel.analyze(ast).isNotEmpty())
+    }
+
+    @Test
+    fun shouldReturnEmptyWhenCaseConventionIsSnakeCaseAndVariableNamesAreSnakeCase() {
+        val ast =
+            ASTSingleNode(
+                ASTSingleNode(
+                    null,
+                    PrintScriptToken(
+                        TokenType.VALUE_IDENTIFIER,
+                        "snake_case",
+                        Coordinate(2, 5),
+                        Coordinate(2, 9),
+                    ),
+                ),
+                PrintScriptToken(
+                    TokenType.VARIABLE_KEYWORD,
+                    "let",
+                    Coordinate(2, 3),
+                    Coordinate(2, 3),
+                ),
+            )
+        assert(printExpressionsAndSnake.analyze(ast).isEmpty())
+    }
+
+    @Test
+    fun shouldReturnWarningWhenCaseConventionIsSnakeCaseAndVariableNamesAreCamelCase() {
+        val ast =
+            ASTSingleNode(
+                ASTSingleNode(
+                    null,
+                    PrintScriptToken(
+                        TokenType.VALUE_IDENTIFIER,
+                        "camelCase",
+                        Coordinate(2, 5),
+                        Coordinate(2, 9),
+                    ),
+                ),
+                PrintScriptToken(
+                    TokenType.VARIABLE_KEYWORD,
+                    "let",
+                    Coordinate(2, 3),
+                    Coordinate(2, 3),
+                ),
+            )
+        assert(printExpressionsAndSnake.analyze(ast).isNotEmpty())
+    }
 }
