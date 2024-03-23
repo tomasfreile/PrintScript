@@ -1,14 +1,14 @@
-package org.example.parser.semantic
+package parser.semantic
 
 import token.Token
 import token.TokenType
 
-class NumberTypeDeclaration: SemanticChecker {
+class NumberTypeDeclaration : SemanticChecker {
     override fun checkSemantic(tokenList: List<Token>): Boolean {
-        for(token in tokenList){
-            when(token.type){
+        for (token in tokenList) {
+            when (token.type) {
                 TokenType.STRING -> return false
-                else -> { continue }
+                else -> continue
             }
         }
         return true

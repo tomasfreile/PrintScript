@@ -1,9 +1,8 @@
-package org.example.parser.semantic
+package parser.semantic
 
 import token.Token
 
-
-class StringTypeDeclaration: SemanticChecker {
+class StringTypeDeclaration : SemanticChecker {
     override fun checkSemantic(tokenList: List<Token>): Boolean {
         TODO("Not yet implemented")
     }
