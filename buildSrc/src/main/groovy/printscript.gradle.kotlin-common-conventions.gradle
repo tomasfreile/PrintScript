@@ -1,6 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm'
     id "org.jlleitschuh.gradle.ktlint"
+    id "org.jetbrains.kotlinx.kover"
 }
 
 
@@ -32,4 +33,16 @@ tasks.named('build') {
     dependsOn 'installGitHook'
 }
 
-
+subprojects {
+    kover {
+        verify {
+            rule {
+                isEnabled = true
+                name = "Coverage must be more than 60%"
+                bound {
+                    minValue = 60
+                }
+            }
+        }
+    }
+}
