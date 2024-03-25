@@ -1,4 +1,4 @@
 rootProject.name = 'PrintScript'
-include('commons','sca','lexer','parser')
+include('commons','sca','lexer','parser', 'interpreter')
 
 
