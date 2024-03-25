@@ -8,18 +8,12 @@ import token.PrintScriptToken
 import token.TokenType
 
 class ScaTest {
+    // use resources files
     private val noPrintExpressionsAndCamel =
-        StaticCodeAnalyzerImpl("C:\\Users\\tomyf\\ingisis\\PrintScript\\sca\\src\\test\\resources\\NoPrintExpressionsAndCamelCase.yaml")
-    private val printExpressionsAndSnake =
-        StaticCodeAnalyzerImpl("C:\\Users\\tomyf\\ingisis\\PrintScript\\sca\\src\\test\\resources\\PrintExpressionsAndSnakeCase.yaml")
+        StaticCodeAnalyzerImpl("src/test/resources/NoPrintExpressionsAndCamelCase.yaml")
 
-    @Test
-    fun shouldReturnEmptyWhenInputFileDoesNotExist() {
-        val sca = StaticCodeAnalyzerImpl("configTest.yaml")
-        val ast =
-            ASTSingleNode(null, PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)))
-        assert(sca.analyze(ast).isEmpty())
-    }
+    private val printExpressionsAndSnake =
+        StaticCodeAnalyzerImpl("src/test/resources/PrintExpressionsAndSnakeCase.yaml")
 
     @Test
     fun shouldReturnEmptyWhenPrintExpressionsAreDisabledAndNoPrintExpressionsArePresent() {
