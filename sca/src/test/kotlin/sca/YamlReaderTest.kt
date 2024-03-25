@@ -35,8 +35,8 @@ class YamlReaderTest {
             yamlReader.readYaml(
                 "src/test/resources/PrintExpressionsAndSnakeCase.yaml",
             )
-//        assert(result["caseConvention"] == "SNAKE_CASE")
-//        assert(result["enablePrintExpressions"] == true)
+        assert(result["caseConvention"] == "SNAKE_CASE")
+        assert(result["enablePrintExpressions"] == true)
     }
 
     @Test
