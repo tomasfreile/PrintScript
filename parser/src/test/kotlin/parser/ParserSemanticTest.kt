@@ -1,5 +1,3 @@
 package parser
 
-class ParserSemanticTest {
-
-}
+class ParserSemanticTest

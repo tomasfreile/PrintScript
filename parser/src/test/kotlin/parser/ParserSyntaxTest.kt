@@ -297,7 +297,7 @@ class ParserSyntaxTest {
     }
 
     @Test
-    fun hasInvalidOperatorOnAssignationValidTest() {
+    fun has2InvalidOperatorOnAssignationValidTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -339,7 +339,7 @@ class ParserSyntaxTest {
     }
 
     @Test
-    fun HasInvalidOperatorOnAssignationValidTest() {
+    fun hasInvalidOperatorOnAssignationValidTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
