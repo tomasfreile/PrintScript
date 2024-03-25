@@ -40,7 +40,7 @@ subprojects {
                 isEnabled = true
                 name = "Coverage must be more than 60%"
                 bound {
-                    minValue = 60
+                    minValue = 99
                 }
             }
         }
