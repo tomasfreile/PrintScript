@@ -33,6 +33,10 @@ tasks.named('build') {
     dependsOn 'installGitHook'
 }
 
+tasks.named('check') {
+    dependsOn 'ktlintCheck'
+}
+
 subprojects {
     kover {
         verify {
