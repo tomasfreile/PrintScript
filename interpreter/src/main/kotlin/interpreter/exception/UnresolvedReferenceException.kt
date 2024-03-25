@@ -1,4 +1,3 @@
 package interpreter.exception
 
-class UnresolvedReferenceException(override val message: String): Exception() {
-}
+class UnresolvedReferenceException(override val message: String) : Exception()

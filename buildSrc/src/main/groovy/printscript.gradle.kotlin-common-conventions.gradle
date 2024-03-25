@@ -1,6 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm'
     id "org.jlleitschuh.gradle.ktlint"
+    id "org.jetbrains.kotlinx.kover"
 }
 
 
@@ -32,4 +33,28 @@ tasks.named('build') {
     dependsOn 'installGitHook'
 }
 
+tasks.named('check') {
+    dependsOn 'ktlintCheck'
+}
 
+koverReport {
+    filters {
+        excludes {
+            // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
+            classes("org.commons")
+        }
+    }
+    verify {
+        rule {
+            minBound(60)
+            filters {
+                excludes{
+                    packages("ast")
+                    packages("token")
+                    packages("utils")
+                }
+
+            }
+        }
+    }
+}
