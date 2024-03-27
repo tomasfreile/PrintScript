@@ -32,11 +32,15 @@ class HasInvalidOperator : SintacticChecker { // SOLO REVISA QUE SE MANTENGA EL 
                 when {
                     isLiteral(content[index]) -> 1
                     isAnOperator(content[index]) -> { // At least index should be index = 1
-                        if (isFormatted(content, index)) {
-                            1
-                        } else {
-                            return true
-                        }
+                        val value = isFormatted(content, index)
+                        if (isFormatted(content, index)) 1 else return true
+                    }
+                    isLeftParen(content[index]) -> {
+                        if (isLiteral(content[index + 1])) 1 else return true
+                    }
+                    isRightParen(content[index]) -> {
+                        if (index + 1 >= content.size) 1 // end
+                        else if (isAnOperator(content[index + 1])) 1 else return true //there is smth else
                     }
                     else -> return true
                 }
@@ -48,7 +52,12 @@ class HasInvalidOperator : SintacticChecker { // SOLO REVISA QUE SE MANTENGA EL 
         content: List<Token>,
         index: Int,
     ): Boolean { // L O L jsjs
-        return if (index + 1 >= content.size) false else isLiteral(content[index - 1]) && isLiteral(content[index + 1])
+        return if (index + 1 >= content.size) false
+        else {
+            isLiteral(content[index - 1]) && isLiteral(content[index + 1])
+                    || isRightParen(content[index - 1]) && isLiteral(content[index + 1])
+                    || isRightParen(content[index - 1]) && isLeftParen(content[index + 1])
+        }
     }
 
     private fun isLiteral(token: Token): Boolean {
@@ -61,6 +70,27 @@ class HasInvalidOperator : SintacticChecker { // SOLO REVISA QUE SE MANTENGA EL 
     private fun isAnOperator(token: Token): Boolean {
         return when (token.type) {
             TokenType.PLUS, TokenType.STAR, TokenType.SLASH, TokenType.MINUS -> true
+            else -> false
+        }
+    }
+
+    private fun isLeftParen(token: Token): Boolean {
+        return when (token.type) {
+            TokenType.LEFT_PAREN -> true
+            else -> false
+        }
+    }
+
+    private fun isRightParen(token: Token): Boolean {
+        return when (token.type) {
+            TokenType.RIGHT_PAREN -> true
+            else -> false
+        }
+    }
+
+    private fun isSemicolon(token: Token): Boolean {
+        return when (token.type) {
+            TokenType.SEMICOLON -> true
             else -> false
         }
     }
