@@ -11,20 +11,24 @@ class AssignationParse : Parse {
         val token = tokenList.first()
         return when {
             breakRecursion(token) -> ASTSingleNode(null, token)
-            isLiteral(token) -> handleLiteral(tokenList)
+            isLiteral(token) || isLeftParen(token) -> handleBuild(tokenList)
             ignore(token) -> parse(tokenList.subList(1, tokenList.size))
             else -> ASTSingleNode(parse(tokenList.subList(1, tokenList.size)), token)
         }
     }
 
-    private fun handleLiteral(tokenList: List<Token>): Node { // if next is an operator
+    private fun handleBuild(tokenList: List<Token>): Node { // if next is an operator
         return if (tokenList.size == 1) {
             ASTSingleNode(null, tokenList.first())
-        } else if (isOperator(tokenList[1])) {
+        } else if (isBinaryNode(tokenList)) {
             BinaryNodeBuilder(PrintParse()).build(tokenList)
         } else {
             ASTSingleNode(parse(tokenList.subList(1, tokenList.size)), tokenList.first())
         }
+    }
+
+    private fun isBinaryNode(tokenList: List<Token>): Boolean {
+        return (isLiteral(tokenList.first()) && isOperator(tokenList[1])) || isLeftParen(tokenList.first())
     }
 
     private fun isLiteral(token: Token): Boolean {
@@ -37,6 +41,13 @@ class AssignationParse : Parse {
     private fun isOperator(token: Token): Boolean {
         return when (token.type) {
             TokenType.PLUS, TokenType.MINUS, TokenType.STAR, TokenType.SLASH -> true
+            else -> false
+        }
+    }
+
+    private fun isLeftParen(token: Token): Boolean  {
+        return when (token.type) {
+            TokenType.LEFT_PAREN -> true
             else -> false
         }
     }

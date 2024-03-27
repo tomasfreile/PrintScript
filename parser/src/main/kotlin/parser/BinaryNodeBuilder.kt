@@ -8,6 +8,14 @@ import token.TokenType
 
 class BinaryNodeBuilder(private val parseAlgorithm: Parse) {
     fun build(tokenList: List<Token>): Node {
+        return when {
+            isOperator(tokenList[1]) -> buildCommonNode(tokenList)
+            isLeftParen(tokenList.first()) -> handleLeftParen(tokenList)
+            else -> throw InvalidSyntax("Syntax error")
+        }
+    }
+
+    private fun buildCommonNode(tokenList: List<Token>): Node{
         return if (isSplit(tokenList)) { // If there is a Plus or Minus, should split the terms
             split(tokenList)
         } else { // if the operator is not plus, does not matter the order, could be STAR or SLASH
@@ -17,6 +25,27 @@ class BinaryNodeBuilder(private val parseAlgorithm: Parse) {
                 tokenList[1],
             )
         }
+    }
+
+    private fun handleLeftParen(tokenList: List<Token>): Node {
+        val index = getRightIndexParen(tokenList)
+        if(index + 1 >= tokenList.size) throw InvalidSyntax("Invalid syntax")
+        return ASTBinaryNode(
+            parseAlgorithm.parse(tokenList.subList(index + 2, tokenList.size)),
+            buildCommonNode(tokenList.subList(1, index)),
+            tokenList[index + 1]
+        )
+    }
+
+    private fun getRightIndexParen(tokenList: List<Token>): Int {
+        var index = 0
+        for (token in tokenList){
+            when (token.type) {
+                TokenType.RIGHT_PAREN -> break
+                else -> index += 1
+            }
+        }
+        return index
     }
 
     private fun isSplit(tokenList: List<Token>): Boolean {
@@ -79,5 +108,19 @@ class BinaryNodeBuilder(private val parseAlgorithm: Parse) {
             }
         }
         return -1
+    }
+
+    private fun isOperator(token: Token): Boolean {
+        return when (token.type){
+            TokenType.PLUS, TokenType.MINUS, TokenType.SLASH, TokenType.STAR -> true
+            else -> false
+        }
+    }
+
+    private fun isLeftParen(token: Token): Boolean {
+        return when (token.type){
+            TokenType.LEFT_PAREN -> true
+            else -> false
+        }
     }
 }
