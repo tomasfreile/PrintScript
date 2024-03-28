@@ -1,7 +1,11 @@
 plugins {
     // Support convention plugins written in Groovy. Convention plugins are build scripts in 'src/main' that automatically become available as plugins in the main build.
     id 'groovy-gradle-plugin'
+    id 'maven-publish'
 }
+
+group = 'printscript'
+version = '1.0.0'
 
 repositories {
     // Use the plugin portal to apply community plugins in convention plugins.
@@ -13,6 +17,24 @@ dependencies {
     implementation 'org.jlleitschuh.gradle:ktlint-gradle:12.1.0'
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kover-gradle-plugin
     implementation("org.jetbrains.kotlinx:kover-gradle-plugin:0.7.6")
+}
 
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/tomasfreile/printscript")
+            version = "1.0.0-SNAPSHOT"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
 }
 
