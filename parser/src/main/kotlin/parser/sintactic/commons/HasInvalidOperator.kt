@@ -39,8 +39,13 @@ class HasInvalidOperator : SintacticChecker { // SOLO REVISA QUE SE MANTENGA EL 
                         if (isLiteral(content[index + 1])) 1 else return true
                     }
                     isRightParen(content[index]) -> {
-                        if (index + 1 >= content.size) 1 // end
-                        else if (isAnOperator(content[index + 1])) 1 else return true //there is smth else
+                        if (index + 1 >= content.size) {
+                            1 // end
+                        } else if (isAnOperator(content[index + 1])) {
+                            1
+                        } else {
+                            return true // there is smth else
+                        }
                     }
                     else -> return true
                 }
@@ -52,11 +57,12 @@ class HasInvalidOperator : SintacticChecker { // SOLO REVISA QUE SE MANTENGA EL 
         content: List<Token>,
         index: Int,
     ): Boolean { // L O L jsjs
-        return if (index + 1 >= content.size) false
-        else {
-            isLiteral(content[index - 1]) && isLiteral(content[index + 1])
-                    || isRightParen(content[index - 1]) && isLiteral(content[index + 1])
-                    || isRightParen(content[index - 1]) && isLeftParen(content[index + 1])
+        return if (index + 1 >= content.size) {
+            false
+        } else {
+            isLiteral(content[index - 1]) && isLiteral(content[index + 1]) ||
+                isRightParen(content[index - 1]) && isLiteral(content[index + 1]) ||
+                isRightParen(content[index - 1]) && isLeftParen(content[index + 1])
         }
     }
 

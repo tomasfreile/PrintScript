@@ -26,7 +26,7 @@ class IsDeclarative : SintacticChecker {
 
     private fun isLiteral(type: TokenType): Boolean {
         return when (type) {
-            TokenType.NUMBER, TokenType.STRING, TokenType.VALUE_IDENTIFIER -> true
+            TokenType.NUMBER, TokenType.STRING, TokenType.VALUE_IDENTIFIER, TokenType.LEFT_PAREN -> true
             else -> false
         }
     }

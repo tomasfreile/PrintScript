@@ -4,5 +4,5 @@ enum class Type {
     PRINT,
     ASSIGNATION,
     DECLARATION,
-    NIL
+    NIL,
 }
