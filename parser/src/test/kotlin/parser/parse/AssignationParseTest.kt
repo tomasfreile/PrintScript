@@ -7,6 +7,7 @@ import token.Coordinate
 import token.PrintScriptToken
 import token.Token
 import token.TokenType
+import utils.printAST
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -117,7 +118,7 @@ class AssignationParseTest {
     }
 
     @Test
-    fun parseValidParenthesisTest()  {
+    fun parseValidParenthesisTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -135,14 +136,14 @@ class AssignationParseTest {
         try {
             node = parser.parse(tokenList)
             assertTrue(true)
-            println(node)
+            printAST(node)
         } catch (e: InvalidSyntax) {
             assertTrue(false)
         }
     }
 
     @Test
-    fun parseInvalidParenTest()  {
+    fun parseInvalidParenTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -161,14 +162,14 @@ class AssignationParseTest {
         try {
             node = parser.parse(tokenList)
             assertTrue(false)
-            println(node)
+            printAST(node)
         } catch (e: InvalidSyntax) {
             assertTrue(true)
         }
     }
 
     @Test
-    fun parseExtenseValidParenthesisTest()  {
+    fun parseExtenseValidParenthesisTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -190,14 +191,14 @@ class AssignationParseTest {
         try {
             node = parser.parse(tokenList)
             assertTrue(true)
-            println(node)
+            printAST(node)
         } catch (e: InvalidSyntax) {
             assertTrue(false)
         }
     }
 
     @Test
-    fun parseExtenseInvalidParenthesisTest(){
+    fun parseExtenseInvalidParenthesisTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -220,7 +221,6 @@ class AssignationParseTest {
         try {
             node = parser.parse(tokenList)
             assertTrue(false)
-            println(node)
         } catch (e: InvalidSyntax) {
             assertTrue(true)
         }

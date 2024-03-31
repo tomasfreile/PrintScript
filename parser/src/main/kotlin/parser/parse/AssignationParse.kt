@@ -21,7 +21,7 @@ class AssignationParse : Parse {
         return if (tokenList.size == 1) {
             ASTSingleNode(null, tokenList.first())
         } else if (isBinaryNode(tokenList)) {
-            BinaryNodeBuilder(PrintParse()).build(tokenList)
+            BinaryNodeBuilder(ParseImpl()).build(tokenList)
         } else {
             ASTSingleNode(parse(tokenList.subList(1, tokenList.size)), tokenList.first())
         }
@@ -45,7 +45,7 @@ class AssignationParse : Parse {
         }
     }
 
-    private fun isLeftParen(token: Token): Boolean  {
+    private fun isLeftParen(token: Token): Boolean {
         return when (token.type) {
             TokenType.LEFT_PAREN -> true
             else -> false
