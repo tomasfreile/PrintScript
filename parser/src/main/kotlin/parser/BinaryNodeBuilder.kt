@@ -15,7 +15,7 @@ class BinaryNodeBuilder(private val parseAlgorithm: Parse) {
         }
     }
 
-    private fun buildCommonNode(tokenList: List<Token>): Node{
+    private fun buildCommonNode(tokenList: List<Token>): Node {
         return if (isSplit(tokenList)) { // If there is a Plus or Minus, should split the terms
             split(tokenList)
         } else { // if the operator is not plus, does not matter the order, could be STAR or SLASH
@@ -29,17 +29,17 @@ class BinaryNodeBuilder(private val parseAlgorithm: Parse) {
 
     private fun handleLeftParen(tokenList: List<Token>): Node {
         val index = getRightIndexParen(tokenList)
-        if(index + 1 >= tokenList.size) throw InvalidSyntax("Invalid syntax")
+        if (index + 1 >= tokenList.size) throw InvalidSyntax("Invalid syntax") // it always ends with Semicolon
         return ASTBinaryNode(
             parseAlgorithm.parse(tokenList.subList(index + 2, tokenList.size)),
             buildCommonNode(tokenList.subList(1, index)),
-            tokenList[index + 1]
+            tokenList[index + 1],
         )
     }
 
     private fun getRightIndexParen(tokenList: List<Token>): Int {
         var index = 0
-        for (token in tokenList){
+        for (token in tokenList) {
             when (token.type) {
                 TokenType.RIGHT_PAREN -> break
                 else -> index += 1
@@ -111,14 +111,14 @@ class BinaryNodeBuilder(private val parseAlgorithm: Parse) {
     }
 
     private fun isOperator(token: Token): Boolean {
-        return when (token.type){
+        return when (token.type) {
             TokenType.PLUS, TokenType.MINUS, TokenType.SLASH, TokenType.STAR -> true
             else -> false
         }
     }
 
     private fun isLeftParen(token: Token): Boolean {
-        return when (token.type){
+        return when (token.type) {
             TokenType.LEFT_PAREN -> true
             else -> false
         }
