@@ -4,7 +4,10 @@ import ast.ASTBinaryNode
 import ast.ASTSingleNode
 import ast.Node
 
-fun printAST(node: Node?, depth: Int = 0) {
+fun printAST(
+    node: Node?,
+    depth: Int = 0,
+) {
     if (node == null) return
 
     val indentation = "  ".repeat(depth)
