@@ -4,6 +4,7 @@ import token.Token
 import token.TokenType
 
 class NumberTypeAssignationContent : SemanticChecker {
+    // Precondition: Always a Declaration
     override fun checkSemantic(tokenList: List<Token>): Boolean {
         for (token in tokenList.subList(5, tokenList.size - 1)) {
             when {
