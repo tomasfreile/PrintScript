@@ -30,11 +30,15 @@ class BinaryNodeBuilder(private val parseAlgorithm: Parse) {
     private fun handleLeftParen(tokenList: List<Token>): Node {
         val index = getRightIndexParen(tokenList)
         if (index + 1 >= tokenList.size) throw InvalidSyntax("Invalid syntax") // it always ends with Semicolon
-        return ASTBinaryNode(
-            parseAlgorithm.parse(tokenList.subList(index + 2, tokenList.size)),
-            buildCommonNode(tokenList.subList(1, index)),
-            tokenList[index + 1],
-        )
+        return if (index + 2 == tokenList.size && tokenList[tokenList.size - 1].type == TokenType.SEMICOLON) { // at the end
+            parseAlgorithm.parse(tokenList.subList(1, tokenList.size))
+        } else {
+            ASTBinaryNode(
+                parseAlgorithm.parse(tokenList.subList(index + 2, tokenList.size)),
+                buildCommonNode(tokenList.subList(1, index)),
+                tokenList[index + 1],
+            )
+        }
     }
 
     private fun getRightIndexParen(tokenList: List<Token>): Int {
