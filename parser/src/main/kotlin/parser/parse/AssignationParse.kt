@@ -28,8 +28,8 @@ class AssignationParse : Parse {
     }
 
     private fun isBinaryNode(tokenList: List<Token>): Boolean {
-        return isLiteral(tokenList.first()) && isOperator(tokenList[1])
-                || isLeftParen(tokenList.first()) && isLiteral(tokenList[1])
+        return isLiteral(tokenList.first()) && isOperator(tokenList[1]) ||
+            isLeftParen(tokenList.first()) && isLiteral(tokenList[1])
     }
 
     private fun isLiteral(token: Token): Boolean {
