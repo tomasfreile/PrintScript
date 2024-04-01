@@ -1,7 +1,8 @@
-package parser
+package parser.utils
 
 import ast.ASTBinaryNode
 import ast.Node
+import parser.InvalidSyntax
 import parser.parse.Parse
 import token.Token
 import token.TokenType

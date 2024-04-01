@@ -1,4 +1,4 @@
-package parser
+package parser.utils
 
 enum class Type {
     PRINT,
