@@ -16,17 +16,9 @@ class IsPrint : SintacticChecker {
         var points = 0
         if (tokenList[0].type == TokenType.PRINT) points += 1
         if (tokenList[1].type == TokenType.LEFT_PAREN) points += 1
-        if (isLiteral(tokenList[2].type)) points += 1
         if (tokenList[tokenList.size - 2].type == TokenType.RIGHT_PAREN) points += 1
         if (tokenList[tokenList.size - 1].type == TokenType.SEMICOLON) points += 1
-        return points == 5
-    }
-
-    private fun isLiteral(type: TokenType): Boolean {
-        return when (type) {
-            TokenType.NUMBER, TokenType.STRING, TokenType.VALUE_IDENTIFIER, TokenType.LEFT_PAREN -> true
-            else -> false
-        }
+        return points == 4
     }
 
     private fun hasEnoughLength(tokenList: List<Token>): Boolean {
