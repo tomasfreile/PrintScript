@@ -1,10 +1,10 @@
 package parser.sintactic.commons
 
-import parser.Type
 import parser.sintactic.IsAssignation
 import parser.sintactic.IsDeclarative
 import parser.sintactic.IsPrint
 import parser.sintactic.SintacticChecker
+import parser.utils.Type
 import token.Token
 import token.TokenType
 

@@ -2,7 +2,7 @@ package parser.parse
 
 import ast.ASTSingleNode
 import ast.Node
-import parser.BinaryNodeBuilder
+import parser.utils.BinaryNodeBuilder
 import token.Token
 import token.TokenType
 

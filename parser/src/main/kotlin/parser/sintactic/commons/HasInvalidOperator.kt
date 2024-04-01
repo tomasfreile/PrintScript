@@ -6,7 +6,7 @@ import parser.sintactic.IsPrint
 import parser.sintactic.SintacticChecker
 import token.Token
 import token.TokenType
-import parser.Type as Type
+import parser.utils.Type as Type
 
 class HasInvalidOperator : SintacticChecker { // SOLO REVISA QUE SE MANTENGA EL FORMATO LITERAL OPERADOR LITERAL EN EL CONTENIDO (LOL RULE)
     override fun checkSyntax(tokenList: List<Token>): Boolean {
