@@ -51,10 +51,10 @@ class Parser {
         val dataType = tokenList[3]
         when (dataType.type) {
             TokenType.STRING_TYPE -> {
-                if (StringTypeAssignationContent().checkSemantic(tokenList)) throw InvalidCommonSense("String type has strings")
+                if (!StringTypeAssignationContent().checkSemantic(tokenList)) throw InvalidCommonSense("String type has strings")
             }
             TokenType.NUMBER_TYPE -> {
-                if (NumberTypeAssignationContent().checkSemantic(tokenList)) throw InvalidCommonSense("Number type has numbers")
+                if (!NumberTypeAssignationContent().checkSemantic(tokenList)) throw InvalidCommonSense("Number type has numbers")
             }
             else -> return
         }
