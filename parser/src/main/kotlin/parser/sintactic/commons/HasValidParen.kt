@@ -22,7 +22,7 @@ class HasValidParen : SintacticChecker {
     private fun checkStructure(tokenList: List<Token>): Boolean {
         var tokenCopy = tokenList
         var index = 0
-        while (tokenCopy.isNotEmpty()) {
+        while (tokenCopy.isNotEmpty() && index < tokenCopy.size) {
             when (tokenCopy[index].type) {
                 TokenType.LEFT_PAREN -> { // if there is a left paren, there has to be a right paren on list
                     val rightParenIndex = getRightParen(tokenCopy)
