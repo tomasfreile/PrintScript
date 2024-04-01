@@ -1,21 +1,17 @@
 package parser.semantic
 
-import parser.sintactic.IsDeclarative
 import token.Token
 import token.TokenType
 
 class StringTypeAssignationContent : SemanticChecker {
     override fun checkSemantic(tokenList: List<Token>): Boolean {
-        if (IsDeclarative().checkSyntax(tokenList)) {
-            for (token in tokenList.subList(5, tokenList.size - 1)) {
-                when {
-                    isValidToken(token) -> continue
-                    else -> return false
-                }
+        for (token in tokenList.subList(5, tokenList.size - 1)) {
+            when {
+                isValidToken(token) -> continue
+                else -> return false
             }
-            return true
         }
-        return false
+        return true
     }
 
     private fun isValidToken(token: Token): Boolean {
