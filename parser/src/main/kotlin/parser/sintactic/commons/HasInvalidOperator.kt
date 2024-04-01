@@ -28,24 +28,12 @@ class HasInvalidOperator : SintacticChecker { // SOLO REVISA QUE SE MANTENGA EL 
         var index = 0
         while (index < content.size) {
             if (index + 1 > content.size) return true // there is a problem because at the end should be a Literal
+            val token = content[index]
             index +=
                 when {
-                    isLiteral(content[index]) -> 1
-                    isAnOperator(content[index]) -> { // At least index should be index = 1
-                        val value = isFormatted(content, index)
+                    isLiteral(token) || ignore(token) -> 1 // Literal o  = ( 3 + 3 ) * 4
+                    isAnOperator(token) -> { // At least index should be index = 1
                         if (isFormatted(content, index)) 1 else return true
-                    }
-                    isLeftParen(content[index]) -> {
-                        if (isLiteral(content[index + 1])) 1 else return true
-                    }
-                    isRightParen(content[index]) -> {
-                        if (index + 1 >= content.size) {
-                            1 // end
-                        } else if (isAnOperator(content[index + 1])) {
-                            1
-                        } else {
-                            return true // there is smth else
-                        }
                     }
                     else -> return true
                 }
@@ -56,13 +44,14 @@ class HasInvalidOperator : SintacticChecker { // SOLO REVISA QUE SE MANTENGA EL 
     private fun isFormatted(
         content: List<Token>,
         index: Int,
-    ): Boolean { // L O L jsjs
+    ): Boolean {
         return if (index + 1 >= content.size) {
             false
         } else {
-            isLiteral(content[index - 1]) && isLiteral(content[index + 1]) ||
-                isRightParen(content[index - 1]) && isLiteral(content[index + 1]) ||
-                isRightParen(content[index - 1]) && isLeftParen(content[index + 1])
+            isLiteral(content[index - 1]) && isLiteral(content[index + 1]) || // L O L
+                isRightParen(content[index - 1]) && isLiteral(content[index + 1]) || // ) O L
+                isRightParen(content[index - 1]) && isLeftParen(content[index + 1]) || // ) O (
+                isLiteral(content[index - 1]) && isLeftParen(content[index + 1]) // L O (
         }
     }
 
@@ -80,9 +69,9 @@ class HasInvalidOperator : SintacticChecker { // SOLO REVISA QUE SE MANTENGA EL 
         }
     }
 
-    private fun isLeftParen(token: Token): Boolean {
+    private fun ignore(token: Token): Boolean {
         return when (token.type) {
-            TokenType.LEFT_PAREN -> true
+            TokenType.LEFT_PAREN, TokenType.RIGHT_PAREN -> true
             else -> false
         }
     }
@@ -94,9 +83,9 @@ class HasInvalidOperator : SintacticChecker { // SOLO REVISA QUE SE MANTENGA EL 
         }
     }
 
-    private fun isSemicolon(token: Token): Boolean {
+    private fun isLeftParen(token: Token): Boolean {
         return when (token.type) {
-            TokenType.SEMICOLON -> true
+            TokenType.LEFT_PAREN -> true
             else -> false
         }
     }
