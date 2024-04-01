@@ -1,9 +1,9 @@
 package parser
 
 import org.junit.jupiter.api.Test
-import parser.semantic.NumberTypeAssignationContent
-import parser.semantic.PrintContent
-import parser.semantic.StringTypeAssignationContent
+import parser.analysis.semantic.NumberTypeDeclarationContent
+import parser.analysis.semantic.PrintContent
+import parser.analysis.semantic.StringTypeDeclarationContent
 import token.Coordinate
 import token.PrintScriptToken
 import token.Token
@@ -13,8 +13,8 @@ import kotlin.test.assertTrue
 
 class ParserSemanticTest {
     private val print = PrintContent()
-    private val stringType = StringTypeAssignationContent()
-    private val numberType = NumberTypeAssignationContent()
+    private val stringType = StringTypeDeclarationContent()
+    private val numberType = NumberTypeDeclarationContent()
 
     @Test
     fun test001_PrintContentPrintOfPrint() {

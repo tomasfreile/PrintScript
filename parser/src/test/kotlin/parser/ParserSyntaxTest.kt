@@ -1,12 +1,12 @@
 package parser
 
 import org.junit.jupiter.api.Test
-import parser.sintactic.IsAssignation
-import parser.sintactic.IsDeclarative
-import parser.sintactic.IsPrint
-import parser.sintactic.commons.HasCombination
-import parser.sintactic.commons.HasInvalidOperator
-import parser.sintactic.commons.HasValidParen
+import parser.analysis.sintactic.IsAssignation
+import parser.analysis.sintactic.IsDeclarative
+import parser.analysis.sintactic.IsPrint
+import parser.analysis.sintactic.commons.HasCombination
+import parser.analysis.sintactic.commons.HasInvalidOperator
+import parser.analysis.sintactic.commons.HasValidParen
 import token.Coordinate
 import token.PrintScriptToken
 import token.Token

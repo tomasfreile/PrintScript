@@ -1,18 +1,18 @@
 package parser
 
 import ast.Node
+import parser.analysis.semantic.NumberTypeDeclarationContent
+import parser.analysis.semantic.PrintContent
+import parser.analysis.semantic.StringTypeDeclarationContent
+import parser.analysis.sintactic.IsAssignation
+import parser.analysis.sintactic.IsDeclarative
+import parser.analysis.sintactic.IsPrint
+import parser.analysis.sintactic.commons.HasInvalidOperator
+import parser.analysis.sintactic.commons.HasString
+import parser.analysis.sintactic.commons.HasValidParen
+import parser.analysis.sintactic.commons.IsConcatenation
 import parser.parse.AssignationParse
 import parser.parse.PrintParse
-import parser.semantic.NumberTypeAssignationContent
-import parser.semantic.PrintContent
-import parser.semantic.StringTypeAssignationContent
-import parser.sintactic.IsAssignation
-import parser.sintactic.IsDeclarative
-import parser.sintactic.IsPrint
-import parser.sintactic.commons.HasInvalidOperator
-import parser.sintactic.commons.HasString
-import parser.sintactic.commons.HasValidParen
-import parser.sintactic.commons.IsConcatenation
 import token.Token
 import token.TokenType
 
@@ -51,10 +51,10 @@ class Parser {
         val dataType = tokenList[3]
         when (dataType.type) {
             TokenType.STRING_TYPE -> {
-                if (!StringTypeAssignationContent().checkSemantic(tokenList)) throw InvalidCommonSense("String type has strings")
+                if (!StringTypeDeclarationContent().checkSemantic(tokenList)) throw InvalidCommonSense("String type has strings")
             }
             TokenType.NUMBER_TYPE -> {
-                if (!NumberTypeAssignationContent().checkSemantic(tokenList)) throw InvalidCommonSense("Number type has numbers")
+                if (!NumberTypeDeclarationContent().checkSemantic(tokenList)) throw InvalidCommonSense("Number type has numbers")
             }
             else -> return
         }
