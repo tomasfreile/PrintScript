@@ -6,6 +6,7 @@ import parser.sintactic.IsDeclarative
 import parser.sintactic.IsPrint
 import parser.sintactic.commons.HasCombination
 import parser.sintactic.commons.HasInvalidOperator
+import parser.sintactic.commons.HasValidParen
 import token.Coordinate
 import token.PrintScriptToken
 import token.Token
@@ -357,7 +358,7 @@ class ParserSyntaxTest {
     }
 
     @Test
-    fun hasInvalidOperatorOnLeftParenValidTest(){
+    fun hasInvalidOperatorOnLeftParenValidTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -375,45 +376,7 @@ class ParserSyntaxTest {
     }
 
     @Test
-    fun hasInvalidOperatorOnLeftParenInvalidTest(){
-        val tokenList: List<Token> =
-            listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "c", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER, "8", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
-            )
-        assertTrue(HasInvalidOperator().checkSyntax(tokenList))
-    }
-
-    @Test
-    fun test001HasInvalidOperatorOnLeftParenInvalidTest(){
-        val tokenList: List<Token> =
-            listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "c", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER, "8", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
-            )
-        assertTrue(HasInvalidOperator().checkSyntax(tokenList))
-    }
-
-    @Test
-    fun test002HasInvalidOperatorOnLeftParenValidTest(){
+    fun test002HasInvalidOperatorOnLeftParenValidTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -426,5 +389,96 @@ class ParserSyntaxTest {
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertFalse(HasInvalidOperator().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun test029_HasValidParenJustOnePair() {
+        val tokenList: List<Token> =
+            listOf(
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "c", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
+            )
+        assertTrue(HasValidParen().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun test030_HasInvalidParenJustOneLeftParen() {
+        val tokenList: List<Token> =
+            listOf(
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "c", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
+            )
+        assertFalse(HasValidParen().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun test031_HasInvalidParenJustOneRightParen() {
+        val tokenList: List<Token> =
+            listOf(
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "c", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
+            )
+        assertFalse(HasValidParen().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun test032_HasValidParenAtLeastTwoPairs() {
+        val tokenList: List<Token> =
+            listOf(
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "c", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "c", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
+            )
+        assertTrue(HasValidParen().checkSyntax(tokenList))
+    }
+
+    @Test
+    fun test033_HasInvalidParenOnePairAndOneLeftParen() {
+        val tokenList: List<Token> =
+            listOf(
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "c", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "c", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
+            )
+        assertFalse(HasValidParen().checkSyntax(tokenList))
     }
 }
