@@ -21,14 +21,15 @@ class AssignationParse : Parse {
         return if (tokenList.size == 1) {
             ASTSingleNode(null, tokenList.first())
         } else if (isBinaryNode(tokenList)) {
-            BinaryNodeBuilder(ParseImpl()).build(tokenList)
+            BinaryNodeBuilder(this).build(tokenList)
         } else {
             ASTSingleNode(parse(tokenList.subList(1, tokenList.size)), tokenList.first())
         }
     }
 
     private fun isBinaryNode(tokenList: List<Token>): Boolean {
-        return (isLiteral(tokenList.first()) && isOperator(tokenList[1])) || isLeftParen(tokenList.first())
+        return isLiteral(tokenList.first()) && isOperator(tokenList[1])
+                || isLeftParen(tokenList.first()) && isLiteral(tokenList[1])
     }
 
     private fun isLiteral(token: Token): Boolean {

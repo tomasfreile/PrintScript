@@ -1,6 +1,6 @@
 package parser.parse
 
-import ast.Node
+import org.junit.jupiter.api.assertDoesNotThrow
 import parser.InvalidSyntax
 import parser.Parser
 import token.Coordinate
@@ -9,13 +9,13 @@ import token.Token
 import token.TokenType
 import utils.printAST
 import kotlin.test.Test
-import kotlin.test.assertTrue
+import kotlin.test.assertFailsWith
 
 class AssignationParseTest {
     private val parser: Parser = Parser()
 
     @Test
-    fun parseSimpleValidAssignationTest() {
+    fun test001_ParseSimpleValidAssignationTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -23,18 +23,17 @@ class AssignationParseTest {
                 PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node: Node
-        try {
-            node = parser.parse(tokenList)
-            assertTrue(true)
-            println(node)
-        } catch (e: InvalidSyntax) {
-            assertTrue(false)
+        assertDoesNotThrow {
+            val node = parser.parse(tokenList)
+            println("Assignation Parse Test: 001")
+            println("==================================")
+            printAST(node)
+            println("==================================")
         }
     }
 
     @Test
-    fun parseCombinationValidAssignationTest() {
+    fun test002_ParseCombinationValidAssignationTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -44,18 +43,17 @@ class AssignationParseTest {
                 PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node: Node
-        try {
-            node = parser.parse(tokenList)
-            assertTrue(true)
-            println(node)
-        } catch (e: InvalidSyntax) {
-            assertTrue(false)
+        assertDoesNotThrow {
+            val node = parser.parse(tokenList)
+            println("Assignation Parse Test: 002")
+            println("==================================")
+            printAST(node)
+            println("==================================")
         }
     }
 
     @Test
-    fun parseInvalidCombinationAssignationTest() {
+    fun test003_ParseInvalidCombinationAssignationTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -65,18 +63,13 @@ class AssignationParseTest {
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node: Node
-        try {
-            node = parser.parse(tokenList)
-            assertTrue(false)
-            println(node)
-        } catch (e: InvalidSyntax) {
-            assertTrue(true)
+        assertFailsWith<InvalidSyntax> {
+            parser.parse(tokenList)
         }
     }
 
     @Test
-    fun parseConcatenationAssignationTest() {
+    fun test004_ParseConcatenationAssignationTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -86,18 +79,17 @@ class AssignationParseTest {
                 PrintScriptToken(TokenType.STRING, " holas", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node: Node
-        try {
-            node = parser.parse(tokenList)
-            assertTrue(true)
-            println(node)
-        } catch (e: InvalidSyntax) {
-            assertTrue(false)
+        assertDoesNotThrow {
+            val node = parser.parse(tokenList)
+            println("Assignation Parse Test: 003")
+            println("==================================")
+            printAST(node)
+            println("==================================")
         }
     }
 
     @Test
-    fun parseInvalidConcatenationAssignationTest() {
+    fun test005_ParseInvalidConcatenationAssignationTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -107,18 +99,13 @@ class AssignationParseTest {
                 PrintScriptToken(TokenType.STRING, " holas", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node: Node
-        try {
-            node = parser.parse(tokenList)
-            assertTrue(false)
-            println(node)
-        } catch (e: InvalidSyntax) {
-            assertTrue(true)
+        assertFailsWith<InvalidSyntax> {
+            parser.parse(tokenList)
         }
     }
 
     @Test
-    fun parseValidParenthesisTest() {
+    fun test006_ParseValidParenthesisTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -132,18 +119,17 @@ class AssignationParseTest {
                 PrintScriptToken(TokenType.NUMBER, "4", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node: Node
-        try {
-            node = parser.parse(tokenList)
-            assertTrue(true)
+        assertDoesNotThrow {
+            val node = parser.parse(tokenList)
+            println("Assignation Parse Test: 004")
+            println("==================================")
             printAST(node)
-        } catch (e: InvalidSyntax) {
-            assertTrue(false)
+            println("==================================")
         }
     }
 
     @Test
-    fun parseInvalidParenTest() {
+    fun test007_ParseInvalidParenTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -158,18 +144,13 @@ class AssignationParseTest {
                 PrintScriptToken(TokenType.NUMBER, "4", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node: Node
-        try {
-            node = parser.parse(tokenList)
-            assertTrue(false)
-            printAST(node)
-        } catch (e: InvalidSyntax) {
-            assertTrue(true)
+        assertFailsWith<InvalidSyntax> {
+            parser.parse(tokenList)
         }
     }
 
     @Test
-    fun parseExtenseValidParenthesisTest() {
+    fun test008_ParseExtenseValidParenthesisTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -187,18 +168,17 @@ class AssignationParseTest {
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node: Node
-        try {
-            node = parser.parse(tokenList)
-            assertTrue(true)
+        assertDoesNotThrow {
+            val node = parser.parse(tokenList)
+            println("Assignation Parse Test: 005")
+            println("==================================")
             printAST(node)
-        } catch (e: InvalidSyntax) {
-            assertTrue(false)
+            println("==================================")
         }
     }
 
     @Test
-    fun parseExtenseInvalidParenthesisTest() {
+    fun test009_ParseExtenseInvalidParenthesisTest() {
         val tokenList: List<Token> =
             listOf(
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER, "a", Coordinate(2, 3), Coordinate(2, 3)),
@@ -217,12 +197,8 @@ class AssignationParseTest {
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node: Node
-        try {
-            node = parser.parse(tokenList)
-            assertTrue(false)
-        } catch (e: InvalidSyntax) {
-            assertTrue(true)
+        assertFailsWith<InvalidSyntax> {
+            parser.parse(tokenList)
         }
     }
 }
