@@ -20,17 +20,29 @@ class BinaryNodeBuilder(private val parseAlgorithm: Parse) {
             split(tokenList)
         } else { // if the operator is not plus, does not matter the order, could be STAR or SLASH
             ASTBinaryNode(
-                parseAlgorithm.parse(tokenList.subList(2, tokenList.size)),
+                parseAlgorithm.parse(tokenList.subList(indexIsParen(tokenList), tokenList.size)),
                 parseAlgorithm.parse(tokenList.subList(0, 1)),
                 tokenList[1],
             )
         }
     }
 
+    private fun indexIsParen(tokenList: List<Token>): Int {
+        return when (tokenList[2].type) {
+            TokenType.LEFT_PAREN, TokenType.RIGHT_PAREN -> 3
+            else -> 2
+        }
+    }
+
     private fun handleLeftParen(tokenList: List<Token>): Node {
         val index = getRightIndexParen(tokenList)
         if (index + 1 >= tokenList.size) throw InvalidSyntax("Invalid syntax") // it always ends with Semicolon
-        return if (index + 2 == tokenList.size && tokenList[tokenList.size - 1].type == TokenType.SEMICOLON) { // at the end
+        return if (index + 2 == tokenList.size && tokenList[tokenList.size - 1].type == TokenType.SEMICOLON ||
+            isPrintCase(
+                tokenList,
+                index,
+            )
+        ) {
             parseAlgorithm.parse(tokenList.subList(1, tokenList.size))
         } else {
             ASTBinaryNode(
@@ -39,6 +51,14 @@ class BinaryNodeBuilder(private val parseAlgorithm: Parse) {
                 tokenList[index + 1],
             )
         }
+    }
+
+    private fun isPrintCase(
+        tokenList: List<Token>,
+        index: Int,
+    ): Boolean {
+        return tokenList[index + 1].type == TokenType.RIGHT_PAREN &&
+            tokenList[index + 2].type == TokenType.SEMICOLON
     }
 
     private fun getRightIndexParen(tokenList: List<Token>): Int {
@@ -104,6 +124,7 @@ class BinaryNodeBuilder(private val parseAlgorithm: Parse) {
         var position = 0
         for (token in tokenList) {
             when (token.type) {
+                TokenType.LEFT_PAREN -> break // case of 3 * ( 2 + 2 )
                 type -> return position
                 else -> {
                     position += 1
