@@ -1,18 +1,21 @@
-package parser.semantic
+package parser.analysis.semantic
 
+import parser.analysis.sintactic.IsPrint
 import token.Token
 import token.TokenType
 
-class StringTypeAssignationContent : SemanticChecker {
-    // Precondition: Always a declaration
+class PrintContent : SemanticChecker {
     override fun checkSemantic(tokenList: List<Token>): Boolean {
-        for (token in tokenList.subList(5, tokenList.size - 1)) {
-            when {
-                isValidToken(token) -> continue
-                else -> return false
+        if (IsPrint().checkSyntax(tokenList)) {
+            for (token in tokenList.subList(2, tokenList.size - 2)) {
+                when {
+                    isValidToken(token) -> continue
+                    else -> return false
+                }
             }
+            return true
         }
-        return true
+        return false
     }
 
     private fun isValidToken(token: Token): Boolean {
@@ -23,14 +26,14 @@ class StringTypeAssignationContent : SemanticChecker {
 
     private fun isValidLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.STRING, TokenType.VALUE_IDENTIFIER -> true
+            TokenType.STRING, TokenType.NUMBER, TokenType.VALUE_IDENTIFIER -> true
             else -> false
         }
     }
 
     private fun isValidOperator(token: Token): Boolean {
         return when (token.type) {
-            TokenType.PLUS -> true
+            TokenType.MINUS, TokenType.PLUS, TokenType.STAR, TokenType.SLASH -> true
             else -> false
         }
     }

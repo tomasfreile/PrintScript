@@ -1,4 +1,4 @@
-package parser.semantic
+package parser.analysis.semantic
 
 import token.Token
 

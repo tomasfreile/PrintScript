@@ -1,4 +1,4 @@
-package parser.sintactic
+package parser.analysis.sintactic
 
 import token.Token
 import token.TokenType

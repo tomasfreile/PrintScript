@@ -1,10 +1,10 @@
-package parser.semantic
+package parser.analysis.semantic
 
 import token.Token
 import token.TokenType
 
-class NumberTypeAssignationContent : SemanticChecker {
-    // Precondition: Always a Declaration
+class StringTypeDeclarationContent : SemanticChecker {
+    // Precondition: Always a declaration
     override fun checkSemantic(tokenList: List<Token>): Boolean {
         for (token in tokenList.subList(5, tokenList.size - 1)) {
             when {
@@ -23,14 +23,14 @@ class NumberTypeAssignationContent : SemanticChecker {
 
     private fun isValidLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.NUMBER, TokenType.VALUE_IDENTIFIER -> true
+            TokenType.STRING, TokenType.VALUE_IDENTIFIER -> true
             else -> false
         }
     }
 
     private fun isValidOperator(token: Token): Boolean {
         return when (token.type) {
-            TokenType.PLUS, TokenType.MINUS, TokenType.STAR, TokenType.SLASH -> true
+            TokenType.PLUS -> true
             else -> false
         }
     }

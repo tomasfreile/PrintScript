@@ -1,9 +1,9 @@
-package parser.sintactic.commons
+package parser.analysis.sintactic.commons
 
-import parser.sintactic.IsAssignation
-import parser.sintactic.IsDeclarative
-import parser.sintactic.IsPrint
-import parser.sintactic.SintacticChecker
+import parser.analysis.sintactic.IsAssignation
+import parser.analysis.sintactic.IsDeclarative
+import parser.analysis.sintactic.IsPrint
+import parser.analysis.sintactic.SintacticChecker
 import token.Token
 import token.TokenType
 import parser.utils.Type as Type
