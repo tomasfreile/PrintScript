@@ -15,11 +15,15 @@ class FormatterTest {
         val formatter = Formatter()
         val map = formatter.readYaml()
         val expectedFormatting = mapOf(
-            "colon" to mapOf("before" to false, "after" to false),
-            "assignation" to mapOf("before" to false, "after" to false),
-            "print" to mapOf("jump" to 0)
+            "colonBefore" to false,
+            "colonAfter" to false,
+            "equalsBefore" to false,
+            "equalsAfter" to false,
+            "assignationBefore" to false,
+            "assignationAfter" to false,
+            "printJump" to 1
         )
-        assertEquals(expectedFormatting, map["formatting"])
+        assertEquals(expectedFormatting, map)
     }
 
     @Test

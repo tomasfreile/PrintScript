@@ -1,9 +1,7 @@
-formatting:
-  colon:
-    before: false
-    after: false
-  assignation:
-    before: false
-    after: false
-  print:
-    jump: 0
+colonBefore: false
+colonAfter: false
+equalsBefore: false
+equalsAfter: false
+assignationBefore: true
+assignationAfter: false
+printJump: 1
