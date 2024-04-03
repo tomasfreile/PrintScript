@@ -132,6 +132,24 @@ class PrintScriptLexerTest {
         compareExpectedWithOutput(input, expectedTokens)
     }
 
+    @Test
+    fun letKeywordOnlyWorksIfSurroundedBySpaces() {
+        val input = "letx"
+        val expectedTokens =
+            listOf(
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "letx", Coordinate(0, 0), Coordinate(0, 4)),
+            )
+        compareExpectedWithOutput(input, expectedTokens)
+
+        val input2 = "let x"
+        val expectedTokens2 =
+            listOf(
+                PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(0, 0), Coordinate(0, 3)),
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "x", Coordinate(0, 4), Coordinate(0, 5)),
+            )
+        compareExpectedWithOutput(input2, expectedTokens2)
+    }
+
     private fun compareExpectedWithOutput(
         input: String,
         expectedTokens: List<PrintScriptToken>,

@@ -21,12 +21,12 @@ fun getTokenMap(): EnumMap<TokenType, Pattern> {
     tokenMap[TokenType.COLON] = Pattern.compile(":")
 
     // Keywords
-    tokenMap[TokenType.PRINT] = Pattern.compile("println")
-    tokenMap[TokenType.IF] = Pattern.compile("if")
-    tokenMap[TokenType.ELSE] = Pattern.compile("else")
-    tokenMap[TokenType.NUMBER_TYPE] = Pattern.compile("Number")
-    tokenMap[TokenType.STRING_TYPE] = Pattern.compile("String")
-    tokenMap[TokenType.VARIABLE_KEYWORD] = Pattern.compile("let")
+    tokenMap[TokenType.PRINT] = Pattern.compile("\\bprintln")
+    tokenMap[TokenType.IF] = Pattern.compile("\\bif")
+    tokenMap[TokenType.ELSE] = Pattern.compile("\\belse")
+    tokenMap[TokenType.NUMBER_TYPE] = Pattern.compile("\\bNumber\\b")
+    tokenMap[TokenType.STRING_TYPE] = Pattern.compile("\\bString\\b")
+    tokenMap[TokenType.VARIABLE_KEYWORD] = Pattern.compile("\\blet\\b")
 
     // Literals
     tokenMap[TokenType.VALUE_IDENTIFIER] = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]*")
