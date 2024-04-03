@@ -13,6 +13,4 @@ dependencies {
     implementation 'org.jlleitschuh.gradle:ktlint-gradle:12.1.0'
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kover-gradle-plugin
     implementation("org.jetbrains.kotlinx:kover-gradle-plugin:0.7.6")
-
 }
-
