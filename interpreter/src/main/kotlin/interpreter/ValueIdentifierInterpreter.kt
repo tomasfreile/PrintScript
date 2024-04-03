@@ -3,7 +3,6 @@ package interpreter
 import ast.ASTSingleNode
 import ast.Node
 import interpreter.exception.UnresolvedReferenceException
-import org.example.interpreter.Interpreter
 import token.Token
 import token.TokenType
 

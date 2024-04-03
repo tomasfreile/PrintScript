@@ -1,4 +1,4 @@
-package org.example.interpreter.operation
+package interpreter.operation
 
 class MinusOperation : Operation {
     override val symbol = "-"

@@ -1,8 +1,8 @@
-package org.example.interpreter
+package interpreter
 
 import ast.ASTBinaryNode
 import ast.Node
-import org.example.interpreter.operation.Operation
+import interpreter.operation.Operation
 import token.Token
 import token.TokenType
 

@@ -2,8 +2,6 @@ package interpreter
 
 import ast.ASTBinaryNode
 import ast.Node
-import org.example.interpreter.Interpreter
-import org.example.interpreter.PrintScriptInterpreter
 import token.Coordinate
 import token.PrintScriptToken
 import token.Token
