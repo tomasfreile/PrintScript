@@ -1,4 +1,5 @@
 plugins {
     id 'printscript.gradle.kotlin-common-conventions'
+    id 'printscript.gradle.kotlin-publishing-conventions'
     id 'java-library'
 }

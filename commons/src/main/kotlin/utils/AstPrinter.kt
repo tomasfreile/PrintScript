@@ -5,19 +5,26 @@ import ast.ASTSingleNode
 import ast.Node
 
 fun printAST(
-    ast: Node,
+    node: Node?,
     depth: Int = 0,
 ) {
-    val indent = "  ".repeat(depth)
-    when (ast) {
-        is ASTSingleNode -> {
-            println("$indent|_${ast.token.value}")
-            ast.node?.let { printAST(it, depth + 1) }
-        }
+    if (node == null) return
+
+    val indentation = "  ".repeat(depth)
+    val underline = "\u001B[4m"
+    val reset = "\u001B[0m"
+
+    when (node) {
         is ASTBinaryNode -> {
-            println("$indent|_${ast.token.value}")
-            ast.left?.let { printAST(it, depth + 1) }
-            ast.right?.let { printAST(it, depth + 1) }
+            println("$indentation ${underline}Binary Node:$reset ${node.token.value}")
+            println("$indentation ${underline}Left:$reset")
+            printAST(node.left, depth + 1)
+            println("$indentation ${underline}Right:$reset")
+            printAST(node.right, depth + 1)
+        }
+        is ASTSingleNode -> {
+            println("$indentation Single Node: ${node.token.value}")
+            printAST(node.node, depth + 1)
         }
     }
 }
