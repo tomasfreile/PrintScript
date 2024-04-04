@@ -150,6 +150,24 @@ class PrintScriptLexerTest {
         compareExpectedWithOutput(input2, expectedTokens2)
     }
 
+    @Test
+    fun invalidCharactersThrowExceptionWithPosition() {
+        val input = "ha%o"
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            lexer.lex(input)
+        }
+
+        val input2 = "let x = 1;&"
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            lexer.lex(input2)
+        }
+
+        val input3 = "{}"
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            lexer.lex(input3)
+        }
+    }
+
     private fun compareExpectedWithOutput(
         input: String,
         expectedTokens: List<PrintScriptToken>,
