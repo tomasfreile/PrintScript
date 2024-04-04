@@ -3,5 +3,3 @@ plugins {
 }
 rootProject.name = 'PrintScript'
 include('commons','sca','lexer','parser','formatter','interpreter')
-include 'formatter'
-
