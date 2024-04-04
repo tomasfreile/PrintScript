@@ -48,7 +48,7 @@ class PrintScriptLexerTest {
         val input = """"Hello, World!""""
         val expectedTokens =
             listOf(
-                PrintScriptToken(TokenType.STRING, "\"Hello, World!\"", Coordinate(0, 0), Coordinate(0, 15)),
+                PrintScriptToken(TokenType.STRING, "Hello, World!", Coordinate(0, 1), Coordinate(0, 14)),
             )
         compareExpectedWithOutput(input, expectedTokens)
     }
@@ -63,7 +63,7 @@ class PrintScriptLexerTest {
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(0, 7), Coordinate(0, 8)),
                 PrintScriptToken(TokenType.STRING_TYPE, "String", Coordinate(0, 9), Coordinate(0, 15)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(0, 16), Coordinate(0, 17)),
-                PrintScriptToken(TokenType.STRING, "'Hello, World!'", Coordinate(0, 18), Coordinate(0, 33)),
+                PrintScriptToken(TokenType.STRING, "Hello, World!", Coordinate(0, 19), Coordinate(0, 32)),
             )
 
         compareExpectedWithOutput(input, expectedTokens)
@@ -95,7 +95,7 @@ class PrintScriptLexerTest {
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(0, 8), Coordinate(0, 9)),
                 PrintScriptToken(TokenType.STRING_TYPE, "String", Coordinate(0, 10), Coordinate(0, 16)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(0, 17), Coordinate(0, 18)),
-                PrintScriptToken(TokenType.STRING, "'Hello, World!'", Coordinate(0, 19), Coordinate(0, 34)),
+                PrintScriptToken(TokenType.STRING, "Hello, World!", Coordinate(0, 20), Coordinate(0, 33)),
             )
 
         compareExpectedWithOutput(input, expectedTokens)
@@ -111,7 +111,7 @@ class PrintScriptLexerTest {
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(0, 8), Coordinate(0, 9)),
                 PrintScriptToken(TokenType.STRING_TYPE, "String", Coordinate(0, 10), Coordinate(0, 16)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(0, 17), Coordinate(0, 18)),
-                PrintScriptToken(TokenType.STRING, "\"Hello, World!\"", Coordinate(0, 19), Coordinate(0, 34)),
+                PrintScriptToken(TokenType.STRING, "Hello, World!", Coordinate(0, 20), Coordinate(0, 33)),
             )
 
         compareExpectedWithOutput(input, expectedTokens)

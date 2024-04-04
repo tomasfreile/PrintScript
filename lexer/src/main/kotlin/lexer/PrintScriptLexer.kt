@@ -45,7 +45,13 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
                 )
             }
 
-            tokens.add(PrintScriptToken(type, token, Coordinate(line, start), Coordinate(line, end)))
+            if (type == TokenType.STRING) {
+                tokens.add(
+                    PrintScriptToken(type, token.substring(1, token.length - 1), Coordinate(line, start + 1), Coordinate(line, end - 1)),
+                )
+            } else {
+                tokens.add(PrintScriptToken(type, token, Coordinate(line, start), Coordinate(line, end)))
+            }
             currentIndex = end
         }
 
