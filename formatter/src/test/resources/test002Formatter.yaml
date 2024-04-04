@@ -1,4 +1,4 @@
-colonBefore: false
+colonBefore: true
 colonAfter: true
 assignationBefore: true
 assignationAfter: true
