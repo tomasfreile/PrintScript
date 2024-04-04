@@ -7,7 +7,7 @@ import token.TokenType
 
 class VariableNamingRule(private val namingConvention: NamingConvention) : Rule {
     override fun validate(ast: Node): StaticCodeAnalyzerResult {
-        if (ast is ASTSingleNode && ast.token.type == TokenType.VARIABLE_KEYWORD) {
+        if (ast is ASTSingleNode && ast.token.type == TokenType.LET) {
             val regex = namingConvention.regex
             return validateVariableNames(ast, regex, namingConvention.display)
         }
@@ -30,7 +30,7 @@ class VariableNamingRule(private val namingConvention: NamingConvention) : Rule 
         return StaticCodeAnalyzerResult.Ok
     }
 
-    private fun isVariableKeywordNode(node: ASTSingleNode) = node.node?.token?.type == TokenType.VALUE_IDENTIFIER
+    private fun isVariableKeywordNode(node: ASTSingleNode) = node.node?.token?.type == TokenType.VALUE_IDENTIFIER_LITERAL
 }
 
 enum class NamingConvention(val regex: String, val display: String) {

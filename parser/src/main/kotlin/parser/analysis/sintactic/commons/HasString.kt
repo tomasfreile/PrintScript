@@ -26,7 +26,7 @@ class HasString : SintacticChecker {
     ): Boolean {
         for (token in tokenList.subList(from, to)) {
             when (token.type) {
-                TokenType.STRING -> return true
+                TokenType.STRING_LITERAL -> return true
                 else -> continue
             }
         }

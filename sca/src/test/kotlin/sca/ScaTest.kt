@@ -21,7 +21,7 @@ class ScaTest {
             ASTSingleNode(
                 ASTSingleNode(
                     null,
-                    PrintScriptToken(TokenType.VALUE_IDENTIFIER, "x", Coordinate(2, 3), Coordinate(2, 3)),
+                    PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "x", Coordinate(2, 3), Coordinate(2, 3)),
                 ),
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
             )
@@ -35,11 +35,11 @@ class ScaTest {
                 ASTBinaryNode(
                     ASTSingleNode(
                         null,
-                        PrintScriptToken(TokenType.NUMBER, "1", Coordinate(2, 3), Coordinate(2, 3)),
+                        PrintScriptToken(TokenType.NUMBER_LITERAL, "1", Coordinate(2, 3), Coordinate(2, 3)),
                     ),
                     ASTSingleNode(
                         null,
-                        PrintScriptToken(TokenType.NUMBER, "2", Coordinate(2, 3), Coordinate(2, 3)),
+                        PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 3), Coordinate(2, 3)),
                     ),
                     PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
                 ),
@@ -55,7 +55,7 @@ class ScaTest {
             ASTSingleNode(
                 ASTSingleNode(
                     null,
-                    PrintScriptToken(TokenType.VALUE_IDENTIFIER, "x", Coordinate(2, 3), Coordinate(2, 3)),
+                    PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "x", Coordinate(2, 3), Coordinate(2, 3)),
                 ),
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
             )
@@ -69,11 +69,11 @@ class ScaTest {
                 ASTBinaryNode(
                     ASTSingleNode(
                         null,
-                        PrintScriptToken(TokenType.NUMBER, "1", Coordinate(2, 3), Coordinate(2, 3)),
+                        PrintScriptToken(TokenType.NUMBER_LITERAL, "1", Coordinate(2, 3), Coordinate(2, 3)),
                     ),
                     ASTSingleNode(
                         null,
-                        PrintScriptToken(TokenType.NUMBER, "2", Coordinate(2, 3), Coordinate(2, 3)),
+                        PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 3), Coordinate(2, 3)),
                     ),
                     PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
                 ),
@@ -90,14 +90,14 @@ class ScaTest {
                 ASTSingleNode(
                     null,
                     PrintScriptToken(
-                        TokenType.VALUE_IDENTIFIER,
+                        TokenType.VALUE_IDENTIFIER_LITERAL,
                         "camelCase",
                         Coordinate(2, 5),
                         Coordinate(2, 9),
                     ),
                 ),
                 PrintScriptToken(
-                    TokenType.VARIABLE_KEYWORD,
+                    TokenType.LET,
                     "let",
                     Coordinate(2, 3),
                     Coordinate(2, 3),
@@ -113,14 +113,14 @@ class ScaTest {
                 ASTSingleNode(
                     null,
                     PrintScriptToken(
-                        TokenType.VALUE_IDENTIFIER,
+                        TokenType.VALUE_IDENTIFIER_LITERAL,
                         "snake_case",
                         Coordinate(2, 5),
                         Coordinate(2, 9),
                     ),
                 ),
                 PrintScriptToken(
-                    TokenType.VARIABLE_KEYWORD,
+                    TokenType.LET,
                     "let",
                     Coordinate(2, 3),
                     Coordinate(2, 3),
@@ -136,14 +136,14 @@ class ScaTest {
                 ASTSingleNode(
                     null,
                     PrintScriptToken(
-                        TokenType.VALUE_IDENTIFIER,
+                        TokenType.VALUE_IDENTIFIER_LITERAL,
                         "snake_case",
                         Coordinate(2, 5),
                         Coordinate(2, 9),
                     ),
                 ),
                 PrintScriptToken(
-                    TokenType.VARIABLE_KEYWORD,
+                    TokenType.LET,
                     "let",
                     Coordinate(2, 3),
                     Coordinate(2, 3),
@@ -159,14 +159,14 @@ class ScaTest {
                 ASTSingleNode(
                     null,
                     PrintScriptToken(
-                        TokenType.VALUE_IDENTIFIER,
+                        TokenType.VALUE_IDENTIFIER_LITERAL,
                         "camelCase",
                         Coordinate(2, 5),
                         Coordinate(2, 9),
                     ),
                 ),
                 PrintScriptToken(
-                    TokenType.VARIABLE_KEYWORD,
+                    TokenType.LET,
                     "let",
                     Coordinate(2, 3),
                     Coordinate(2, 3),

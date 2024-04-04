@@ -26,7 +26,7 @@ class PrintContent : SemanticChecker {
 
     private fun isValidLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.STRING, TokenType.NUMBER, TokenType.VALUE_IDENTIFIER -> true
+            TokenType.STRING_LITERAL, TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
             else -> false
         }
     }

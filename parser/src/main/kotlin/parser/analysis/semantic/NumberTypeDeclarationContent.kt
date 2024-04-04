@@ -23,7 +23,7 @@ class NumberTypeDeclarationContent : SemanticChecker {
 
     private fun isValidLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.NUMBER, TokenType.VALUE_IDENTIFIER -> true
+            TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
             else -> false
         }
     }

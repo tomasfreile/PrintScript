@@ -36,7 +36,7 @@ class HasCombination : SintacticChecker {
         var index = 0
         while (index < tokenList.size) {
             when (tokenList[index].type) {
-                TokenType.STRING, TokenType.NUMBER, TokenType.VALUE_IDENTIFIER -> {
+                TokenType.STRING_LITERAL, TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> {
                     index += 1
                 }
                 TokenType.PLUS -> if (isNextLiteral(tokenList, index)) index += 1 else return false
@@ -51,7 +51,7 @@ class HasCombination : SintacticChecker {
         var index = 0
         while (index < tokenList.size) {
             when (tokenList[index].type) {
-                TokenType.NUMBER, TokenType.VALUE_IDENTIFIER -> index += 1
+                TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> index += 1
                 TokenType.PLUS, TokenType.STAR, TokenType.SLASH, TokenType.MINUS -> {
                     if (isNextLiteral(tokenList, index)) index += 1 else return false
                 }
@@ -67,7 +67,7 @@ class HasCombination : SintacticChecker {
     ): Boolean {
         return if (index < tokenList.size - 1) {
             when (tokenList[index + 1].type) {
-                TokenType.STRING, TokenType.NUMBER, TokenType.VALUE_IDENTIFIER -> true
+                TokenType.STRING_LITERAL, TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
                 else -> false
             }
         } else {

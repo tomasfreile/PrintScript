@@ -57,7 +57,7 @@ class HasInvalidOperator : SintacticChecker { // SOLO REVISA QUE SE MANTENGA EL 
 
     private fun isLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.NUMBER, TokenType.STRING, TokenType.VALUE_IDENTIFIER -> true
+            TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
             else -> false
         }
     }

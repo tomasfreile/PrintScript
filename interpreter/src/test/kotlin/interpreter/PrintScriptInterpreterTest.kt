@@ -30,15 +30,15 @@ class PrintScriptInterpreterTest {
         mapOf(
             Pair(TokenType.LEFT_PAREN, ParenInterpreter()),
             Pair(TokenType.RIGHT_PAREN, ParenInterpreter()),
-            Pair(TokenType.STRING, StringInterpreter()),
+            Pair(TokenType.STRING_LITERAL, StringInterpreter()),
             Pair(TokenType.PRINT, PrintInterpreter()),
-            Pair(TokenType.NUMBER, NumberInterpreter()),
+            Pair(TokenType.NUMBER_LITERAL, NumberInterpreter()),
             Pair(TokenType.STAR, operationInterpreter),
             Pair(TokenType.SLASH, operationInterpreter),
             Pair(TokenType.PLUS, operationInterpreter),
             Pair(TokenType.MINUS, operationInterpreter),
-            Pair(TokenType.VARIABLE_KEYWORD, DeclarationInterpreter()),
-            Pair(TokenType.VALUE_IDENTIFIER, ValueIdentifierInterpreter()),
+            Pair(TokenType.LET, DeclarationInterpreter()),
+            Pair(TokenType.VALUE_IDENTIFIER_LITERAL, ValueIdentifierInterpreter()),
             Pair(TokenType.ASSIGNATION, AssignationInterpreter()),
         )
 
@@ -54,7 +54,7 @@ class PrintScriptInterpreterTest {
                             null,
                             PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                         ),
-                        PrintScriptToken(TokenType.STRING, "a", Coordinate(2, 3), Coordinate(2, 3)),
+                        PrintScriptToken(TokenType.STRING_LITERAL, "a", Coordinate(2, 3), Coordinate(2, 3)),
                     ),
                     PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
                 ),
@@ -84,7 +84,7 @@ class PrintScriptInterpreterTest {
                             ASTSingleNode(
                                 ASTSingleNode(
                                     null,
-                                    PrintScriptToken(TokenType.STRING, "tista", Coordinate(2, 3), Coordinate(2, 3)),
+                                    PrintScriptToken(TokenType.STRING_LITERAL, "tista", Coordinate(2, 3), Coordinate(2, 3)),
                                 ),
                                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
                             ),
@@ -92,9 +92,9 @@ class PrintScriptInterpreterTest {
                         ),
                         PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 3), Coordinate(2, 3)),
                     ),
-                    PrintScriptToken(TokenType.VALUE_IDENTIFIER, "name", Coordinate(2, 3), Coordinate(2, 3)),
+                    PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "name", Coordinate(2, 3), Coordinate(2, 3)),
                 ),
-                PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LET, "let", Coordinate(2, 3), Coordinate(2, 3)),
             )
 
         val interpreter = PrintScriptInterpreter(interpreterMap, symbolTable)
@@ -117,10 +117,13 @@ class PrintScriptInterpreterTest {
                         ASTSingleNode(
                             ASTSingleNode(
                                 ASTBinaryNode(
-                                    ASTSingleNode(null, PrintScriptToken(TokenType.NUMBER, "3", Coordinate(2, 3), Coordinate(2, 3))),
                                     ASTSingleNode(
                                         null,
-                                        PrintScriptToken(TokenType.STRING, "tista", Coordinate(2, 3), Coordinate(2, 3)),
+                                        PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                                    ),
+                                    ASTSingleNode(
+                                        null,
+                                        PrintScriptToken(TokenType.STRING_LITERAL, "tista", Coordinate(2, 3), Coordinate(2, 3)),
                                     ),
                                     PrintScriptToken(
                                         TokenType.PLUS,
@@ -135,9 +138,9 @@ class PrintScriptInterpreterTest {
                         ),
                         PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 3), Coordinate(2, 3)),
                     ),
-                    PrintScriptToken(TokenType.VALUE_IDENTIFIER, "name", Coordinate(2, 3), Coordinate(2, 3)),
+                    PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "name", Coordinate(2, 3), Coordinate(2, 3)),
                 ),
-                PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LET, "let", Coordinate(2, 3), Coordinate(2, 3)),
             )
 
         val interpreter = PrintScriptInterpreter(interpreterMap, symbolTable)

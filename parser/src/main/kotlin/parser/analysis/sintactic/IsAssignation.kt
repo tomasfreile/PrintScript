@@ -14,7 +14,7 @@ class IsAssignation : SintacticChecker {
 
     private fun checkStructure(tokenList: List<Token>): Boolean {
         var points = 0
-        if (tokenList[0].type == TokenType.VALUE_IDENTIFIER) points += 1
+        if (tokenList[0].type == TokenType.VALUE_IDENTIFIER_LITERAL) points += 1
         if (tokenList[1].type == TokenType.ASSIGNATION) points += 1
         if (isLiteral(tokenList[2].type)) points += 1
         if (tokenList[tokenList.size - 1].type == TokenType.SEMICOLON) points += 1
@@ -23,7 +23,7 @@ class IsAssignation : SintacticChecker {
 
     private fun isLiteral(type: TokenType): Boolean {
         return when (type) {
-            TokenType.NUMBER, TokenType.STRING, TokenType.VALUE_IDENTIFIER, TokenType.LEFT_PAREN -> true
+            TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL, TokenType.LEFT_PAREN -> true
             else -> false
         }
     }

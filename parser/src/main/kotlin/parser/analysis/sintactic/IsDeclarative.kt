@@ -14,8 +14,8 @@ class IsDeclarative : SintacticChecker {
 
     private fun checkStructure(tokenList: List<Token>): Int {
         var points = 0
-        if (tokenList[0].type == TokenType.VARIABLE_KEYWORD) points += 1
-        if (tokenList[1].type == TokenType.VALUE_IDENTIFIER) points += 1
+        if (tokenList[0].type == TokenType.LET) points += 1
+        if (tokenList[1].type == TokenType.VALUE_IDENTIFIER_LITERAL) points += 1
         if (tokenList[2].type == TokenType.COLON) points += 1
         if (tokenList[3].type == TokenType.NUMBER_TYPE || tokenList[3].type == TokenType.STRING_TYPE) points += 1
         if (tokenList[4].type == TokenType.ASSIGNATION) points += 1
@@ -26,7 +26,7 @@ class IsDeclarative : SintacticChecker {
 
     private fun isLiteral(type: TokenType): Boolean {
         return when (type) {
-            TokenType.NUMBER, TokenType.STRING, TokenType.VALUE_IDENTIFIER, TokenType.LEFT_PAREN -> true
+            TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL, TokenType.LEFT_PAREN -> true
             else -> false
         }
     }
