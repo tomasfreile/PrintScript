@@ -182,7 +182,7 @@ class FormatterTest {
     }
 
     @Test
-    fun test006_formatAComplexOperation()  {
+    fun test006_formatAComplexOperation() {
         val formatter = Formatter(formatterPath)
         val node =
             ASTSingleNode(
