@@ -1,0 +1,5 @@
+colonBefore: true
+colonAfter: false
+assignationBefore: true
+assignationAfter: false
+printJump: 2
