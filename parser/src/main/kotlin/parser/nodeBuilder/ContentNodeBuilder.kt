@@ -5,7 +5,7 @@ import ast.BinaryOperationNode
 import token.Token
 import token.TokenType
 
-class BinaryNodeBuilder : NodeBuilder {
+class ContentNodeBuilder : NodeBuilder {
     override fun build(tokenList: List<Token>): AstNode {
         return when {
             isBreakRecursion(tokenList) -> buildLiteralNode(tokenList.first())
