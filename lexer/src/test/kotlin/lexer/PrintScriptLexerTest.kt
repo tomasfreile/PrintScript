@@ -55,13 +55,13 @@ class PrintScriptLexerTest {
 
     @Test
     fun stringType() {
-        val input = "let str: String = 'Hello, World!'"
+        val input = "let str: string = 'Hello, World!'"
         val expectedTokens =
             listOf(
                 PrintScriptToken(TokenType.LET, "let", Coordinate(0, 0), Coordinate(0, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "str", Coordinate(0, 4), Coordinate(0, 7)),
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(0, 7), Coordinate(0, 8)),
-                PrintScriptToken(TokenType.STRING_TYPE, "String", Coordinate(0, 9), Coordinate(0, 15)),
+                PrintScriptToken(TokenType.STRING_TYPE, "string", Coordinate(0, 9), Coordinate(0, 15)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(0, 16), Coordinate(0, 17)),
                 PrintScriptToken(TokenType.STRING_LITERAL, "Hello, World!", Coordinate(0, 19), Coordinate(0, 32)),
             )
@@ -71,13 +71,13 @@ class PrintScriptLexerTest {
 
     @Test
     fun numberType() {
-        val input = "let num: Number = 123"
+        val input = "let num: number = 123"
         val expectedTokens =
             listOf(
                 PrintScriptToken(TokenType.LET, "let", Coordinate(0, 0), Coordinate(0, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "num", Coordinate(0, 4), Coordinate(0, 7)),
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(0, 7), Coordinate(0, 8)),
-                PrintScriptToken(TokenType.NUMBER_TYPE, "Number", Coordinate(0, 9), Coordinate(0, 15)),
+                PrintScriptToken(TokenType.NUMBER_TYPE, "number", Coordinate(0, 9), Coordinate(0, 15)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(0, 16), Coordinate(0, 17)),
                 PrintScriptToken(TokenType.NUMBER_LITERAL, "123", Coordinate(0, 18), Coordinate(0, 21)),
             )
@@ -87,13 +87,13 @@ class PrintScriptLexerTest {
 
     @Test
     fun stringsWorkWithSimpleQuotes() {
-        val input = "let str1: String = 'Hello, World!'"
+        val input = "let str1: string = 'Hello, World!'"
         val expectedTokens =
             listOf(
                 PrintScriptToken(TokenType.LET, "let", Coordinate(0, 0), Coordinate(0, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "str1", Coordinate(0, 4), Coordinate(0, 8)),
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(0, 8), Coordinate(0, 9)),
-                PrintScriptToken(TokenType.STRING_TYPE, "String", Coordinate(0, 10), Coordinate(0, 16)),
+                PrintScriptToken(TokenType.STRING_TYPE, "string", Coordinate(0, 10), Coordinate(0, 16)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(0, 17), Coordinate(0, 18)),
                 PrintScriptToken(TokenType.STRING_LITERAL, "Hello, World!", Coordinate(0, 20), Coordinate(0, 33)),
             )
@@ -103,13 +103,13 @@ class PrintScriptLexerTest {
 
     @Test
     fun stringsWorkWithDoubleQuotes() {
-        val input = "let str1: String = \"Hello, World!\""
+        val input = "let str1: string = \"Hello, World!\""
         val expectedTokens =
             listOf(
                 PrintScriptToken(TokenType.LET, "let", Coordinate(0, 0), Coordinate(0, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "str1", Coordinate(0, 4), Coordinate(0, 8)),
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(0, 8), Coordinate(0, 9)),
-                PrintScriptToken(TokenType.STRING_TYPE, "String", Coordinate(0, 10), Coordinate(0, 16)),
+                PrintScriptToken(TokenType.STRING_TYPE, "string", Coordinate(0, 10), Coordinate(0, 16)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(0, 17), Coordinate(0, 18)),
                 PrintScriptToken(TokenType.STRING_LITERAL, "Hello, World!", Coordinate(0, 20), Coordinate(0, 33)),
             )

@@ -9,6 +9,8 @@ enum class TokenType {
     MINUS, // -
     STAR, // *
     SLASH, // /
+    LEFT_BRACE, // {
+    RIGHT_BRACE, // }
 
     // Separators
     SEMICOLON, // ;
@@ -23,6 +25,8 @@ enum class TokenType {
     BOOLEAN_TYPE, // Boolean
     LET, // VARIABLE_KEYWORD name: String
     CONST, // const
+    READ_INPUT, // readInput
+    READ_ENV, // readEnv
 
     // Literals
     VALUE_IDENTIFIER_LITERAL, // let VALUE_IDENTIFIER: STRING
