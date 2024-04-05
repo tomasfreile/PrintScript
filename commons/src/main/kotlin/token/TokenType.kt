@@ -29,8 +29,8 @@ enum class TokenType {
     READ_ENV, // readEnv
 
     // Literals
-    VALUE_IDENTIFIER_LITERAL, // let VALUE_IDENTIFIER: STRING
     STRING_LITERAL, // "hola"
     NUMBER_LITERAL, // 123
     BOOLEAN_LITERAL, // true or false
+    VALUE_IDENTIFIER_LITERAL, // let VALUE_IDENTIFIER: STRING
 }

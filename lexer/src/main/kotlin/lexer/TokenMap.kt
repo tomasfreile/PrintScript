@@ -27,9 +27,9 @@ fun getTokenMapV10(): EnumMap<TokenType, Pattern> {
     tokenMap[TokenType.LET] = Pattern.compile("\\blet\\b")
 
     // Literals
-    tokenMap[TokenType.VALUE_IDENTIFIER_LITERAL] = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]*")
     tokenMap[TokenType.STRING_LITERAL] = Pattern.compile("\'[^']*\'|\"[^\"]*\"")
     tokenMap[TokenType.NUMBER_LITERAL] = Pattern.compile("[0-9]+")
+    tokenMap[TokenType.VALUE_IDENTIFIER_LITERAL] = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]*")
 
     return tokenMap
 }
@@ -41,9 +41,9 @@ fun getTokenMapV11(): EnumMap<TokenType, Pattern> {
     tokenMap[TokenType.CONST] = Pattern.compile("\\bconst\\b")
     tokenMap[TokenType.READ_INPUT] = Pattern.compile("\\breadInput\\b")
     tokenMap[TokenType.READ_ENV] = Pattern.compile("\\breadEnv\\b")
-    tokenMap[TokenType.BOOLEAN_LITERAL] = Pattern.compile("\\btrue\\b|\\bfalse\\b")
-    tokenMap[TokenType.IF] = Pattern.compile("\\bif")
-    tokenMap[TokenType.ELSE] = Pattern.compile("\\belse")
+    tokenMap[TokenType.BOOLEAN_LITERAL] = Pattern.compile("\\btrue\\b")
+    tokenMap[TokenType.IF] = Pattern.compile("\\bif\\b")
+    tokenMap[TokenType.ELSE] = Pattern.compile("\\belse\\b")
     tokenMap[TokenType.LEFT_BRACE] = Pattern.compile("\\{")
     tokenMap[TokenType.RIGHT_BRACE] = Pattern.compile("}")
 
