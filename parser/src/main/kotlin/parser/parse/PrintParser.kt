@@ -4,7 +4,8 @@ import ast.AstNode
 import ast.PrintNode
 import parser.analysis.sintactic.IsArithmeticExpression
 import parser.analysis.sintactic.IsStringConcat
-import parser.nodeBuilder.BinaryNodeBuilder
+import parser.nodeBuilder.ArithmeticNodeBuilder
+import parser.nodeBuilder.ContentNodeBuilder
 import parser.nodeBuilder.LiteralNodeBuilder
 import token.Token
 import token.TokenType
@@ -20,8 +21,8 @@ class PrintParser : Parser {
     override fun createAST(tokenList: List<Token>): AstNode {
         val content = getExpression(tokenList)
         return when {
+            isArithmeticExpression(content) -> createArithmeticBinaryNode(content)
             isConcat(content) -> createBinaryNode(content)
-            isArithmeticExpression(content) -> createBinaryNode(content)
             else -> createLiteralNode(content)
         }
     }
@@ -54,7 +55,11 @@ class PrintParser : Parser {
     }
 
     private fun createBinaryNode(expression: List<Token>): AstNode {
-        return PrintNode(BinaryNodeBuilder().build(expression))
+        return PrintNode(ContentNodeBuilder().build(expression))
+    }
+
+    private fun createArithmeticBinaryNode(expression: List<Token>): AstNode {
+        return PrintNode(ArithmeticNodeBuilder().build(expression))
     }
 
     private fun createLiteralNode(expression: List<Token>): AstNode {
