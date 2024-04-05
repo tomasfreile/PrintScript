@@ -20,10 +20,10 @@ enum class TokenType {
     PRINT, // print
     IF, // if
     ELSE, // else
-    NUMBER_TYPE, // Number
-    STRING_TYPE, // String
-    BOOLEAN_TYPE, // Boolean
-    LET, // VARIABLE_KEYWORD name: String
+    NUMBER_TYPE, // number
+    STRING_TYPE, // string
+    BOOLEAN_TYPE, // boolean
+    LET, // let
     CONST, // const
     READ_INPUT, // readInput
     READ_ENV, // readEnv
