@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
-class PrintParseTest {
+class PrintParserTest {
     private val parse = PrintParser()
 
     @Test
