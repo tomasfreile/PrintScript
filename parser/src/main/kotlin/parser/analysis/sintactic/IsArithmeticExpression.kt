@@ -5,14 +5,23 @@ import token.TokenType
 
 class IsArithmeticExpression : SyntaxRule {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
+        var index = 0
         for (token in tokenList) {
-            return when {
-                isParen(token) -> if (HasValidParens().checkSyntax(tokenList)) continue else false
-                isLiteral(token) || isOperator(token) -> continue
-                else -> false
-            }
+            index +=
+                when {
+                    isParen(token) -> if (isParenValid(tokenList, index)) 1 else return false
+                    isLiteral(token) || isOperator(token) || ignore(token) -> 1
+                    else -> return false
+                }
         }
         return true
+    }
+
+    private fun isParenValid(
+        tokenList: List<Token>,
+        from: Int,
+    ): Boolean {
+        return HasPairOfParen().checkSyntax(tokenList.subList(from, tokenList.size))
     }
 
     private fun isLiteral(token: Token): Boolean {
@@ -32,6 +41,13 @@ class IsArithmeticExpression : SyntaxRule {
     private fun isParen(token: Token): Boolean {
         return when (token.type) {
             TokenType.LEFT_PAREN -> true
+            else -> false
+        }
+    }
+
+    private fun ignore(token: Token): Boolean {
+        return when (token.type) {
+            TokenType.RIGHT_PAREN -> true
             else -> false
         }
     }

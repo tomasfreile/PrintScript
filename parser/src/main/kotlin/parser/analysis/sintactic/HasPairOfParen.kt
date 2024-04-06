@@ -3,30 +3,32 @@ package parser.analysis.sintactic
 import token.Token
 import token.TokenType
 
-class HasValidParens : SyntaxRule {
+class HasPairOfParen : SyntaxRule {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
         var index = 0
-        var tokenCopy = tokenList
-        while (index < tokenList.size) {
-            when (tokenCopy[index].type) {
+        for (token in tokenList) {
+            when (token.type) {
                 TokenType.LEFT_PAREN -> {
-                    val rightParenIndex = getRightParenIndex(tokenCopy)
+                    val rightParenIndex = getRightParenIndex(tokenList, index) // busco right paren desde donde encontre el left
                     if (rightParenIndex > 0) {
-                        tokenCopy = tokenCopy.subList(rightParenIndex + 1, tokenList.size)
-                        index = rightParenIndex + 1
+                        return true
                     } else {
                         return false
                     }
                 }
-                else -> continue
+                TokenType.RIGHT_PAREN -> return false
+                else -> index += 1
             }
         }
-        return true
+        return true // there is no left paren
     }
 
-    private fun getRightParenIndex(tokenList: List<Token>): Int {
+    private fun getRightParenIndex(
+        tokenList: List<Token>,
+        from: Int,
+    ): Int {
         var index = 0
-        for (token in tokenList) {
+        for (token in tokenList.subList(from, tokenList.size)) {
             when (token.type) {
                 TokenType.RIGHT_PAREN -> return index
                 else -> index += 1
