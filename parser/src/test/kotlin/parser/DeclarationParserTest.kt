@@ -162,11 +162,11 @@ class DeclarationParserTest {
         assertTrue {
             node is VariableDeclarationNode
             (node as VariableDeclarationNode).expression is BinaryOperationNode
-            (((node as VariableDeclarationNode).expression as BinaryOperationNode)).right is BinaryOperationNode
+            ((node.expression as BinaryOperationNode)).right is BinaryOperationNode
         }
         assertEquals((((node as VariableDeclarationNode).expression as BinaryOperationNode)).operator, TokenType.PLUS)
         assertEquals(
-            ((((node as VariableDeclarationNode).expression as BinaryOperationNode)).right as BinaryOperationNode).operator,
+            (((node.expression as BinaryOperationNode)).right as BinaryOperationNode).operator,
             TokenType.STAR,
         )
     }
@@ -192,12 +192,12 @@ class DeclarationParserTest {
         val node = parser.createAST(tokenList)
         assertTrue {
             (node as VariableDeclarationNode).expression is BinaryOperationNode
-            (((node as VariableDeclarationNode).expression as BinaryOperationNode)).right is LiteralNode
-            (((node as VariableDeclarationNode).expression as BinaryOperationNode)).left is BinaryOperationNode
+            ((node.expression as BinaryOperationNode)).right is LiteralNode
+            ((node.expression as BinaryOperationNode)).left is BinaryOperationNode
         }
         assertEquals((((node as VariableDeclarationNode).expression as BinaryOperationNode)).operator, TokenType.STAR)
         assertEquals(
-            ((((node as VariableDeclarationNode).expression as BinaryOperationNode)).left as BinaryOperationNode).operator,
+            (((node.expression as BinaryOperationNode)).left as BinaryOperationNode).operator,
             TokenType.PLUS,
         )
     }
