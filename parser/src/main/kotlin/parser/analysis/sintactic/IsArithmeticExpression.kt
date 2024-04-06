@@ -1,27 +1,27 @@
 package parser.analysis.sintactic
 
+import parser.InvalidSyntaxException
 import token.Token
 import token.TokenType
 
 class IsArithmeticExpression : SyntaxRule {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
         var index = 0
-        for (token in tokenList) {
+        var tokenCopy = tokenList
+        while (index < tokenCopy.size && tokenCopy.isNotEmpty()) {
+            val token = tokenCopy[index]
             index +=
                 when {
-                    isParen(token) -> if (isParenValid(tokenList, index)) 1 else return false
+                    isParen(token) -> {
+                        tokenCopy = skipParenContent(tokenCopy.subList(index, tokenCopy.size))
+                        index = 0
+                        continue
+                    }
                     isLiteral(token) || isOperator(token) || ignore(token) -> 1
                     else -> return false
                 }
         }
         return true
-    }
-
-    private fun isParenValid(
-        tokenList: List<Token>,
-        from: Int,
-    ): Boolean {
-        return HasPairOfParen().checkSyntax(tokenList.subList(from, tokenList.size))
     }
 
     private fun isLiteral(token: Token): Boolean {
@@ -45,10 +45,41 @@ class IsArithmeticExpression : SyntaxRule {
         }
     }
 
+    private fun skipParenContent(tokenList: List<Token>): List<Token> {
+        return when {
+            isParenContentValid(tokenList) -> tokenList.subList(getRightParenIndex(tokenList) + 1, tokenList.size)
+            else -> throw InvalidSyntaxException("Invalid Syntax Exception on line: " + tokenList.first().start.row)
+        }
+    }
+
+    private fun isParenContentValid(tokenList: List<Token>): Boolean {
+        return if (isParenValid(tokenList)) {
+            val parenContent = tokenList.subList(1, getRightParenIndex(tokenList))
+            checkSyntax(parenContent)
+        } else {
+            false
+        }
+    }
+
     private fun ignore(token: Token): Boolean {
         return when (token.type) {
             TokenType.RIGHT_PAREN -> true
             else -> false
         }
+    }
+
+    private fun getRightParenIndex(tokenList: List<Token>): Int {
+        var i = 0
+        for (token in tokenList) {
+            when (token.type) {
+                TokenType.RIGHT_PAREN -> return i
+                else -> i += 1
+            }
+        }
+        return -1
+    }
+
+    private fun isParenValid(tokenList: List<Token>): Boolean {
+        return HasPairOfParen().checkSyntax(tokenList)
     }
 }
