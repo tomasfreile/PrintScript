@@ -4,7 +4,7 @@ import ast.BinaryOperationNode
 import ast.LiteralNode
 import ast.PrintNode
 import org.junit.jupiter.api.Test
-import parser.parse.PrintParser
+import parser.parser.PrintParser
 import token.Coordinate
 import token.PrintScriptToken
 import token.TokenType

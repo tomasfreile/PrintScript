@@ -1,4 +1,4 @@
-package parser.parse
+package parser.parser
 
 import ast.AstNode
 import token.Token
