@@ -1,10 +1,11 @@
-package parser.parse
+package parser.parser
 
 import ast.AstNode
 import ast.VariableDeclarationNode
 import parser.InvalidDeclarationStatement
 import parser.InvalidOperatorException
 import parser.InvalidSyntaxException
+import parser.analysis.semantic.OperatorIsFormatted
 import parser.analysis.sintactic.IsArithmeticExpression
 import parser.analysis.sintactic.IsStringConcat
 import parser.nodeBuilder.ArithmeticNodeBuilder
@@ -145,6 +146,11 @@ class DeclarationParser : Parser {
     }
 
     private fun isNumberExpression(expression: List<Token>): Boolean {
-        return IsArithmeticExpression().checkSyntax(expression)
+        val formatResult = OperatorIsFormatted().checkSemantic(expression)
+        val arithmeticResult = IsArithmeticExpression().checkSyntax(expression)
+        return when {
+            formatResult && arithmeticResult -> true
+            else -> false
+        }
     }
 }
