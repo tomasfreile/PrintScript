@@ -5,6 +5,7 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
+import formatter.Formatter
 import interpreter.PrintScriptInterpreter
 import interpreter.builder.InterpreterBuilder
 import lexer.Lexer
@@ -26,7 +27,6 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     val lexer: Lexer = PrintScriptLexer(getTokenMap())
     val parser: Parser = Parser()
     var interpreter: PrintScriptInterpreter = InterpreterBuilder().build()
-    val sca: StaticCodeAnalyzer = StaticCodeAnalyzerImpl(config?.path ?: throw NullPointerException("Expected config file path for sca."))
 
     override fun run() {
         val sentencesList = getSentenceList()
@@ -36,10 +36,12 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
             }
 
             "format" -> {
-                formatCode()
+                formatCode(sentencesList)
             }
 
             "analyze" -> {
+                val sca: StaticCodeAnalyzer =
+                    StaticCodeAnalyzerImpl(config?.path ?: throw NullPointerException("Expected config file path for sca."))
                 // TODO
             }
 
@@ -57,7 +59,18 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
         }
     }
 
-    private fun formatCode() {
+    private fun formatCode(sentencesList: List<String>) {
+        val formatter: Formatter = Formatter(config?.path ?: throw NullPointerException("Expected config file path for formatter."))
+        val file = File(source.path)
+        var text = ""
+
+        for (sentence in sentencesList) {
+            val tokenList = lexer.lex(sentence)
+            val tree = parser.parse(tokenList)
+            val line = formatter.format(tree)
+            text += line
+        }
+        file.writeText(text)
     }
 
     private fun getSentenceList(): List<String> {
