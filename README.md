@@ -18,4 +18,6 @@ You can run PrintScript code using:
 ```bash
 ./print-script execute <source>
 ```
-Usage: print-script [<options>] <operation> <source>
+Usage: print-script <operation> <source>
+operations: execute - validate - format - analyze
+options: -v <version>, -c <config file path>
