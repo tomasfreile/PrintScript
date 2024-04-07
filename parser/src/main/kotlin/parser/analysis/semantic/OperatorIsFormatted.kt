@@ -65,7 +65,8 @@ class OperatorIsFormatted : SemanticRule {
 
     private fun skipParenContent(tokenList: List<Token>): List<Token> {
         return when {
-            isParenContentValid(tokenList) -> tokenList.subList(getRightParenIndex(tokenList), tokenList.size)
+            !isLeftParen(tokenList.first()) -> skipParenContent(tokenList.subList(1, tokenList.size))
+            isParenContentValid(tokenList) -> tokenList.subList(getRightParenIndex(tokenList) + 1, tokenList.size)
             else -> throw InvalidSyntaxException(
                 "Invalid Syntax Exception on line: " + tokenList.first().start.row + " | reason: Invalid Paren",
             )
@@ -100,9 +101,15 @@ class OperatorIsFormatted : SemanticRule {
         tokenList: List<Token>,
         index: Int,
     ): Boolean { // L O L ;)
-        return isLiteral(tokenList[index - 1]) && isLiteral(tokenList[index + 1]) ||
-            isRightParen(tokenList[index - 1]) && isLiteral(tokenList[index + 1]) ||
-            isLiteral(tokenList[index - 1]) && isLeftParen(tokenList[index + 1])
+        return if (index == 0 && tokenList.size > 2) {
+            isOperator(tokenList[index]) && isLeftParen(tokenList[index + 1])
+        } else if (tokenList.size == 2) {
+            isOperator(tokenList[index]) && isLiteral(tokenList[index + 1])
+        } else {
+            isLiteral(tokenList[index - 1]) && isLiteral(tokenList[index + 1]) ||
+                isRightParen(tokenList[index - 1]) && isLiteral(tokenList[index + 1]) ||
+                isLiteral(tokenList[index - 1]) && isLeftParen(tokenList[index + 1])
+        }
     }
 
     private fun preCondition(tokenList: List<Token>): Boolean {

@@ -16,7 +16,6 @@ class HasPairOfParen : SyntaxRule {
                         return false
                     }
                 }
-                TokenType.RIGHT_PAREN -> return false
                 else -> index += 1
             }
         }
