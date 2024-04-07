@@ -1,6 +1,7 @@
 package parser.parser
 
 import ast.AstNode
+import ast.NilNode
 import ast.VariableDeclarationNode
 import parser.InvalidDeclarationStatement
 import parser.InvalidOperatorException
@@ -24,10 +25,15 @@ class DeclarationParser : Parser {
 
     override fun createAST(tokenList: List<Token>): AstNode {
         return when {
+            isNonUninitialized(tokenList) -> createUninitializedDeclarationAst(tokenList)
             isNumberType(tokenList[3]) -> createArithmeticDeclarationAst(tokenList)
             isStringType(tokenList[3]) -> createStringDeclarationAst(tokenList)
             else -> throw InvalidSyntaxException("Has no type the declaration on line: " + tokenList.first().start.row)
         }
+    }
+
+    private fun createUninitializedDeclarationAst(tokenList: List<Token>): AstNode {
+        return createDeclarationAst(tokenList)
     }
 
     private fun createArithmeticDeclarationAst(tokenList: List<Token>): AstNode {
@@ -66,7 +72,7 @@ class DeclarationParser : Parser {
 
     private fun createDeclarationAst(
         tokenList: List<Token>,
-        node: AstNode,
+        node: AstNode = NilNode,
     ): AstNode {
         return VariableDeclarationNode(
             tokenList[0].type,
@@ -94,12 +100,11 @@ class DeclarationParser : Parser {
         if (tokenList[1].type == TokenType.VALUE_IDENTIFIER_LITERAL) points += 1
         if (tokenList[2].type == TokenType.COLON) points += 1
         if (isValueType(tokenList[3])) points += 1
-        if (tokenList[4].type == TokenType.ASSIGNATION) points += 1
-        return points == 5
+        return points == 4
     }
 
     private fun hasEnoughLength(tokenList: List<Token>): Boolean {
-        return tokenList.size >= 6 // at least has the structure and content
+        return tokenList.size >= 5 // at least has the structure and content
     }
 
     private fun isDeclarativeToken(token: Token): Boolean {
@@ -114,7 +119,7 @@ class DeclarationParser : Parser {
     }
 
     private fun getExpression(tokenList: List<Token>): List<Token> {
-        return tokenList.subList(5, tokenList.size)
+        return if (tokenList.size == 4) emptyList() else tokenList.subList(5, tokenList.size)
     }
 
     private fun isStringType(token: Token): Boolean {
@@ -129,6 +134,10 @@ class DeclarationParser : Parser {
             TokenType.NUMBER_TYPE -> true
             else -> false
         }
+    }
+
+    private fun isNonUninitialized(tokenList: List<Token>): Boolean {
+        return getExpression(tokenList).isEmpty()
     }
 
     private fun isLiteral(tokenList: List<Token>): Boolean {
