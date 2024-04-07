@@ -48,7 +48,7 @@ class PrintScriptLexerTest {
         val input = """"Hello, World!""""
         val expectedTokens =
             listOf(
-                PrintScriptToken(TokenType.STRING, "\"Hello, World!\"", Coordinate(0, 0), Coordinate(0, 15)),
+                PrintScriptToken(TokenType.STRING, "Hello, World!", Coordinate(0, 1), Coordinate(0, 14)),
             )
         compareExpectedWithOutput(input, expectedTokens)
     }
@@ -63,7 +63,7 @@ class PrintScriptLexerTest {
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(0, 7), Coordinate(0, 8)),
                 PrintScriptToken(TokenType.STRING_TYPE, "String", Coordinate(0, 9), Coordinate(0, 15)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(0, 16), Coordinate(0, 17)),
-                PrintScriptToken(TokenType.STRING, "'Hello, World!'", Coordinate(0, 18), Coordinate(0, 33)),
+                PrintScriptToken(TokenType.STRING, "Hello, World!", Coordinate(0, 19), Coordinate(0, 32)),
             )
 
         compareExpectedWithOutput(input, expectedTokens)
@@ -95,7 +95,7 @@ class PrintScriptLexerTest {
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(0, 8), Coordinate(0, 9)),
                 PrintScriptToken(TokenType.STRING_TYPE, "String", Coordinate(0, 10), Coordinate(0, 16)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(0, 17), Coordinate(0, 18)),
-                PrintScriptToken(TokenType.STRING, "'Hello, World!'", Coordinate(0, 19), Coordinate(0, 34)),
+                PrintScriptToken(TokenType.STRING, "Hello, World!", Coordinate(0, 20), Coordinate(0, 33)),
             )
 
         compareExpectedWithOutput(input, expectedTokens)
@@ -111,7 +111,7 @@ class PrintScriptLexerTest {
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(0, 8), Coordinate(0, 9)),
                 PrintScriptToken(TokenType.STRING_TYPE, "String", Coordinate(0, 10), Coordinate(0, 16)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(0, 17), Coordinate(0, 18)),
-                PrintScriptToken(TokenType.STRING, "\"Hello, World!\"", Coordinate(0, 19), Coordinate(0, 34)),
+                PrintScriptToken(TokenType.STRING, "Hello, World!", Coordinate(0, 20), Coordinate(0, 33)),
             )
 
         compareExpectedWithOutput(input, expectedTokens)
@@ -130,6 +130,42 @@ class PrintScriptLexerTest {
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 1), Coordinate(2, 4)),
             )
         compareExpectedWithOutput(input, expectedTokens)
+    }
+
+    @Test
+    fun letKeywordOnlyWorksIfSurroundedBySpaces() {
+        val input = "letx"
+        val expectedTokens =
+            listOf(
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "letx", Coordinate(0, 0), Coordinate(0, 4)),
+            )
+        compareExpectedWithOutput(input, expectedTokens)
+
+        val input2 = "let x"
+        val expectedTokens2 =
+            listOf(
+                PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(0, 0), Coordinate(0, 3)),
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER, "x", Coordinate(0, 4), Coordinate(0, 5)),
+            )
+        compareExpectedWithOutput(input2, expectedTokens2)
+    }
+
+    @Test
+    fun invalidCharactersThrowExceptionWithPosition() {
+        val input = "ha%o"
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            lexer.lex(input)
+        }
+
+        val input2 = "let x = 1;&"
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            lexer.lex(input2)
+        }
+
+        val input3 = "{}"
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            lexer.lex(input3)
+        }
     }
 
     private fun compareExpectedWithOutput(
