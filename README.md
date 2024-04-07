@@ -13,4 +13,11 @@ To check linter:
 ./gradlew check
 ```
 
-
+## Run Code
+You can run PrintScript code using:
+```bash
+./print-script execute <source>
+```
+Usage: print-script <operation> <source> <br>
+operations: execute - validate - format - analyze <br>
+options: -v <version>, -c <config file path>

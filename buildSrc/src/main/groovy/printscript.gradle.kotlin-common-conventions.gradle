@@ -53,6 +53,7 @@ koverReport {
             minBound(60)
             filters {
                 excludes{
+                    packages("cli")
                     packages("ast")
                     packages("token")
                     packages("utils")

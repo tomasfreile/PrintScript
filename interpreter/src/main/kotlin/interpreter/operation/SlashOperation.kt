@@ -1,4 +1,4 @@
-package org.example.interpreter.operation
+package interpreter.operation
 
 class SlashOperation : Operation {
     override val symbol = "/"

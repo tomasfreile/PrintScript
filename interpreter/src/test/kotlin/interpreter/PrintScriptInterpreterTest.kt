@@ -2,47 +2,17 @@ package interpreter
 
 import ast.ASTBinaryNode
 import ast.ASTSingleNode
-import org.example.interpreter.DeclarationInterpreter
-import org.example.interpreter.NumberInterpreter
-import org.example.interpreter.OperationInterpreter
-import org.example.interpreter.ParenInterpreter
-import org.example.interpreter.PrintInterpreter
-import org.example.interpreter.PrintScriptInterpreter
-import org.example.interpreter.StringInterpreter
-import org.example.interpreter.operation.MinusOperation
-import org.example.interpreter.operation.PlusOperation
-import org.example.interpreter.operation.SlashOperation
-import org.example.interpreter.operation.StarOperation
+import interpreter.builder.InterpreterBuilder
 import org.junit.jupiter.api.Test
 import token.Coordinate
 import token.PrintScriptToken
-import token.Token
 import token.TokenType
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import kotlin.test.assertEquals
 
 class PrintScriptInterpreterTest {
-    val operationInterpreter =
-        OperationInterpreter(listOf(PlusOperation(), MinusOperation(), SlashOperation(), StarOperation()))
-
-    val interpreterMap =
-        mapOf(
-            Pair(TokenType.LEFT_PAREN, ParenInterpreter()),
-            Pair(TokenType.RIGHT_PAREN, ParenInterpreter()),
-            Pair(TokenType.STRING, StringInterpreter()),
-            Pair(TokenType.PRINT, PrintInterpreter()),
-            Pair(TokenType.NUMBER, NumberInterpreter()),
-            Pair(TokenType.STAR, operationInterpreter),
-            Pair(TokenType.SLASH, operationInterpreter),
-            Pair(TokenType.PLUS, operationInterpreter),
-            Pair(TokenType.MINUS, operationInterpreter),
-            Pair(TokenType.VARIABLE_KEYWORD, DeclarationInterpreter()),
-            Pair(TokenType.VALUE_IDENTIFIER, ValueIdentifierInterpreter()),
-            Pair(TokenType.ASSIGNATION, AssignationInterpreter()),
-        )
-
-    val symbolTable = emptyMap<String, Token>()
+    private val interpreter = InterpreterBuilder().build()
 
     @Test
     fun testBasicPrint() {
@@ -60,8 +30,6 @@ class PrintScriptInterpreterTest {
                 ),
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
             )
-
-        val interpreter = PrintScriptInterpreter(interpreterMap, symbolTable)
 
         val outputStream = ByteArrayOutputStream()
         System.setOut(PrintStream(outputStream))
@@ -97,7 +65,6 @@ class PrintScriptInterpreterTest {
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
             )
 
-        val interpreter = PrintScriptInterpreter(interpreterMap, symbolTable)
         val nextInterpreter = interpreter.interpret(ast)
         val nextSymbolTable = nextInterpreter.symbolTable
         val key = nextSymbolTable.keys.elementAt(0)
@@ -140,7 +107,6 @@ class PrintScriptInterpreterTest {
                 PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 3), Coordinate(2, 3)),
             )
 
-        val interpreter = PrintScriptInterpreter(interpreterMap, symbolTable)
         val nextInterpreter = interpreter.interpret(ast)
         val nextSymbolTable = nextInterpreter.symbolTable
         val key = nextSymbolTable.keys.elementAt(0)
