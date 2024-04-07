@@ -2,6 +2,7 @@ package parser
 
 import ast.BinaryOperationNode
 import ast.LiteralNode
+import ast.NilNode
 import ast.VariableDeclarationNode
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -266,5 +267,23 @@ class DeclarationParserTest {
             (((node.expression as BinaryOperationNode).right as BinaryOperationNode).right as BinaryOperationNode).operator,
             TokenType.PLUS,
         )
+    }
+
+    @Test
+    fun test012_DeclarationParserNonAssignedVariable() {
+        val tokenList =
+            listOf(
+                PrintScriptToken(TokenType.LET, "let", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "number", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBER_TYPE, "Int", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
+            )
+        assertTrue(parser.canHandle(tokenList))
+        val node = parser.createAST(tokenList)
+        assertTrue {
+            node is VariableDeclarationNode
+            (node as VariableDeclarationNode).expression is NilNode
+        }
     }
 }
