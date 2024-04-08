@@ -8,8 +8,10 @@ import parser.InvalidOperatorException
 import parser.InvalidSyntaxException
 import parser.analysis.semantic.OperatorIsFormatted
 import parser.analysis.sintactic.IsArithmeticExpression
+import parser.analysis.sintactic.IsBooleanExpression
 import parser.analysis.sintactic.IsStringExpression
 import parser.nodeBuilder.ArithmeticNodeBuilder
+import parser.nodeBuilder.BooleanNodeBuilder
 import parser.nodeBuilder.LiteralNodeBuilder
 import parser.nodeBuilder.StringNodeBuilder
 import token.Token
@@ -28,7 +30,22 @@ class DeclarationParser : Parser {
             isNonUninitialized(tokenList) -> createUninitializedDeclarationAst(tokenList)
             isNumberType(tokenList[3]) -> createArithmeticDeclarationAst(tokenList)
             isStringType(tokenList[3]) -> createStringDeclarationAst(tokenList)
+            isBooleanType(tokenList[3]) -> createBooleanDeclarationAST(tokenList)
             else -> throw InvalidSyntaxException("Has no type the declaration on line: " + tokenList.first().start.row)
+        }
+    }
+
+    private fun createBooleanDeclarationAST(tokenList: List<Token>): AstNode {
+        val expression = getExpression(tokenList)
+        return if (isBooleanExpression(expression)) {
+            createDeclarationAst(
+                tokenList,
+                createBooleanAst(expression),
+            )
+        } else {
+            throw InvalidDeclarationStatement(
+                "Invalid Boolean Declaration Statement on line: " + tokenList.first().start.row,
+            )
         }
     }
 
@@ -45,7 +62,7 @@ class DeclarationParser : Parser {
             )
         } else {
             throw InvalidDeclarationStatement(
-                "Invalid Declaration Statement on linde: " + tokenList.first().start.row + "\n Is a number declaration dummy",
+                "Invalid Number Declaration Statement on linde: " + tokenList.first().start.row + "\n Is a number declaration dummy",
             )
         }
     }
@@ -60,7 +77,7 @@ class DeclarationParser : Parser {
                 )
             } else {
                 throw InvalidDeclarationStatement(
-                    "Invalid Declaration Statement on line: " + tokenList.first().start.row + "\n Is a string declaration dummy",
+                    "Invalid String Declaration Statement on line: " + tokenList.first().start.row + "\n Is a string declaration dummy",
                 )
             }
         } catch (e: InvalidOperatorException) {
@@ -90,6 +107,10 @@ class DeclarationParser : Parser {
         return ArithmeticNodeBuilder().build(expression)
     }
 
+    private fun createBooleanAst(expression: List<Token>): AstNode {
+        return BooleanNodeBuilder().build(expression)
+    }
+
     private fun createLiteralNode(tokenList: List<Token>): AstNode {
         return LiteralNodeBuilder().build(tokenList)
     }
@@ -104,7 +125,7 @@ class DeclarationParser : Parser {
     }
 
     private fun hasEnoughLength(tokenList: List<Token>): Boolean {
-        return tokenList.size >= 5 // at least has the structure and content
+        return tokenList.size >= 4 // at least has the structure and content
     }
 
     private fun isDeclarativeToken(token: Token): Boolean {
@@ -115,7 +136,7 @@ class DeclarationParser : Parser {
     }
 
     private fun isValueType(token: Token): Boolean {
-        return isStringType(token) || isNumberType(token)
+        return isStringType(token) || isNumberType(token) || isBooleanType(token)
     }
 
     private fun getExpression(tokenList: List<Token>): List<Token> {
@@ -132,6 +153,13 @@ class DeclarationParser : Parser {
     private fun isNumberType(token: Token): Boolean {
         return when (token.type) {
             TokenType.NUMBER_TYPE -> true
+            else -> false
+        }
+    }
+
+    private fun isBooleanType(token: Token): Boolean {
+        return when (token.type) {
+            TokenType.BOOLEAN_TYPE -> true
             else -> false
         }
     }
@@ -161,5 +189,9 @@ class DeclarationParser : Parser {
             formatResult && arithmeticResult -> true
             else -> false
         }
+    }
+
+    private fun isBooleanExpression(expression: List<Token>): Boolean {
+        return IsBooleanExpression().checkSyntax(expression)
     }
 }
