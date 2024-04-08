@@ -1,22 +1,20 @@
-package org.example.interpreter
+package interpreter
 
-import ast.ASTSingleNode
-import ast.Node
-import token.Token
-import token.TokenType
+import ast.AstNode
+import ast.PrintNode
+import interpreter.variable.Variable
 
 class PrintInterpreter : Interpreter {
     override fun interpret(
-        node: Node?,
-        interpreters: Map<TokenType, Interpreter>,
-        symbolTable: Map<String, Token>,
-    ): Any? {
-        if (node is ASTSingleNode) {
-            val stringToPrint = interpreters[node.node?.token?.type]?.interpret(node.node, interpreters, symbolTable)
-            println(stringToPrint)
-            return stringToPrint
-        } else {
-            throw UnsupportedOperationException("No value after print")
-        }
+        node: AstNode?,
+        interpreter: PrintScriptInterpreter,
+        symbolTable: MutableMap<Variable, Any>,
+    ): Any {
+        node as PrintNode
+        return interpreter.interpret(node.expression, symbolTable)
+    }
+
+    override fun canHandle(node: AstNode): Boolean {
+        return node is PrintNode
     }
 }
