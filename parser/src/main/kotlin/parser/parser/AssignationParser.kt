@@ -5,8 +5,10 @@ import ast.AstNode
 import parser.InvalidSyntaxException
 import parser.analysis.semantic.OperatorIsFormatted
 import parser.analysis.sintactic.IsArithmeticExpression
+import parser.analysis.sintactic.IsBooleanExpression
 import parser.analysis.sintactic.IsStringExpression
 import parser.nodeBuilder.ArithmeticNodeBuilder
+import parser.nodeBuilder.BooleanNodeBuilder
 import parser.nodeBuilder.StringNodeBuilder
 import token.Token
 import token.TokenType
@@ -21,8 +23,9 @@ class AssignationParser : Parser {
 
     override fun createAST(tokenList: List<Token>): AstNode {
         return when {
-            isNumberExpression(tokenList) -> createArithmeticNode(tokenList)
-            isStringExpression(tokenList) -> createStringNode(tokenList)
+            isNumberExpression(tokenList) -> createArithmeticAst(tokenList)
+            isStringExpression(tokenList) -> createStringAst(tokenList)
+            isBooleanExpression(tokenList) -> createBooleanAst(tokenList)
             else -> throw InvalidSyntaxException("Invalid Syntax Assignation on line: " + tokenList.first().start.row)
         }
     }
@@ -53,17 +56,29 @@ class AssignationParser : Parser {
         return IsStringExpression().checkSyntax(expression)
     }
 
-    private fun createArithmeticNode(tokenList: List<Token>): AstNode {
+    private fun isBooleanExpression(tokenList: List<Token>): Boolean {
+        val expression = getExpression(tokenList)
+        return IsBooleanExpression().checkSyntax(expression)
+    }
+
+    private fun createArithmeticAst(tokenList: List<Token>): AstNode {
         return createAssignationAst(
             tokenList,
             ArithmeticNodeBuilder().build(getExpression(tokenList)),
         )
     }
 
-    private fun createStringNode(tokenList: List<Token>): AstNode {
+    private fun createStringAst(tokenList: List<Token>): AstNode {
         return createAssignationAst(
             tokenList,
             StringNodeBuilder().build(getExpression(tokenList)),
+        )
+    }
+
+    private fun createBooleanAst(tokenList: List<Token>): AstNode {
+        return createAssignationAst(
+            tokenList,
+            BooleanNodeBuilder().build(getExpression(tokenList)),
         )
     }
 
