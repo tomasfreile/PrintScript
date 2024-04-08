@@ -5,9 +5,11 @@ import ast.PrintNode
 import parser.InvalidSyntaxException
 import parser.analysis.sintactic.IsArithmeticExpression
 import parser.analysis.sintactic.IsBooleanExpression
+import parser.analysis.sintactic.IsFunctionExpression
 import parser.analysis.sintactic.IsStringExpression
 import parser.nodeBuilder.ArithmeticNodeBuilder
 import parser.nodeBuilder.BooleanNodeBuilder
+import parser.nodeBuilder.FunctionNodeBuilder
 import parser.nodeBuilder.LiteralNodeBuilder
 import parser.nodeBuilder.StringNodeBuilder
 import token.Token
@@ -24,6 +26,7 @@ class PrintParser : Parser {
     override fun createAST(tokenList: List<Token>): AstNode {
         val content = getExpression(tokenList)
         return when {
+            isFunctionExpression(content) -> createFunctionNode(content)
             isArithmeticExpression(content) -> createArithmeticBinaryNode(content)
             isConcat(content) -> createBinaryNode(content)
             isBooleanExpression(content) -> createBooleanNode(content)
@@ -66,6 +69,10 @@ class PrintParser : Parser {
         }
     }
 
+    private fun isFunctionExpression(expression: List<Token>): Boolean {
+        return IsFunctionExpression().checkSyntax(expression)
+    }
+
     private fun isArithmeticExpression(expression: List<Token>): Boolean {
         return IsArithmeticExpression().checkSyntax(expression)
     }
@@ -84,6 +91,10 @@ class PrintParser : Parser {
 
     private fun createArithmeticBinaryNode(expression: List<Token>): AstNode {
         return PrintNode(ArithmeticNodeBuilder().build(expression))
+    }
+
+    private fun createFunctionNode(expression: List<Token>): AstNode {
+        return PrintNode(FunctionNodeBuilder().build(expression))
     }
 
     private fun createLiteralNode(expression: List<Token>): AstNode {

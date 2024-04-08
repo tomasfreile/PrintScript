@@ -1,6 +1,7 @@
 package parser
 
 import ast.BinaryOperationNode
+import ast.FunctionNode
 import ast.LiteralNode
 import ast.PrintNode
 import org.junit.jupiter.api.Test
@@ -225,5 +226,29 @@ class PrintParserTest {
         assertThrows<InvalidSyntaxException> {
             parse.createAST(tokenList)
         }
+    }
+
+    @Test
+    fun test011_PrintParserReadInputFunctionWithStringExpression() {
+        val tokenList =
+            listOf(
+                PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.READ_INPUT, "readInput", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRING_LITERAL, "hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
+            )
+        assertTrue(parse.canHandle(tokenList))
+        val node = parse.createAST(tokenList)
+        assertTrue {
+            node is PrintNode
+            node as PrintNode
+            node.expression is FunctionNode
+        }
+        node as PrintNode
+        assertEquals(((node.expression as FunctionNode).expression as LiteralNode).type, TokenType.STRING_LITERAL)
     }
 }
