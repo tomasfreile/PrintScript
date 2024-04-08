@@ -5,7 +5,7 @@ import ast.AstNode
 import parser.InvalidSyntaxException
 import parser.analysis.semantic.OperatorIsFormatted
 import parser.analysis.sintactic.IsArithmeticExpression
-import parser.analysis.sintactic.IsStringConcat
+import parser.analysis.sintactic.IsStringExpression
 import parser.nodeBuilder.ArithmeticNodeBuilder
 import parser.nodeBuilder.StringNodeBuilder
 import token.Token
@@ -50,7 +50,7 @@ class AssignationParser : Parser {
 
     private fun isStringExpression(tokenList: List<Token>): Boolean {
         val expression = getExpression(tokenList)
-        return IsStringConcat().checkSyntax(expression)
+        return IsStringExpression().checkSyntax(expression)
     }
 
     private fun createArithmeticNode(tokenList: List<Token>): AstNode {

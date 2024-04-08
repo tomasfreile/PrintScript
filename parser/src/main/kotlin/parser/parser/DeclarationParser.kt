@@ -8,7 +8,7 @@ import parser.InvalidOperatorException
 import parser.InvalidSyntaxException
 import parser.analysis.semantic.OperatorIsFormatted
 import parser.analysis.sintactic.IsArithmeticExpression
-import parser.analysis.sintactic.IsStringConcat
+import parser.analysis.sintactic.IsStringExpression
 import parser.nodeBuilder.ArithmeticNodeBuilder
 import parser.nodeBuilder.LiteralNodeBuilder
 import parser.nodeBuilder.StringNodeBuilder
@@ -151,7 +151,7 @@ class DeclarationParser : Parser {
     }
 
     private fun isStringExpression(expression: List<Token>): Boolean {
-        return IsStringConcat().checkSyntax(expression)
+        return IsStringExpression().checkSyntax(expression)
     }
 
     private fun isNumberExpression(expression: List<Token>): Boolean {
