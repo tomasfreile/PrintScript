@@ -27,5 +27,8 @@ data class AssignmentNode(val identifier: String, val expression: AstNode) : Ast
 // If statement
 data class IfNode(val condition: LiteralNode, val thenBlock: AstNode, val elseBlock: AstNode) : AstNode()
 
+// Function
+data class FunctionNode(val function: TokenType, val expression: AstNode)
+
 // Nil
 data object NilNode : AstNode()

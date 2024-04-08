@@ -25,8 +25,11 @@ enum class TokenType {
     BOOLEAN_TYPE, // boolean
     LET, // let
     CONST, // const
-    READ_INPUT, // readInput
-    READ_ENV, // readEnv
+
+    // Functions
+    READ_INPUT,
+    READ_ENV,
+    WRITE_ENV,
 
     // Literals
     STRING_LITERAL, // "hola"
