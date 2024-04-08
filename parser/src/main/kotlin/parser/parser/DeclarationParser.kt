@@ -10,8 +10,8 @@ import parser.analysis.semantic.OperatorIsFormatted
 import parser.analysis.sintactic.IsArithmeticExpression
 import parser.analysis.sintactic.IsStringConcat
 import parser.nodeBuilder.ArithmeticNodeBuilder
-import parser.nodeBuilder.ContentNodeBuilder
 import parser.nodeBuilder.LiteralNodeBuilder
+import parser.nodeBuilder.StringNodeBuilder
 import token.Token
 import token.TokenType
 
@@ -83,7 +83,7 @@ class DeclarationParser : Parser {
     }
 
     private fun createStringAst(expression: List<Token>): AstNode {
-        return ContentNodeBuilder().build(expression)
+        return StringNodeBuilder().build(expression)
     }
 
     private fun createBinaryArithmeticAst(expression: List<Token>): AstNode {

@@ -5,8 +5,8 @@ import ast.PrintNode
 import parser.analysis.sintactic.IsArithmeticExpression
 import parser.analysis.sintactic.IsStringConcat
 import parser.nodeBuilder.ArithmeticNodeBuilder
-import parser.nodeBuilder.ContentNodeBuilder
 import parser.nodeBuilder.LiteralNodeBuilder
+import parser.nodeBuilder.StringNodeBuilder
 import token.Token
 import token.TokenType
 
@@ -55,7 +55,7 @@ class PrintParser : Parser {
     }
 
     private fun createBinaryNode(expression: List<Token>): AstNode {
-        return PrintNode(ContentNodeBuilder().build(expression))
+        return PrintNode(StringNodeBuilder().build(expression))
     }
 
     private fun createArithmeticBinaryNode(expression: List<Token>): AstNode {
