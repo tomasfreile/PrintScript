@@ -1,13 +1,14 @@
-package org.example.interpreter
+package interpreter
 
-import ast.Node
-import token.Token
-import token.TokenType
+import ast.AstNode
+import interpreter.variable.Variable
 
 interface Interpreter {
     fun interpret(
-        node: Node?,
-        interpreters: Map<TokenType, Interpreter>,
-        symbolTable: Map<String, Token>,
-    ): Any?
+        node: AstNode?,
+        interpreter: PrintScriptInterpreter,
+        symbolTable: MutableMap<Variable, Any>,
+    ): Any
+
+    fun canHandle(node: AstNode): Boolean
 }
