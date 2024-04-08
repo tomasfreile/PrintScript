@@ -4,6 +4,7 @@ import ast.BinaryOperationNode
 import ast.LiteralNode
 import ast.PrintNode
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import parser.parser.PrintParser
 import token.Coordinate
 import token.PrintScriptToken
@@ -184,6 +185,45 @@ class PrintParserTest {
             assertTrue(((node.expression as BinaryOperationNode).left as BinaryOperationNode).left is LiteralNode)
             assertEquals((node.expression as BinaryOperationNode).operator, TokenType.PLUS)
             assertEquals(((node.expression as BinaryOperationNode).left as BinaryOperationNode).operator, TokenType.STAR)
+        }
+    }
+
+    @Test
+    fun test009_PrintParserBooleanExpression() {
+        val tokenList =
+            listOf(
+                PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.BOOLEAN_LITERAL, "true", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
+            )
+        assertTrue(parse.canHandle(tokenList))
+        val node = parse.createAST(tokenList)
+        assertTrue {
+            node is PrintNode
+            node as PrintNode
+            node.expression is LiteralNode
+        }
+        node as PrintNode
+        assertEquals((node.expression as LiteralNode).type, TokenType.BOOLEAN_LITERAL)
+    }
+
+    @Test
+    fun test010_PrintParserInvalidBooleanExpressionBecauseOfString() {
+        val tokenList =
+            listOf(
+                PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.BOOLEAN_LITERAL, "true", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRING_LITERAL, "hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
+            )
+        assertTrue(parse.canHandle(tokenList))
+        assertThrows<InvalidSyntaxException> {
+            parse.createAST(tokenList)
         }
     }
 }

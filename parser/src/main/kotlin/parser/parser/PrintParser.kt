@@ -2,9 +2,12 @@ package parser.parser
 
 import ast.AstNode
 import ast.PrintNode
+import parser.InvalidSyntaxException
 import parser.analysis.sintactic.IsArithmeticExpression
-import parser.analysis.sintactic.IsStringConcat
+import parser.analysis.sintactic.IsBooleanExpression
+import parser.analysis.sintactic.IsStringExpression
 import parser.nodeBuilder.ArithmeticNodeBuilder
+import parser.nodeBuilder.BooleanNodeBuilder
 import parser.nodeBuilder.LiteralNodeBuilder
 import parser.nodeBuilder.StringNodeBuilder
 import token.Token
@@ -23,7 +26,9 @@ class PrintParser : Parser {
         return when {
             isArithmeticExpression(content) -> createArithmeticBinaryNode(content)
             isConcat(content) -> createBinaryNode(content)
-            else -> createLiteralNode(content)
+            isBooleanExpression(content) -> createBooleanNode(content)
+            isLiteral(content) -> createLiteralNode(content)
+            else -> throw InvalidSyntaxException("Invalid Print Syntax on line: " + tokenList.first().start.row)
         }
     }
 
@@ -45,8 +50,19 @@ class PrintParser : Parser {
 
     private fun isConcat(expression: List<Token>): Boolean {
         return when {
-            expression.size > 1 -> IsStringConcat().checkSyntax(expression)
+            expression.size > 1 -> IsStringExpression().checkSyntax(expression)
             else -> false
+        }
+    }
+
+    private fun isLiteral(expression: List<Token>): Boolean {
+        return if (expression.size == 1) {
+            when (expression.first().type) {
+                TokenType.STRING_LITERAL, TokenType.BOOLEAN_LITERAL, TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
+                else -> false
+            }
+        } else {
+            false
         }
     }
 
@@ -54,8 +70,16 @@ class PrintParser : Parser {
         return IsArithmeticExpression().checkSyntax(expression)
     }
 
+    private fun isBooleanExpression(expression: List<Token>): Boolean {
+        return IsBooleanExpression().checkSyntax(expression)
+    }
+
     private fun createBinaryNode(expression: List<Token>): AstNode {
         return PrintNode(StringNodeBuilder().build(expression))
+    }
+
+    private fun createBooleanNode(expression: List<Token>): AstNode {
+        return PrintNode(BooleanNodeBuilder().build(expression))
     }
 
     private fun createArithmeticBinaryNode(expression: List<Token>): AstNode {
