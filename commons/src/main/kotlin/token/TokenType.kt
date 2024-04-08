@@ -9,6 +9,8 @@ enum class TokenType {
     MINUS, // -
     STAR, // *
     SLASH, // /
+    LEFT_BRACE, // {
+    RIGHT_BRACE, // }
 
     // Separators
     SEMICOLON, // ;
@@ -18,12 +20,17 @@ enum class TokenType {
     PRINT, // print
     IF, // if
     ELSE, // else
-    NUMBER_TYPE, // Number
-    STRING_TYPE, // String
-    VARIABLE_KEYWORD, // VARIABLE_KEYWORD name: String
+    NUMBER_TYPE, // number
+    STRING_TYPE, // string
+    BOOLEAN_TYPE, // boolean
+    LET, // let
+    CONST, // const
+    READ_INPUT, // readInput
+    READ_ENV, // readEnv
 
     // Literals
-    VALUE_IDENTIFIER, // let VALUE_IDENTIFIER: STRING
-    STRING, // "hola"
-    NUMBER, // 123
+    STRING_LITERAL, // "hola"
+    NUMBER_LITERAL, // 123
+    BOOLEAN_LITERAL, // true or false
+    VALUE_IDENTIFIER_LITERAL, // let VALUE_IDENTIFIER: STRING
 }
