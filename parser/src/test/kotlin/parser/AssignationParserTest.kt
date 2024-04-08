@@ -2,6 +2,7 @@ package parser
 
 import ast.AssignmentNode
 import ast.BinaryOperationNode
+import ast.FunctionNode
 import ast.LiteralNode
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -209,5 +210,27 @@ class AssignationParserTest {
         assertThrows<InvalidSyntaxException> {
             parser.createAST(tokenList)
         }
+    }
+
+    @Test
+    fun test010_AssignationParserReadInputFunctionExpression() {
+        val tokenList =
+            listOf(
+                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "condition", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.READ_INPUT, "readInput", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRING_LITERAL, "hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+            )
+        assertTrue(parser.canHandle(tokenList))
+        val node = parser.createAST(tokenList)
+        assertTrue {
+            node is AssignmentNode
+            node as AssignmentNode
+            node.expression is FunctionNode
+        }
+        node as AssignmentNode
+        assertEquals(((node.expression as FunctionNode).expression as LiteralNode).type, TokenType.STRING_LITERAL)
     }
 }
