@@ -1,6 +1,7 @@
 package sca
 
 import ast.BinaryOperationNode
+import ast.FunctionNode
 import ast.LiteralNode
 import ast.PrintNode
 import ast.VariableDeclarationNode
@@ -13,6 +14,9 @@ class ScaTest {
 
     private val printExpressionsAndSnake =
         StaticCodeAnalyzerImpl("src/test/resources/PrintExpressionsAndSnakeCase.yaml")
+
+    private val noReadInputExpressions =
+        StaticCodeAnalyzerImpl("src/test/resources/NoReadInputExpressions.yaml")
 
     @Test
     fun shouldReturnEmptyWhenPrintExpressionsAreDisabledAndNoPrintExpressionsArePresent() {
@@ -104,5 +108,36 @@ class ScaTest {
                 LiteralNode("1", TokenType.NUMBER_LITERAL),
             )
         assert(printExpressionsAndSnake.analyze(ast).isNotEmpty())
+    }
+
+    @Test
+    fun shouldReturnEmptyWhenReadInputExpressionsAreDisabledAndNoReadInputExpressionsArePresent() {
+        val ast =
+            VariableDeclarationNode(
+                TokenType.LET,
+                "variable",
+                TokenType.NUMBER_TYPE,
+                LiteralNode("1", TokenType.NUMBER_LITERAL),
+            )
+        assert(noReadInputExpressions.analyze(ast).isEmpty())
+    }
+
+    @Test
+    fun shouldReturnWarningWhenReadInputExpressionsAreDisabledAndReadInputExpressionsArePresent() {
+        val ast =
+            VariableDeclarationNode(
+                TokenType.LET,
+                "variable",
+                TokenType.NUMBER_TYPE,
+                FunctionNode(
+                    TokenType.READ_INPUT,
+                    BinaryOperationNode(
+                        LiteralNode("1", TokenType.NUMBER_LITERAL),
+                        LiteralNode("2", TokenType.NUMBER_LITERAL),
+                        TokenType.PLUS,
+                    ),
+                ),
+            )
+        assert(noReadInputExpressions.analyze(ast).isNotEmpty())
     }
 }

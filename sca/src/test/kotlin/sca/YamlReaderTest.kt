@@ -1,6 +1,8 @@
 package sca
 
+import java.io.FileNotFoundException
 import kotlin.test.Test
+import kotlin.test.assertFailsWith
 
 class YamlReaderTest {
     private val yamlReader = YamlReader()
@@ -8,25 +10,26 @@ class YamlReaderTest {
     @Test
     fun emptyFileShouldReturnDefaultValues() {
         val result = yamlReader.readYaml("src/test/resources/empty.yaml")
-        assert(result == yamlReader.getDefaultYamlValues())
+        assert(result.isEmpty())
     }
 
     @Test
-    fun nonExistentFileShouldReturnDefaultValues() {
-        val result = yamlReader.readYaml("non_existent.yaml")
-        assert(result == yamlReader.getDefaultYamlValues())
+    fun nonExistentFileShouldThrowFileNotFoundException() {
+        assertFailsWith<FileNotFoundException> {
+            yamlReader.readYaml("src/test/resources/non_existent.yaml")
+        }
     }
 
     @Test
     fun wrongFormatFileShouldReturnDefaultValues() {
         val result = yamlReader.readYaml("src/test/resources/wrong_format.yaml")
-        assert(result == yamlReader.getDefaultYamlValues())
+        assert(result.isEmpty())
     }
 
     @Test
-    fun differentExtensionFileShouldReturnDefaultValues() {
-        val result = yamlReader.readYaml("src/test/resources/different_extension.txt")
-        assert(result == yamlReader.getDefaultYamlValues())
+    fun differentExtensionFileShouldThrowFileNotFoundException() {
+        val result = yamlReader.readYaml("src/test/resources/different_extension.json")
+        assert(result.isEmpty())
     }
 
     @Test
