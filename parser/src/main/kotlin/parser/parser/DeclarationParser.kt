@@ -19,7 +19,10 @@ import parser.nodeBuilder.StringNodeBuilder
 import token.Token
 import token.TokenType
 
-class DeclarationParser(private val separator: TokenType) : Parser {
+class DeclarationParser(
+    private val separator: TokenType,
+    private val dataTypeMap: Map<TokenType, TokenType>,
+) : Parser {
     override fun canHandle(tokenList: List<Token>): Boolean {
         return when {
             preCondition(tokenList) -> isDeclaration(tokenList)
@@ -221,12 +224,7 @@ class DeclarationParser(private val separator: TokenType) : Parser {
         return tokenList[3].type == typeOf(expression[2].type)
     }
 
-    private fun typeOf(tokenType: TokenType): TokenType {
-        return when (tokenType) {
-            TokenType.NUMBER_LITERAL -> TokenType.NUMBER_TYPE
-            TokenType.STRING_LITERAL -> TokenType.STRING_TYPE
-            TokenType.BOOLEAN_LITERAL -> TokenType.BOOLEAN_TYPE
-            else -> TokenType.NIL
-        }
+    private fun typeOf(tokenType: TokenType): TokenType? {
+        return dataTypeMap[tokenType]
     }
 }
