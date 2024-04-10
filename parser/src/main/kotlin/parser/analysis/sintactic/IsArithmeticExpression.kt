@@ -8,7 +8,7 @@ class IsArithmeticExpression : SyntaxRule {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
         var index = 0
         var tokenCopy = tokenList
-        while (index < tokenCopy.size && tokenCopy.isNotEmpty()) {
+        while (condition(tokenCopy, index)) {
             val token = tokenCopy[index]
             index +=
                 when {
@@ -63,7 +63,7 @@ class IsArithmeticExpression : SyntaxRule {
 
     private fun ignore(token: Token): Boolean {
         return when (token.type) {
-            TokenType.RIGHT_PAREN -> true
+            TokenType.RIGHT_PAREN, TokenType.SEMICOLON -> true
             else -> false
         }
     }
@@ -81,5 +81,12 @@ class IsArithmeticExpression : SyntaxRule {
 
     private fun isParenValid(tokenList: List<Token>): Boolean {
         return HasPairOfParen().checkSyntax(tokenList)
+    }
+
+    private fun condition(
+        tokenList: List<Token>,
+        index: Int,
+    ): Boolean {
+        return index < tokenList.size && tokenList.isNotEmpty()
     }
 }

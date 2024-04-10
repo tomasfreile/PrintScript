@@ -17,7 +17,7 @@ class OperatorIsFormatted : SemanticRule {
     private fun checkStructure(tokenList: List<Token>): Boolean {
         var index = 0
         var tokenCopy = tokenList
-        while (index < tokenCopy.size && tokenCopy.isNotEmpty()) {
+        while (condition(tokenCopy, index)) {
             val token = tokenCopy[index]
             index +=
                 when {
@@ -114,5 +114,12 @@ class OperatorIsFormatted : SemanticRule {
 
     private fun preCondition(tokenList: List<Token>): Boolean {
         return !isOperator(tokenList[0]) && !isOperator(tokenList[tokenList.size - 1]) // No quiero que arranque ni termine con un operador
+    }
+
+    private fun condition(
+        tokenList: List<Token>,
+        index: Int,
+    ): Boolean {
+        return index < tokenList.size && tokenList.isNotEmpty()
     }
 }

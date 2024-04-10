@@ -10,16 +10,12 @@ class HasPairOfParen : SyntaxRule {
             when (token.type) {
                 TokenType.LEFT_PAREN -> {
                     val rightParenIndex = getRightParenIndex(tokenList, index) // busco right paren desde donde encontre el left
-                    if (rightParenIndex > 0) {
-                        return true
-                    } else {
-                        return false
-                    }
+                    return rightParenIndex > 0
                 }
                 else -> index += 1
             }
         }
-        return true // there is no left paren
+        return true // there is no left paren so all ok
     }
 
     private fun getRightParenIndex(
