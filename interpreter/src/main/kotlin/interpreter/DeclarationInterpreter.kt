@@ -2,6 +2,7 @@ package interpreter
 
 import ast.AstNode
 import ast.VariableDeclarationNode
+import interpreter.result.Result
 import interpreter.variable.Variable
 
 class DeclarationInterpreter : Interpreter {
@@ -15,7 +16,7 @@ class DeclarationInterpreter : Interpreter {
         val type = node.valueType
         val value = interpreter.interpret(node.expression, symbolTable)
         symbolTable[Variable(identifier, type)] = value
-        return value
+        return Result(value)
     }
 
     override fun canHandle(node: AstNode): Boolean {

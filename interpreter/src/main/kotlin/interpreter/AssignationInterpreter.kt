@@ -2,6 +2,7 @@ package interpreter
 
 import ast.AssignmentNode
 import ast.AstNode
+import interpreter.result.Result
 import interpreter.variable.Variable
 
 class AssignationInterpreter : Interpreter {
@@ -15,7 +16,7 @@ class AssignationInterpreter : Interpreter {
         val variable: Variable = getVariable(symbolTable, identifier)
         val value = interpreter.interpret(node, symbolTable)
         symbolTable[variable] = value
-        return value
+        return Result(value)
     }
 
     private fun getVariable(
