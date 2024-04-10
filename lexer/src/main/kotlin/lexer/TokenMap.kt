@@ -4,7 +4,7 @@ import token.TokenType
 import java.util.EnumMap
 import java.util.regex.Pattern
 
-fun getTokenMap(): EnumMap<TokenType, Pattern> {
+fun getTokenMapV10(): EnumMap<TokenType, Pattern> {
     val tokenMap = EnumMap<TokenType, Pattern>(TokenType::class.java)
 
     // Single-character tokens.
@@ -21,17 +21,31 @@ fun getTokenMap(): EnumMap<TokenType, Pattern> {
     tokenMap[TokenType.COLON] = Pattern.compile(":")
 
     // Keywords
-    tokenMap[TokenType.PRINT] = Pattern.compile("println")
-    tokenMap[TokenType.IF] = Pattern.compile("if")
-    tokenMap[TokenType.ELSE] = Pattern.compile("else")
-    tokenMap[TokenType.NUMBER_TYPE] = Pattern.compile("Number")
-    tokenMap[TokenType.STRING_TYPE] = Pattern.compile("String")
-    tokenMap[TokenType.VARIABLE_KEYWORD] = Pattern.compile("let")
+    tokenMap[TokenType.PRINT] = Pattern.compile("\\bprintln")
+    tokenMap[TokenType.NUMBER_TYPE] = Pattern.compile("\\bnumber\\b")
+    tokenMap[TokenType.STRING_TYPE] = Pattern.compile("\\bstring\\b")
+    tokenMap[TokenType.LET] = Pattern.compile("\\blet\\b")
 
     // Literals
-    tokenMap[TokenType.VALUE_IDENTIFIER] = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]*")
-    tokenMap[TokenType.STRING] = Pattern.compile("\'[^']*\'|\"[^\"]*\"")
-    tokenMap[TokenType.NUMBER] = Pattern.compile("[0-9]+")
+    tokenMap[TokenType.STRING_LITERAL] = Pattern.compile("\'[^']*\'|\"[^\"]*\"")
+    tokenMap[TokenType.NUMBER_LITERAL] = Pattern.compile("[0-9]+")
+    tokenMap[TokenType.VALUE_IDENTIFIER_LITERAL] = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]*")
+
+    return tokenMap
+}
+
+fun getTokenMapV11(): EnumMap<TokenType, Pattern> {
+    val tokenMap = getTokenMapV10()
+
+    tokenMap[TokenType.BOOLEAN_TYPE] = Pattern.compile("\\bboolean\\b")
+    tokenMap[TokenType.CONST] = Pattern.compile("\\bconst\\b")
+    tokenMap[TokenType.READ_INPUT] = Pattern.compile("\\breadInput\\b")
+    tokenMap[TokenType.READ_ENV] = Pattern.compile("\\breadEnv\\b")
+    tokenMap[TokenType.BOOLEAN_LITERAL] = Pattern.compile("\\btrue\\b")
+    tokenMap[TokenType.IF] = Pattern.compile("\\bif\\b")
+    tokenMap[TokenType.ELSE] = Pattern.compile("\\belse\\b")
+    tokenMap[TokenType.LEFT_BRACE] = Pattern.compile("\\{")
+    tokenMap[TokenType.RIGHT_BRACE] = Pattern.compile("}")
 
     return tokenMap
 }
