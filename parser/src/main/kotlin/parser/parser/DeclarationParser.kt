@@ -4,7 +4,6 @@ import ast.AstNode
 import ast.NilNode
 import ast.VariableDeclarationNode
 import parser.InvalidDeclarationStatement
-import parser.InvalidOperatorException
 import parser.InvalidSyntaxException
 import parser.analysis.semantic.OperatorIsFormatted
 import parser.analysis.sintactic.IsArithmeticExpression
@@ -79,27 +78,21 @@ class DeclarationParser : Parser {
             )
         } else {
             throw InvalidDeclarationStatement(
-                "Invalid Number Declaration Statement on linde: " + tokenList.first().start.row + "\n Is a number declaration dummy",
+                "Invalid Number Declaration Statement on linde: " + tokenList.first().start.row,
             )
         }
     }
 
     private fun createStringDeclarationAst(tokenList: List<Token>): AstNode {
         val expression = getExpression(tokenList)
-        try {
-            return if (isStringExpression(expression)) {
-                createDeclarationAst(
-                    tokenList,
-                    if (isLiteral(expression)) createLiteralNode(expression) else createStringAst(expression),
-                )
-            } else {
-                throw InvalidDeclarationStatement(
-                    "Invalid String Declaration Statement on line: " + tokenList.first().start.row + "\n Is a string declaration dummy",
-                )
-            }
-        } catch (e: InvalidOperatorException) {
+        return if (isStringExpression(expression)) {
+            createDeclarationAst(
+                tokenList,
+                if (isLiteral(expression)) createLiteralNode(expression) else createStringAst(expression),
+            )
+        } else {
             throw InvalidDeclarationStatement(
-                "Invalid Declaration Statement on linde: " + tokenList.first().start.row + "\n Is a string declaration dummy",
+                "Invalid String Declaration Statement on line: " + tokenList.first().start.row + "\n Is a string declaration dummy",
             )
         }
     }
@@ -161,7 +154,7 @@ class DeclarationParser : Parser {
     }
 
     private fun getExpression(tokenList: List<Token>): List<Token> {
-        return if (tokenList.size == 4) emptyList() else tokenList.subList(5, tokenList.size)
+        return if (tokenList.size == 5) emptyList() else tokenList.subList(5, tokenList.size - 1) // expression without semicolon
     }
 
     private fun isStringType(token: Token): Boolean {

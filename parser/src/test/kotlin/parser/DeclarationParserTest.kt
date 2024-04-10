@@ -39,7 +39,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.LET, "let", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "age", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_TYPE, "String", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBER_TYPE, "Int", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STRING_LITERAL, "Tatiana", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
@@ -65,7 +65,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
-        assertThrows<InvalidDeclarationStatement> {
+        assertThrows<InvalidOperatorException> {
             parser.createAST(tokenList)
         }
     }
@@ -112,6 +112,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.STRING_LITERAL, "Tatiana", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STRING_LITERAL, "Malano", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue { parser.canHandle(tokenList) }
         val node = parser.createAST(tokenList)
@@ -134,6 +135,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
         val node = parser.createAST(tokenList)
@@ -158,6 +160,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.NUMBER_LITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
         val node = parser.createAST(tokenList)
@@ -189,6 +192,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
         val node = parser.createAST(tokenList)
@@ -219,6 +223,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.NUMBER_LITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
         assertThrows<InvalidDeclarationStatement> {
@@ -252,6 +257,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "a", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
         val node = parser.createAST(tokenList)
@@ -278,6 +284,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "number", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.NUMBER_TYPE, "Int", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
         val node = parser.createAST(tokenList)
@@ -297,6 +304,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.BOOLEAN_TYPE, "Boolean", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.BOOLEAN_LITERAL, "True", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
         val node = parser.createAST(tokenList)
@@ -318,6 +326,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "result", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.BOOLEAN_TYPE, "Boolean", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
         val node = parser.createAST(tokenList)
@@ -339,6 +348,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.BOOLEAN_LITERAL, "True", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
         assertThrows<InvalidDeclarationStatement> {
@@ -359,6 +369,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
         val node = parser.createAST(tokenList)
@@ -382,6 +393,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
         assertThrows<InvalidDeclarationStatement> {

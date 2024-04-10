@@ -108,6 +108,6 @@ class AssignationParser : Parser {
     }
 
     private fun getExpression(tokenList: List<Token>): List<Token> {
-        return tokenList.subList(2, tokenList.size)
+        return tokenList.subList(2, tokenList.size - 1)
     }
 }
