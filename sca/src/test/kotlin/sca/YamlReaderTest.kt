@@ -3,7 +3,7 @@ package sca
 import kotlin.test.Test
 
 class YamlReaderTest {
-    val yamlReader = YamlReader()
+    private val yamlReader = YamlReader()
 
     @Test
     fun emptyFileShouldReturnDefaultValues() {

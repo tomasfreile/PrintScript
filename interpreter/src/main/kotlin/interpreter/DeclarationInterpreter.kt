@@ -1,56 +1,24 @@
 package interpreter
 
-import ast.ASTSingleNode
-import ast.Node
-import token.Coordinate
-import token.PrintScriptToken
-import token.Token
-import token.TokenType
+import ast.AstNode
+import ast.VariableDeclarationNode
+import interpreter.variable.Variable
 
 class DeclarationInterpreter : Interpreter {
     override fun interpret(
-        node: Node?,
-        interpreters: Map<TokenType, Interpreter>,
-        symbolTable: Map<String, Token>,
-    ): Any? {
-        node as ASTSingleNode
-        val valueIdentifier = getValueIdentifier(node)
-        val variableType = getVariableType(node)
-        val assignationNode = getAssignationNode(node)
-        val assignationNodeChild = assignationNode.node
-        val variableValue =
-            interpreters[assignationNodeChild?.token?.type]?.interpret(
-                assignationNodeChild,
-                interpreters,
-                symbolTable,
-            ).toString()
-        val newSymbolTable =
-            symbolTable.plus(
-                Pair(valueIdentifier, PrintScriptToken(variableType, variableValue, Coordinate(0, 0), Coordinate(0, 0))),
-            )
-        return PrintScriptInterpreter(interpreters, newSymbolTable)
+        node: AstNode?,
+        interpreter: PrintScriptInterpreter,
+        symbolTable: MutableMap<Variable, Any>,
+    ): Any {
+        node as VariableDeclarationNode
+        val identifier = node.identifier
+        val type = node.valueType
+        val value = interpreter.interpret(node.expression, symbolTable)
+        symbolTable[Variable(identifier, type)] = value
+        return value
     }
 
-    private fun getValueIdentifier(node: ASTSingleNode): String {
-        return node.node?.token?.value ?: throw NullPointerException("Expected VALUE_IDENTIFIER, received null")
-    }
-
-    private fun getVariableType(node: ASTSingleNode): TokenType {
-        return getNthChildNodeInASTSingleNode(node, 3).token.type
-    }
-
-    private fun getAssignationNode(node: ASTSingleNode): ASTSingleNode {
-        return getNthChildNodeInASTSingleNode(node, 4)
-    }
-
-    private fun getNthChildNodeInASTSingleNode(
-        node: ASTSingleNode,
-        n: Int,
-    ): ASTSingleNode {
-        var child = node
-        for (i in 0..<n) {
-            child = child.node as ASTSingleNode
-        }
-        return child
+    override fun canHandle(node: AstNode): Boolean {
+        return node is VariableDeclarationNode
     }
 }

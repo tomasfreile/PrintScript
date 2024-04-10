@@ -37,15 +37,9 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
             val end = matcher.end()
 
             // Check if there are any characters between the current token and the previous one
-            val invalidCharIndex = input.substring(currentIndex, start).indexOfFirst { !it.isWhitespace() }
-            if (invalidCharIndex != -1) {
-                val invalidCharPosition = currentIndex + invalidCharIndex
-                throw IllegalArgumentException(
-                    "Invalid character '${input[invalidCharPosition]}' at line $line, position $invalidCharPosition",
-                )
-            }
+            checkIllegalCharsBetweenTokens(input, currentIndex, start, line)
 
-            if (type == TokenType.STRING) {
+            if (type == TokenType.STRING_LITERAL) {
                 tokens.add(
                     PrintScriptToken(type, token.substring(1, token.length - 1), Coordinate(line, start + 1), Coordinate(line, end - 1)),
                 )
@@ -56,6 +50,16 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
         }
 
         // Check for invalid characters after the last token
+        checkIllegalCharsAfterLastToken(input, currentIndex, line)
+
+        return tokens
+    }
+
+    private fun checkIllegalCharsAfterLastToken(
+        input: String,
+        currentIndex: Int,
+        line: Int,
+    ) {
         val remainingInvalidCharIndex = input.substring(currentIndex).indexOfFirst { !it.isWhitespace() }
         if (remainingInvalidCharIndex != -1) {
             val remainingInvalidCharPosition = currentIndex + remainingInvalidCharIndex
@@ -63,7 +67,20 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
                 "Invalid character '${input[remainingInvalidCharPosition]}' at line $line, position $remainingInvalidCharPosition",
             )
         }
+    }
 
-        return tokens
+    private fun checkIllegalCharsBetweenTokens(
+        input: String,
+        currentIndex: Int,
+        start: Int,
+        line: Int,
+    ) {
+        val invalidCharIndex = input.substring(currentIndex, start).indexOfFirst { !it.isWhitespace() }
+        if (invalidCharIndex != -1) {
+            val invalidCharPosition = currentIndex + invalidCharIndex
+            throw IllegalArgumentException(
+                "Invalid character '${input[invalidCharPosition]}' at line $line, position $invalidCharPosition",
+            )
+        }
     }
 }
