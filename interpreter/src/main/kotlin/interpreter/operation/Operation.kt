@@ -1,12 +1,10 @@
-package interpreter.operation
-
-import token.TokenType
+package org.example.interpreter.operation
 
 interface Operation {
-    val symbol: TokenType
+    val symbol: String
 
     fun resolve(
-        l: Any,
-        r: Any,
-    ): Any
+        l: Any?,
+        r: Any?,
+    ): Any?
 }

@@ -4,7 +4,5 @@ plugins {
 
 dependencies {
     implementation project(':commons')
-    implementation project(':lexer')
-    implementation project(':parser')
 }
 

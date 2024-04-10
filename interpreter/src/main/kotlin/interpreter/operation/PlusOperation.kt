@@ -1,13 +1,11 @@
-package interpreter.operation
-
-import token.TokenType
+package org.example.interpreter.operation
 
 class PlusOperation : Operation {
-    override val symbol = TokenType.PLUS
+    override val symbol = "+"
 
     override fun resolve(
-        l: Any,
-        r: Any,
+        l: Any?,
+        r: Any?,
     ): Any {
         if (l is Int && r is Int) {
             return l + r
