@@ -7,6 +7,9 @@ import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
 import interpreter.PrintScriptInterpreter
 import interpreter.builder.InterpreterBuilder
+import interpreter.result.InterpreterResult
+import interpreter.result.PrintResult
+import interpreter.result.Result
 import interpreter.variable.Variable
 import lexer.Lexer
 import lexer.factory.LexerBuilder
@@ -57,13 +60,16 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     }
 
     private fun executeCode(sentencesList: List<String>) {
-        var printable = ""
+        var result: InterpreterResult = Result("")
         for (sentence in sentencesList) {
             val tokenList = lexer.lex(sentence)
             val tree = parser.parse(tokenList)
-            printable = interpreter.interpret(tree, symbolTable).toString()
+            result = interpreter.interpret(tree, symbolTable) as InterpreterResult
         }
-        println(printable)
+        when (result) {
+            is PrintResult -> println(result.toPrint)
+            is Result -> Unit // If the result is not a print do nothing.
+        }
     }
 
     private fun formatCode(sentencesList: List<String>) {
