@@ -48,14 +48,19 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
             }
 
             "analyze" -> {
-                val sca: StaticCodeAnalyzer =
-                    StaticCodeAnalyzerImpl(config?.path ?: throw NullPointerException("Expected config file path for sca."))
-                // TODO
+                analyzeCode(sentencesList)
             }
 
             "validate" -> {
-                // TODO
+                validateCode(sentencesList)
             }
+        }
+    }
+
+    private fun validateCode(sentencesList: List<String>) {
+        for (sentence in sentencesList) {
+            val tokenList = lexer.lex(sentence)
+            val tree = parser.parse(tokenList)
         }
     }
 
@@ -85,6 +90,16 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
 //        }
 //        file.writeText(text)
         throw NotImplementedError("Formater needs to be refactored to comply with new-ast.")
+    }
+
+    private fun analyzeCode(sentencesList: List<String>) {
+        val sca: StaticCodeAnalyzer =
+            StaticCodeAnalyzerImpl(config?.path ?: throw NullPointerException("Expected config file path for sca."))
+        for (sentence in sentencesList) {
+            val tokenList = lexer.lex(sentence)
+            val tree = parser.parse(tokenList)
+            sca.analyze(tree)
+        }
     }
 
     private fun getSentenceList(): List<String> {
