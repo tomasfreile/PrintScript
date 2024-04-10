@@ -6,6 +6,7 @@ import ast.VariableDeclarationNode
 import parser.InvalidDeclarationStatement
 import parser.InvalidSyntaxException
 import parser.analysis.semantic.OperatorIsFormatted
+import parser.analysis.sintactic.HasSentenceSeparator
 import parser.analysis.sintactic.IsArithmeticExpression
 import parser.analysis.sintactic.IsBooleanExpression
 import parser.analysis.sintactic.IsFunctionExpression
@@ -18,10 +19,10 @@ import parser.nodeBuilder.StringNodeBuilder
 import token.Token
 import token.TokenType
 
-class DeclarationParser : Parser {
+class DeclarationParser(private val separator: TokenType) : Parser {
     override fun canHandle(tokenList: List<Token>): Boolean {
         return when {
-            hasEnoughLength(tokenList) -> isDeclaration(tokenList)
+            preCondition(tokenList) -> isDeclaration(tokenList)
             else -> false
         }
     }
@@ -35,6 +36,11 @@ class DeclarationParser : Parser {
             isBooleanType(tokenList[3]) -> createBooleanDeclarationAST(tokenList)
             else -> throw InvalidSyntaxException("Has no type the declaration on line: " + tokenList.first().start.row)
         }
+    }
+
+    private fun preCondition(tokenList: List<Token>): Boolean {
+        return tokenList.size >= 4 &&
+            HasSentenceSeparator(separator).checkSyntax(tokenList)
     }
 
     private fun createBooleanDeclarationAST(tokenList: List<Token>): AstNode {
@@ -136,10 +142,6 @@ class DeclarationParser : Parser {
         if (tokenList[2].type == TokenType.COLON) points += 1
         if (isValueType(tokenList[3])) points += 1
         return points == 4
-    }
-
-    private fun hasEnoughLength(tokenList: List<Token>): Boolean {
-        return tokenList.size >= 4 // at least has the structure and content
     }
 
     private fun isDeclarativeToken(token: Token): Boolean {

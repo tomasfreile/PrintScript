@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class DeclarationParserTest {
-    private val parser = DeclarationParser()
+    private val parser = DeclarationParser(TokenType.SEMICOLON)
 
     @Test
     fun test001_DeclarationParserCanHandleStringDeclaration() {

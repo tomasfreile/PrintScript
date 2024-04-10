@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class AssignationParserTest {
-    private val parser = AssignationParser()
+    private val parser = AssignationParser(TokenType.SEMICOLON)
 
     @Test
     fun test001_AssignationParserSimpleStringAssignation() {

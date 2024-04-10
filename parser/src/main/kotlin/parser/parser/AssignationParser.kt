@@ -4,6 +4,7 @@ import ast.AssignmentNode
 import ast.AstNode
 import parser.InvalidSyntaxException
 import parser.analysis.semantic.OperatorIsFormatted
+import parser.analysis.sintactic.HasSentenceSeparator
 import parser.analysis.sintactic.IsArithmeticExpression
 import parser.analysis.sintactic.IsBooleanExpression
 import parser.analysis.sintactic.IsFunctionExpression
@@ -15,10 +16,10 @@ import parser.nodeBuilder.StringNodeBuilder
 import token.Token
 import token.TokenType
 
-class AssignationParser : Parser {
+class AssignationParser(private val separator: TokenType) : Parser {
     override fun canHandle(tokenList: List<Token>): Boolean {
         return when {
-            hasEnoughLength(tokenList) -> isAssignation(tokenList)
+            preCondition(tokenList) -> isAssignation(tokenList)
             else -> false
         }
     }
@@ -33,15 +34,16 @@ class AssignationParser : Parser {
         }
     }
 
+    private fun preCondition(tokenList: List<Token>): Boolean {
+        return tokenList.size >= 3 &&
+            HasSentenceSeparator(separator).checkSyntax(tokenList)
+    }
+
     private fun isAssignation(tokenList: List<Token>): Boolean {
         var points = 0
         if (tokenList[0].type == TokenType.VALUE_IDENTIFIER_LITERAL) points += 1
         if (tokenList[1].type == TokenType.ASSIGNATION) points += 1
         return points == 2
-    }
-
-    private fun hasEnoughLength(tokenList: List<Token>): Boolean {
-        return tokenList.size >= 3
     }
 
     private fun isNumberExpression(tokenList: List<Token>): Boolean {

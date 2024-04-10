@@ -15,7 +15,7 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class PrintParserTest {
-    private val parse = PrintParser()
+    private val parse = PrintParser(TokenType.SEMICOLON)
 
     @Test
     fun test001_PrintParseHelloWorld() {

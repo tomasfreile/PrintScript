@@ -11,6 +11,7 @@ import parser.parser.AssignationParser
 import parser.parser.DeclarationParser
 import parser.parser.Parser
 import parser.parser.PrintParser
+import token.TokenType
 import kotlin.test.assertEquals
 
 class PrintScriptInterpreterTest {
@@ -21,9 +22,9 @@ class PrintScriptInterpreterTest {
 
     private fun getParsers(): List<Parser> {
         return listOf(
-            DeclarationParser(),
-            PrintParser(),
-            AssignationParser(),
+            DeclarationParser(TokenType.SEMICOLON),
+            PrintParser(TokenType.SEMICOLON),
+            AssignationParser(TokenType.SEMICOLON),
         )
     }
 

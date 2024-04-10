@@ -21,9 +21,9 @@ class PrintScriptParserTest {
 
     private fun getParsers(): List<Parser> {
         return listOf(
-            DeclarationParser(),
-            PrintParser(),
-            AssignationParser(),
+            DeclarationParser(TokenType.SEMICOLON),
+            PrintParser(TokenType.SEMICOLON),
+            AssignationParser(TokenType.SEMICOLON),
         )
     }
 

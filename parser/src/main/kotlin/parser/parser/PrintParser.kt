@@ -3,6 +3,7 @@ package parser.parser
 import ast.AstNode
 import ast.PrintNode
 import parser.InvalidSyntaxException
+import parser.analysis.sintactic.HasSentenceSeparator
 import parser.analysis.sintactic.IsArithmeticExpression
 import parser.analysis.sintactic.IsBooleanExpression
 import parser.analysis.sintactic.IsFunctionExpression
@@ -15,10 +16,10 @@ import parser.nodeBuilder.StringNodeBuilder
 import token.Token
 import token.TokenType
 
-class PrintParser : Parser {
+class PrintParser(private val separator: TokenType) : Parser {
     override fun canHandle(tokenList: List<Token>): Boolean {
         return when {
-            isEnoughSize(tokenList) -> isPrint(tokenList)
+            preCondition(tokenList) -> isPrint(tokenList)
             else -> false
         }
     }
@@ -35,8 +36,9 @@ class PrintParser : Parser {
         }
     }
 
-    private fun isEnoughSize(tokenList: List<Token>): Boolean {
-        return tokenList.size >= 4
+    private fun preCondition(tokenList: List<Token>): Boolean {
+        return tokenList.size >= 4 &&
+            HasSentenceSeparator(separator).checkSyntax(tokenList)
     }
 
     private fun isPrint(tokenList: List<Token>): Boolean {
