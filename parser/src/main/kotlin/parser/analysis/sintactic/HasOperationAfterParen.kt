@@ -11,7 +11,7 @@ class HasOperationAfterParen : SyntaxRule {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
         val splitedContet = splitContent(tokenList)
         return when {
-            splitedContet.size >= 2 -> {
+            preCondition(splitedContet) -> {
                 isOperator(splitedContet[0]) && isLiteral(splitedContet[1]) ||
                     isOperator(splitedContet[0]) && isLeftParen(splitedContet[1])
             }
@@ -49,5 +49,9 @@ class HasOperationAfterParen : SyntaxRule {
             TokenType.LEFT_PAREN -> true
             else -> false
         }
+    }
+
+    private fun preCondition(tokenList: List<Token>): Boolean {
+        return tokenList.size >= 2
     }
 }

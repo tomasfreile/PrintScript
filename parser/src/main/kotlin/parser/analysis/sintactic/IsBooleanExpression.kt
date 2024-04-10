@@ -10,7 +10,7 @@ class IsBooleanExpression : SyntaxRule {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
         for (token in tokenList) {
             when {
-                isLiteral(token) -> continue
+                isLiteral(token) || ignore(token) -> continue
                 else -> return false
             }
         }
@@ -20,6 +20,13 @@ class IsBooleanExpression : SyntaxRule {
     private fun isLiteral(token: Token): Boolean {
         return when (token.type) {
             TokenType.BOOLEAN_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
+            else -> false
+        }
+    }
+
+    private fun ignore(token: Token): Boolean {
+        return when (token.type) {
+            TokenType.SEMICOLON -> true
             else -> false
         }
     }

@@ -15,7 +15,11 @@ class IsStringExpression : SyntaxRule {
         }
         for (token in tokenList) {
             when {
-                isInvalidOperator(token) -> throw InvalidOperatorException("Invalid Operator on line: " + token.start.row.toString())
+                isInvalidOperator(
+                    token,
+                ) -> throw InvalidOperatorException(
+                    "Invalid Operator on coord: " + "(" + token.start.row.toString() + "; " + token.start.column.toString() + ")",
+                )
                 isLiteral(token) || isPlus(token) -> continue
                 else -> return false
             }
