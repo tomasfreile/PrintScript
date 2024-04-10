@@ -4,10 +4,12 @@ import ast.Node
 import token.Token
 import token.TokenType
 
-interface Interpreter {
-    fun interpret(
+class NumberInterpreter : Interpreter {
+    override fun interpret(
         node: Node?,
         interpreters: Map<TokenType, Interpreter>,
         symbolTable: Map<String, Token>,
-    ): Any?
+    ): Any? {
+        return node?.token?.value?.toInt()
+    }
 }

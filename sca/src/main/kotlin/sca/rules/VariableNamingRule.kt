@@ -1,23 +1,36 @@
 package sca.rules
 
-import ast.AstNode
-import ast.VariableDeclarationNode
+import ast.ASTSingleNode
+import ast.Node
 import sca.StaticCodeAnalyzerResult
+import token.TokenType
 
 class VariableNamingRule(private val namingConvention: NamingConvention) : Rule {
-    override fun validate(node: AstNode): StaticCodeAnalyzerResult {
-        return when (node) {
-            is VariableDeclarationNode -> {
-                if (namingConvention.regex.toRegex().matches(node.identifier)) {
-                    StaticCodeAnalyzerResult.Ok
-                } else {
-                    StaticCodeAnalyzerResult.Error("Variable name ${node.identifier} does not match ${namingConvention.display}")
-                }
-            }
-
-            else -> StaticCodeAnalyzerResult.Ok
+    override fun validate(ast: Node): StaticCodeAnalyzerResult {
+        if (ast is ASTSingleNode && ast.token.type == TokenType.VARIABLE_KEYWORD) {
+            val regex = namingConvention.regex
+            return validateVariableNames(ast, regex, namingConvention.display)
         }
+        return StaticCodeAnalyzerResult.Ok
     }
+
+    private fun validateVariableNames(
+        node: ASTSingleNode,
+        regex: String,
+        displayName: String,
+    ): StaticCodeAnalyzerResult {
+        if (isVariableKeywordNode(node)) {
+            val identifierNode = node.node
+            if (identifierNode != null && !identifierNode.token.value.matches(Regex(regex))) {
+                return StaticCodeAnalyzerResult.Error(
+                    "Variable ${identifierNode.token.value} should be in $displayName. Position ${identifierNode.token.start.string()}",
+                )
+            }
+        }
+        return StaticCodeAnalyzerResult.Ok
+    }
+
+    private fun isVariableKeywordNode(node: ASTSingleNode) = node.node?.token?.type == TokenType.VALUE_IDENTIFIER
 }
 
 enum class NamingConvention(val regex: String, val display: String) {

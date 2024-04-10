@@ -1,21 +1,16 @@
-package interpreter
+package org.example.interpreter
 
-import ast.AstNode
-import interpreter.variable.Variable
+import ast.Node
+import token.Token
+import token.TokenType
 
-class PrintScriptInterpreter(private val interpreters: List<Interpreter>) {
-    fun interpret(
-        node: AstNode?,
-        symbolTable: MutableMap<Variable, Any>,
-    ): Any {
-        if (node == null) {
-            throw NullPointerException("Node is null.")
+class PrintScriptInterpreter(private val interpreters: Map<TokenType, Interpreter>, val symbolTable: Map<String, Token>) {
+    fun interpret(node: Node?): PrintScriptInterpreter {
+        val result = interpreters[node?.token?.type]?.interpret(node, interpreters, symbolTable)
+        return if (result is PrintScriptInterpreter) {
+            result
+        } else {
+            this
         }
-        for (interpreter in interpreters) {
-            if (interpreter.canHandle(node)) {
-                return interpreter.interpret(node, this, symbolTable)
-            }
-        }
-        throw UnsupportedOperationException("Unkown node type ${node.javaClass}")
     }
 }

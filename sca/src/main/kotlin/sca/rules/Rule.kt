@@ -1,8 +1,8 @@
 package sca.rules
 
-import ast.AstNode
+import ast.Node
 import sca.StaticCodeAnalyzerResult
 
 interface Rule {
-    fun validate(node: AstNode): StaticCodeAnalyzerResult
+    fun validate(ast: Node): StaticCodeAnalyzerResult
 }

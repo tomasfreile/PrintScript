@@ -1,14 +1,12 @@
-package interpreter.operation
-
-import token.TokenType
+package org.example.interpreter.operation
 
 class StarOperation : Operation {
-    override val symbol = TokenType.STAR
+    override val symbol = "*"
 
     override fun resolve(
-        l: Any,
-        r: Any,
-    ): Any {
+        l: Any?,
+        r: Any?,
+    ): Any? {
         if (l is Int && r is Int) {
             return l * r
         }
