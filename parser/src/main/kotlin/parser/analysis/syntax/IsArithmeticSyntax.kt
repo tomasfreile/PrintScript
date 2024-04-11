@@ -1,14 +1,14 @@
-package parser.analysis.syntax.expression
+package parser.analysis.syntax
 
 import parser.InvalidSyntaxException
-import parser.analysis.syntax.rule.HasPairOfParen
+import parser.analysis.syntax.common.HasPairOfParen
 import token.Token
 import token.TokenType
 
-class IsArithmeticExpression : Expression {
-    override fun isExpression(expression: List<Token>): Boolean {
+class IsArithmeticSyntax : SyntaxRule {
+    override fun checkSyntax(tokenList: List<Token>): Boolean {
         var index = 0
-        var tokenCopy = expression
+        var tokenCopy = tokenList
         while (condition(tokenCopy, index)) {
             val token = tokenCopy[index]
             index +=
@@ -58,7 +58,7 @@ class IsArithmeticExpression : Expression {
     private fun isParenContentValid(tokenList: List<Token>): Boolean {
         return if (isParenValid(tokenList)) {
             val parenContent = tokenList.subList(1, getRightParenIndex(tokenList))
-            isExpression(parenContent)
+            checkSyntax(parenContent)
         } else {
             false
         }

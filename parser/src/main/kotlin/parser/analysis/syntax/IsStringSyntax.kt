@@ -1,11 +1,11 @@
-package parser.analysis.syntax.expression
+package parser.analysis.syntax
 
 import token.Token
 import token.TokenType
 
-class IsStringExpression : Expression {
-    override fun isExpression(expression: List<Token>): Boolean {
-        for (token in expression) {
+class IsStringSyntax : SyntaxRule {
+    override fun checkSyntax(tokenList: List<Token>): Boolean {
+        for (token in tokenList) {
             when {
                 isLiteral(token) || isPlus(token) -> continue
                 else -> return false
