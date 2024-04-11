@@ -2,9 +2,12 @@ package interpreter
 
 import ast.AstNode
 import interpreter.builder.InterpreterBuilder
+import interpreter.result.PrintResult
+import interpreter.result.Result
 import interpreter.variable.Variable
 import lexer.PrintScriptLexer
 import lexer.getTokenMapV11
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import parser.parserBuilder.PrintScriptOnePointOneParserBuilder
 import kotlin.test.assertEquals
@@ -23,25 +26,33 @@ class PrintScriptInterpreterTest {
         return parser.createAST(tokenList)
     }
 
+    @BeforeEach
+    fun clearSymbolTable() {
+        symbolTable.clear()
+    }
+
     @Test
     fun testBasicPrint() {
         val string = "println(1);"
         val result = interpreter.interpret(getTree(string), symbolTable)
-        assertEquals(1, result)
+        result as PrintResult
+        assertEquals("1", result.toPrint)
     }
 
     @Test
     fun variableDeclarationTest() {
         val string = "let num: number = 3;"
         val result = interpreter.interpret(getTree(string), symbolTable)
-        assertEquals(3, result)
+        result as Result
+        assertEquals(3, result.value)
     }
 
     @Test
     fun testStringPlusNumberVariableDeclaration() {
         val string = "println('tista' + 3);"
         val result = interpreter.interpret(getTree(string), symbolTable)
-        assertEquals("tista3", result)
+        result as PrintResult
+        assertEquals("tista3", result.toPrint)
     }
 
     @Test
@@ -50,6 +61,7 @@ class PrintScriptInterpreterTest {
         interpreter.interpret(getTree(string), symbolTable)
         val string2 = "println(num);"
         val result = interpreter.interpret(getTree(string2), symbolTable)
-        assertEquals(3, result)
+        result as PrintResult
+        assertEquals("3", result.toPrint)
     }
 }

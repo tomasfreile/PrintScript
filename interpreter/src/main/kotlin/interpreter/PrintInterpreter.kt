@@ -2,6 +2,7 @@ package interpreter
 
 import ast.AstNode
 import ast.PrintNode
+import interpreter.result.PrintResult
 import interpreter.variable.Variable
 
 class PrintInterpreter : Interpreter {
@@ -11,7 +12,7 @@ class PrintInterpreter : Interpreter {
         symbolTable: MutableMap<Variable, Any>,
     ): Any {
         node as PrintNode
-        return interpreter.interpret(node.expression, symbolTable)
+        return PrintResult(interpreter.interpret(node.expression, symbolTable).toString())
     }
 
     override fun canHandle(node: AstNode): Boolean {
