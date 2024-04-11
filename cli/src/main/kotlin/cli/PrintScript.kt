@@ -38,22 +38,26 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
 
     override fun run() {
         val sentencesList = getSentenceList()
-        when (operation) {
-            "execute" -> {
-                executeCode(sentencesList)
-            }
+        try {
+            when (operation) {
+                "execute" -> {
+                    executeCode(sentencesList)
+                }
 
-            "format" -> {
-                formatCode(sentencesList)
-            }
+                "format" -> {
+                    formatCode(sentencesList)
+                }
 
-            "analyze" -> {
-                analyzeCode(sentencesList)
-            }
+                "analyze" -> {
+                    analyzeCode(sentencesList)
+                }
 
-            "validate" -> {
-                validateCode(sentencesList)
+                "validate" -> {
+                    validateCode(sentencesList)
+                }
             }
+        } catch (ex: Exception) {
+            println(ex.message)
         }
     }
 
@@ -62,6 +66,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
             val tokenList = lexer.lex(sentence)
             val tree = parser.parse(tokenList)
         }
+        println("Validation successful!")
     }
 
     private fun executeCode(sentencesList: List<String>) {
@@ -95,10 +100,14 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     private fun analyzeCode(sentencesList: List<String>) {
         val sca: StaticCodeAnalyzer =
             StaticCodeAnalyzerImpl(config?.path ?: throw NullPointerException("Expected config file path for sca."))
+        var errorList: List<String> = listOf()
         for (sentence in sentencesList) {
             val tokenList = lexer.lex(sentence)
             val tree = parser.parse(tokenList)
-            sca.analyze(tree)
+            errorList = errorList.plus(sca.analyze(tree))
+        }
+        for (error in errorList) {
+            println(error)
         }
     }
 
