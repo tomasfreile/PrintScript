@@ -215,7 +215,7 @@ class FormatterTest {
         val result = ast?.let { formatter.format(it) }
         assertEquals("let result:number=(2 + 2) * (3 - 1);" + "\n", result)
     }
-
+//
 //    @Test
 //    fun test003_formatASimpleBooleanDeclaration() {
 //        val string = "let isTrue:boolean = True;"

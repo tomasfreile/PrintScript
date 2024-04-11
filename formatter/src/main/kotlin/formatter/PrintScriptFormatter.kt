@@ -42,7 +42,15 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         val left = applyFormat(node.left, rules)
         val right = applyFormat(node.right, rules)
         val operator = defineOperatorSymbol(node.operator)
-        return "$left $operator $right"
+        return if (node.left is BinaryOperationNode && node.right is BinaryOperationNode) {
+            "($left) $operator ($right)"
+        } else if (node.left is BinaryOperationNode) {
+            "($left) $operator $right"
+        } else if (node.right is BinaryOperationNode) {
+            "$left $operator ($right)"
+        } else {
+            "$left $operator $right"
+        }
     }
 
     private fun formatPrintNode(
@@ -120,7 +128,7 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
     private fun defineVariableSymbol(declarationType: TokenType): String {
         return when (declarationType) {
             TokenType.LET -> "let"
-            TokenType.CONST -> "const"
+//            TokenType.CONST -> "const"
             else -> ""
         }
     }
