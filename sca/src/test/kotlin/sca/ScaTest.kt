@@ -1,9 +1,8 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package sca
 
-import ast.BinaryOperationNode
-import ast.LiteralNode
-import ast.PrintNode
-import ast.VariableDeclarationNode
+import ast.*
 import org.junit.jupiter.api.Test
 import position.Coordinate
 import position.TokenPosition
@@ -15,6 +14,9 @@ class ScaTest {
 
     private val printExpressionsAndSnake =
         StaticCodeAnalyzerImpl("src/test/resources/PrintExpressionsAndSnakeCase.yaml")
+
+    private val noReadInputExpressions =
+        StaticCodeAnalyzerImpl("src/test/resources/NoReadInputExpressions.yaml")
 
     @Test
     fun shouldReturnEmptyWhenPrintExpressionsAreDisabledAndNoPrintExpressionsArePresent() {
@@ -148,5 +150,41 @@ class ScaTest {
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(printExpressionsAndSnake.analyze(ast).isNotEmpty())
+    }
+
+    @Test
+    fun shouldReturnEmptyWhenReadInputExpressionsAreDisabledAndNoReadInputExpressionsArePresent() {
+        val ast =
+            VariableDeclarationNode(
+                TokenType.LET,
+                "variable",
+                TokenType.NUMBER_TYPE,
+                LiteralNode("1", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        assert(noReadInputExpressions.analyze(ast).isEmpty())
+    }
+
+    @Test
+    fun shouldReturnWarningWhenReadInputExpressionsAreDisabledAndReadInputExpressionsArePresent() {
+        val ast =
+            VariableDeclarationNode(
+                TokenType.LET,
+                "variable",
+                TokenType.NUMBER_TYPE,
+                FunctionNode(
+                    TokenType.READ_INPUT,
+                    BinaryOperationNode(
+                        LiteralNode("1", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                        LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                        TokenType.PLUS,
+                        TokenPosition(Coordinate(2, 2), Coordinate(2, 9)),
+                    ),
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        assert(noReadInputExpressions.analyze(ast).isNotEmpty())
+        println(noReadInputExpressions.analyze(ast).get(0))
     }
 }
