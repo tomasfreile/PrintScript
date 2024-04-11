@@ -6,22 +6,7 @@ import ast.LiteralNode
 import ast.PrintNode
 import ast.VariableDeclarationNode
 import org.junit.jupiter.api.Test
-import parser.analysis.semantic.BooleanSemantic
-import parser.analysis.semantic.NumberSemantic
-import parser.analysis.semantic.SemanticRule
-import parser.analysis.semantic.StringSemantic
-import parser.analysis.syntax.IsArithmeticSyntax
-import parser.analysis.syntax.IsBooleanSyntax
-import parser.analysis.syntax.IsStringSyntax
-import parser.analysis.syntax.SyntaxRule
-import parser.nodeBuilder.ArithmeticNodeBuilder
-import parser.nodeBuilder.BooleanNodeBuilder
-import parser.nodeBuilder.NodeBuilder
-import parser.nodeBuilder.StringNodeBuilder
-import parser.parser.AssignationParser
-import parser.parser.DeclarationParser
-import parser.parser.Parser
-import parser.parser.PrintParser
+import parser.parserBuilder.PrintScriptOnePointZeroParserBuilder
 import token.Coordinate
 import token.PrintScriptToken
 import token.TokenType
@@ -29,60 +14,13 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class PrintScriptParserTest {
-    private val parser = PrintScriptParser(getParsers())
-
-    private fun getParsers(): List<Parser> {
-        return listOf(
-            DeclarationParser(TokenType.SEMICOLON, getTypeMap(), getDeclarationList(), getSyntaxMap(), getSemanticMap(), getNodeBuilders()),
-            PrintParser(TokenType.SEMICOLON, getSyntaxMap(), getSemanticMap(), getNodeBuilders()),
-            AssignationParser(TokenType.SEMICOLON, getSyntaxMap(), getSemanticMap(), getNodeBuilders()),
-        )
-    }
-
-    private fun getSemanticMap(): Map<TokenType, SemanticRule> {
-        return mapOf(
-            Pair(TokenType.NUMBER_TYPE, NumberSemantic()),
-            Pair(TokenType.STRING_TYPE, StringSemantic()),
-            Pair(TokenType.BOOLEAN_TYPE, BooleanSemantic()),
-        )
-    }
-
-    private fun getDeclarationList(): List<TokenType> {
-        return listOf(
-            TokenType.LET,
-            TokenType.CONST,
-        )
-    }
-
-    private fun getTypeMap(): Map<TokenType, TokenType> {
-        return mapOf(
-            Pair(TokenType.NUMBER_LITERAL, TokenType.NUMBER_TYPE),
-            Pair(TokenType.STRING_LITERAL, TokenType.STRING_TYPE),
-            Pair(TokenType.BOOLEAN_LITERAL, TokenType.BOOLEAN_TYPE),
-        )
-    }
-
-    private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
-        return mapOf(
-            Pair(TokenType.STRING_TYPE, IsStringSyntax()),
-            Pair(TokenType.NUMBER_TYPE, IsArithmeticSyntax()),
-            Pair(TokenType.BOOLEAN_TYPE, IsBooleanSyntax()),
-        )
-    }
-
-    private fun getNodeBuilders(): Map<TokenType, NodeBuilder> {
-        return mapOf(
-            Pair(TokenType.STRING_TYPE, StringNodeBuilder()),
-            Pair(TokenType.NUMBER_TYPE, ArithmeticNodeBuilder()),
-            Pair(TokenType.BOOLEAN_TYPE, BooleanNodeBuilder()),
-        )
-    }
+    private val parser = PrintScriptOnePointZeroParserBuilder().build()
 
     @Test
     fun test001_DeclarationParser() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.CONST, "const", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LET, "let", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "number", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.NUMBER_TYPE, "Int", Coordinate(2, 3), Coordinate(2, 3)),
@@ -106,7 +44,7 @@ class PrintScriptParserTest {
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node = parser.parse(tokenList)
+        val node = parser.createAST(tokenList)
         assertTrue {
             node is VariableDeclarationNode
             (node as VariableDeclarationNode).expression is BinaryOperationNode
@@ -147,7 +85,7 @@ class PrintScriptParserTest {
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node = parser.parse(tokenList)
+        val node = parser.createAST(tokenList)
         assertTrue {
             node is AssignmentNode
             node as AssignmentNode
@@ -189,7 +127,7 @@ class PrintScriptParserTest {
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node = parser.parse(tokenList)
+        val node = parser.createAST(tokenList)
         println(node)
         if ((node as PrintNode).expression is BinaryOperationNode) {
             assertTrue((node.expression as BinaryOperationNode).left is BinaryOperationNode)
