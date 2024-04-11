@@ -6,6 +6,18 @@ import ast.LiteralNode
 import ast.PrintNode
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import parser.analysis.semantic.BooleanSemantic
+import parser.analysis.semantic.NumberSemantic
+import parser.analysis.semantic.SemanticRule
+import parser.analysis.semantic.StringSemantic
+import parser.analysis.syntax.IsArithmeticSyntax
+import parser.analysis.syntax.IsBooleanSyntax
+import parser.analysis.syntax.IsStringSyntax
+import parser.analysis.syntax.SyntaxRule
+import parser.nodeBuilder.ArithmeticNodeBuilder
+import parser.nodeBuilder.BooleanNodeBuilder
+import parser.nodeBuilder.NodeBuilder
+import parser.nodeBuilder.StringNodeBuilder
 import parser.parser.PrintParser
 import token.Coordinate
 import token.PrintScriptToken
@@ -15,7 +27,31 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class PrintParserTest {
-    private val parse = PrintParser(TokenType.SEMICOLON)
+    private val parse = PrintParser(TokenType.SEMICOLON, getSyntaxMap(), getSemanticMap(), getNodeBuilders())
+
+    private fun getSemanticMap(): Map<TokenType, SemanticRule> {
+        return mapOf(
+            Pair(TokenType.NUMBER_TYPE, NumberSemantic()),
+            Pair(TokenType.STRING_TYPE, StringSemantic()),
+            Pair(TokenType.BOOLEAN_TYPE, BooleanSemantic()),
+        )
+    }
+
+    private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
+        return mapOf(
+            Pair(TokenType.STRING_TYPE, IsStringSyntax()),
+            Pair(TokenType.NUMBER_TYPE, IsArithmeticSyntax()),
+            Pair(TokenType.BOOLEAN_TYPE, IsBooleanSyntax()),
+        )
+    }
+
+    private fun getNodeBuilders(): Map<TokenType, NodeBuilder> {
+        return mapOf(
+            Pair(TokenType.STRING_TYPE, StringNodeBuilder()),
+            Pair(TokenType.NUMBER_TYPE, ArithmeticNodeBuilder()),
+            Pair(TokenType.BOOLEAN_TYPE, BooleanNodeBuilder()),
+        )
+    }
 
     @Test
     fun test001_PrintParseHelloWorld() {
@@ -86,7 +122,7 @@ class PrintParserTest {
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        assertFailsWith<InvalidOperatorException> {
+        assertFailsWith<InvalidSyntaxException> {
             parse.createAST(tokenList)
         }
     }
@@ -195,7 +231,7 @@ class PrintParserTest {
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.BOOLEAN_LITERAL, "true", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.BOOLEAN_LITERAL, "True", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
@@ -228,7 +264,6 @@ class PrintParserTest {
         }
     }
 
-    @Test
     fun test011_PrintParserReadInputFunctionWithStringExpression() {
         val tokenList =
             listOf(
