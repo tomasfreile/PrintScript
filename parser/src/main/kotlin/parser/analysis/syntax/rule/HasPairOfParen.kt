@@ -1,4 +1,4 @@
-package parser.analysis.sintactic
+package parser.analysis.syntax.rule
 
 import token.Token
 import token.TokenType
@@ -9,7 +9,7 @@ class HasPairOfParen : SyntaxRule {
         for (token in tokenList) {
             when (token.type) {
                 TokenType.LEFT_PAREN -> {
-                    val rightParenIndex = getRightParenIndex(tokenList, index) // busco right paren desde donde encontre el left
+                    val rightParenIndex = getRightParenIndex(tokenList, index)
                     return rightParenIndex > 0
                 }
                 else -> index += 1

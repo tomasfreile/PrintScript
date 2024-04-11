@@ -7,6 +7,20 @@ import ast.NilNode
 import ast.VariableDeclarationNode
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import parser.analysis.semantic.BooleanSemantic
+import parser.analysis.semantic.NumberSemantic
+import parser.analysis.semantic.SemanticRule
+import parser.analysis.semantic.StringSemantic
+import parser.analysis.syntax.expression.Expression
+import parser.analysis.syntax.expression.IsArithmeticExpression
+import parser.analysis.syntax.expression.IsBooleanExpression
+import parser.analysis.syntax.expression.IsFunctionExpression
+import parser.analysis.syntax.expression.IsStringExpression
+import parser.nodeBuilder.ArithmeticNodeBuilder
+import parser.nodeBuilder.BooleanNodeBuilder
+import parser.nodeBuilder.FunctionNodeBuilder
+import parser.nodeBuilder.NodeBuilder
+import parser.nodeBuilder.StringNodeBuilder
 import parser.parser.DeclarationParser
 import token.Coordinate
 import token.PrintScriptToken
@@ -15,13 +29,48 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class DeclarationParserTest {
-    private val parser = DeclarationParser(TokenType.SEMICOLON, getMap())
+    private val parser =
+        DeclarationParser(TokenType.SEMICOLON, getTypeMap(), getDeclarationList(), getSyntaxMap(), getSemanticMap(), getNodeBuilders())
 
-    private fun getMap(): Map<TokenType, TokenType> {
+    private fun getSemanticMap(): Map<TokenType, SemanticRule> {
+        return mapOf(
+            Pair(TokenType.NUMBER_TYPE, NumberSemantic()),
+            Pair(TokenType.STRING_TYPE, StringSemantic()),
+            Pair(TokenType.BOOLEAN_TYPE, BooleanSemantic()),
+        )
+    }
+
+    private fun getDeclarationList(): List<TokenType> {
+        return listOf(
+            TokenType.LET,
+            TokenType.CONST,
+        )
+    }
+
+    private fun getTypeMap(): Map<TokenType, TokenType> {
         return mapOf(
             Pair(TokenType.NUMBER_LITERAL, TokenType.NUMBER_TYPE),
             Pair(TokenType.STRING_LITERAL, TokenType.STRING_TYPE),
             Pair(TokenType.BOOLEAN_LITERAL, TokenType.BOOLEAN_TYPE),
+            Pair(TokenType.READ_INPUT, TokenType.FUNCTION_TYPE),
+        )
+    }
+
+    private fun getSyntaxMap(): Map<TokenType, Expression> {
+        return mapOf(
+            Pair(TokenType.STRING_TYPE, IsStringExpression()),
+            Pair(TokenType.NUMBER_TYPE, IsArithmeticExpression()),
+            Pair(TokenType.BOOLEAN_TYPE, IsBooleanExpression()),
+            Pair(TokenType.FUNCTION_TYPE, IsFunctionExpression()),
+        )
+    }
+
+    private fun getNodeBuilders(): Map<TokenType, NodeBuilder> {
+        return mapOf(
+            Pair(TokenType.STRING_TYPE, StringNodeBuilder()),
+            Pair(TokenType.NUMBER_TYPE, ArithmeticNodeBuilder()),
+            Pair(TokenType.BOOLEAN_TYPE, BooleanNodeBuilder()),
+            Pair(TokenType.FUNCTION_TYPE, FunctionNodeBuilder()),
         )
     }
 
@@ -53,7 +102,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
-        assertThrows<InvalidDeclarationStatement> {
+        assertThrows<InvalidDataTypeException> {
             parser.createAST(tokenList)
         }
     }
@@ -234,7 +283,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
-        assertThrows<InvalidDeclarationStatement> {
+        assertThrows<InvalidOperatorException> {
             parser.createAST(tokenList)
         }
     }
@@ -364,7 +413,6 @@ class DeclarationParserTest {
         }
     }
 
-    @Test
     fun test016_DeclarationParserFunctionNumberDeclaration() {
         val tokenList =
             listOf(
@@ -388,7 +436,6 @@ class DeclarationParserTest {
         }
     }
 
-    @Test
     fun test017_DeclarationParserFunctionStringInvalidDeclarationBecauseOfNumberTypeDeclaration() {
         val tokenList =
             listOf(

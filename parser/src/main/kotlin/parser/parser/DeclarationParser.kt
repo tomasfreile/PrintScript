@@ -4,24 +4,20 @@ import ast.AstNode
 import ast.NilNode
 import ast.VariableDeclarationNode
 import parser.InvalidDeclarationStatement
-import parser.InvalidSyntaxException
-import parser.analysis.semantic.OperatorIsFormatted
-import parser.analysis.sintactic.HasSentenceSeparator
-import parser.analysis.sintactic.IsArithmeticExpression
-import parser.analysis.sintactic.IsBooleanExpression
-import parser.analysis.sintactic.IsFunctionExpression
-import parser.analysis.sintactic.IsStringExpression
-import parser.nodeBuilder.ArithmeticNodeBuilder
-import parser.nodeBuilder.BooleanNodeBuilder
-import parser.nodeBuilder.FunctionNodeBuilder
-import parser.nodeBuilder.LiteralNodeBuilder
-import parser.nodeBuilder.StringNodeBuilder
+import parser.analysis.semantic.SemanticRule
+import parser.analysis.syntax.expression.Expression
+import parser.analysis.syntax.rule.HasSentenceSeparator
+import parser.nodeBuilder.NodeBuilder
 import token.Token
 import token.TokenType
 
 class DeclarationParser(
     private val separator: TokenType,
     private val dataTypeMap: Map<TokenType, TokenType>,
+    private val declarationType: List<TokenType>,
+    private val expressionsSyntax: Map<TokenType, Expression>,
+    private val expressionsSemantic: Map<TokenType, SemanticRule>,
+    private val nodeBuilders: Map<TokenType, NodeBuilder>,
 ) : Parser {
     override fun canHandle(tokenList: List<Token>): Boolean {
         return when {
@@ -30,80 +26,103 @@ class DeclarationParser(
         }
     }
 
-    override fun createAST(tokenList: List<Token>): AstNode {
-        return when {
-            isNonUninitialized(tokenList) -> createUninitializedDeclarationAst(tokenList)
-            isFunctionExpression(tokenList) -> createFunctionDeclarationAst(tokenList)
-            isNumberType(tokenList[3]) -> createArithmeticDeclarationAst(tokenList)
-            isStringType(tokenList[3]) -> createStringDeclarationAst(tokenList)
-            isBooleanType(tokenList[3]) -> createBooleanDeclarationAST(tokenList)
-            else -> throw InvalidSyntaxException("Has no type the declaration on line: " + tokenList.first().start.row)
-        }
-    }
-
     private fun preCondition(tokenList: List<Token>): Boolean {
         return tokenList.size >= 4 &&
             HasSentenceSeparator(separator).checkSyntax(tokenList)
     }
 
-    private fun createBooleanDeclarationAST(tokenList: List<Token>): AstNode {
-        val expression = getExpression(tokenList)
-        return if (isBooleanExpression(expression)) {
-            createDeclarationAst(
-                tokenList,
-                createBooleanAst(expression),
-            )
-        } else {
-            throw InvalidDeclarationStatement(
-                "Invalid Boolean Declaration Statement on line: " + tokenList.first().start.row,
+    override fun createAST(tokenList: List<Token>): AstNode? {
+        return when {
+            isUninitialized(tokenList) -> createUninitializedDeclarationAst(tokenList)
+            else -> buildDeclarationAst(tokenList)
+        }
+    }
+
+    private fun isUninitialized(tokenList: List<Token>): Boolean {
+        return getContent(tokenList).isEmpty()
+    }
+
+    private fun isDeclaration(tokenList: List<Token>): Boolean {
+        var points = 0
+        if (hasValidDeclarationType(tokenList[0])) points += 1
+        if (tokenList[1].type == TokenType.VALUE_IDENTIFIER_LITERAL) points += 1
+        if (tokenList[2].type == TokenType.COLON) points += 1
+        if (hasValidType(tokenList[3])) points += 1
+        return points == 4
+    }
+
+    /*
+        Checks if is LET or CONST
+     */
+    private fun hasValidDeclarationType(token: Token): Boolean {
+        return when {
+            declarationType.contains(token.type) -> true
+            else -> false
+        }
+    }
+
+    /*
+        Checks if exists data type
+     */
+    private fun hasValidType(token: Token): Boolean {
+        for ((_, type) in dataTypeMap) {
+            when (type) {
+                token.type -> return true
+                else -> continue
+            }
+        }
+        return false
+    }
+
+    private fun getExpressionSyntax(token: Token): Expression? {
+        return expressionsSyntax[token.type]
+    }
+
+    private fun getSemantic(token: Token): SemanticRule? {
+        return expressionsSemantic[token.type]
+    }
+
+    private fun buildDeclarationAst(tokenList: List<Token>): AstNode? {
+        return when {
+            isValidDeclaration(tokenList) -> {
+                val content = getContent(tokenList)
+                buildNode(content, tokenList[3])?.let {
+                    createDeclarationAst(
+                        tokenList,
+                        it,
+                    )
+                }
+            }
+            else -> throw InvalidDeclarationStatement(
+                "Invalid declaration statement on line: " + tokenList.first().start.row,
             )
         }
+    }
+
+    private fun isValidDeclaration(tokenList: List<Token>): Boolean {
+        val expressionSyntax = getExpressionSyntax(tokenList[3])
+        val expressionSemantic = getSemantic(tokenList[3])
+        val content = getContent(tokenList)
+        return when {
+            expressionSyntax != null && expressionSemantic != null -> {
+                val syntaxResult = expressionSyntax.isExpression(content)
+                val semanticResult = expressionSemantic.checkSemantic(content)
+                return syntaxResult && semanticResult
+            }
+            else -> false
+        }
+    }
+
+    private fun buildNode(
+        content: List<Token>,
+        token: Token,
+    ): AstNode? {
+        val builder = nodeBuilders[token.type]
+        return builder?.build(content)
     }
 
     private fun createUninitializedDeclarationAst(tokenList: List<Token>): AstNode {
         return createDeclarationAst(tokenList)
-    }
-
-    private fun createFunctionDeclarationAst(tokenList: List<Token>): AstNode {
-        val expression = getExpression(tokenList)
-        return if (isFunctionExpressionValid(tokenList)) {
-            createDeclarationAst(
-                tokenList,
-                createFunctionAst(expression),
-            )
-        } else {
-            throw InvalidDeclarationStatement(
-                "Invalid readInput Declaration on line: " + tokenList.first().start.row + "    | reason: Invalid input type",
-            )
-        }
-    }
-
-    private fun createArithmeticDeclarationAst(tokenList: List<Token>): AstNode {
-        val expression = getExpression(tokenList)
-        return if (isNumberExpression(expression)) {
-            createDeclarationAst(
-                tokenList,
-                if (isLiteral(expression)) createLiteralNode(expression) else createBinaryArithmeticAst(expression),
-            )
-        } else {
-            throw InvalidDeclarationStatement(
-                "Invalid Number Declaration Statement on linde: " + tokenList.first().start.row,
-            )
-        }
-    }
-
-    private fun createStringDeclarationAst(tokenList: List<Token>): AstNode {
-        val expression = getExpression(tokenList)
-        return if (isStringExpression(expression)) {
-            createDeclarationAst(
-                tokenList,
-                if (isLiteral(expression)) createLiteralNode(expression) else createStringAst(expression),
-            )
-        } else {
-            throw InvalidDeclarationStatement(
-                "Invalid String Declaration Statement on line: " + tokenList.first().start.row + "\n Is a string declaration dummy",
-            )
-        }
     }
 
     private fun createDeclarationAst(
@@ -118,113 +137,7 @@ class DeclarationParser(
         )
     }
 
-    private fun createStringAst(expression: List<Token>): AstNode {
-        return StringNodeBuilder().build(expression)
-    }
-
-    private fun createBinaryArithmeticAst(expression: List<Token>): AstNode {
-        return ArithmeticNodeBuilder().build(expression)
-    }
-
-    private fun createBooleanAst(expression: List<Token>): AstNode {
-        return BooleanNodeBuilder().build(expression)
-    }
-
-    private fun createFunctionAst(expression: List<Token>): AstNode {
-        return FunctionNodeBuilder().build(expression)
-    }
-
-    private fun createLiteralNode(tokenList: List<Token>): AstNode {
-        return LiteralNodeBuilder().build(tokenList)
-    }
-
-    private fun isDeclaration(tokenList: List<Token>): Boolean {
-        var points = 0
-        if (isDeclarativeToken(tokenList[0])) points += 1
-        if (tokenList[1].type == TokenType.VALUE_IDENTIFIER_LITERAL) points += 1
-        if (tokenList[2].type == TokenType.COLON) points += 1
-        if (isValueType(tokenList[3])) points += 1
-        return points == 4
-    }
-
-    private fun isDeclarativeToken(token: Token): Boolean {
-        return when (token.type) {
-            TokenType.LET, TokenType.CONST -> true
-            else -> false
-        }
-    }
-
-    private fun isValueType(token: Token): Boolean {
-        return isStringType(token) || isNumberType(token) || isBooleanType(token)
-    }
-
-    private fun getExpression(tokenList: List<Token>): List<Token> {
+    private fun getContent(tokenList: List<Token>): List<Token> {
         return if (tokenList.size == 5) emptyList() else tokenList.subList(5, tokenList.size - 1) // expression without semicolon
-    }
-
-    private fun isStringType(token: Token): Boolean {
-        return when (token.type) {
-            TokenType.STRING_TYPE -> true
-            else -> false
-        }
-    }
-
-    private fun isNumberType(token: Token): Boolean {
-        return when (token.type) {
-            TokenType.NUMBER_TYPE -> true
-            else -> false
-        }
-    }
-
-    private fun isBooleanType(token: Token): Boolean {
-        return when (token.type) {
-            TokenType.BOOLEAN_TYPE -> true
-            else -> false
-        }
-    }
-
-    private fun isNonUninitialized(tokenList: List<Token>): Boolean {
-        return getExpression(tokenList).isEmpty()
-    }
-
-    private fun isLiteral(tokenList: List<Token>): Boolean {
-        if (tokenList.size == 1) {
-            return when (tokenList.first().type) {
-                TokenType.STRING_LITERAL, TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL, TokenType.BOOLEAN_LITERAL -> true
-                else -> false
-            }
-        }
-        return false
-    }
-
-    private fun isStringExpression(expression: List<Token>): Boolean {
-        return IsStringExpression().checkSyntax(expression)
-    }
-
-    private fun isNumberExpression(expression: List<Token>): Boolean {
-        val formatResult = OperatorIsFormatted().checkSemantic(expression)
-        val arithmeticResult = IsArithmeticExpression().checkSyntax(expression)
-        return when {
-            formatResult && arithmeticResult -> true
-            else -> false
-        }
-    }
-
-    private fun isBooleanExpression(expression: List<Token>): Boolean {
-        return IsBooleanExpression().checkSyntax(expression)
-    }
-
-    private fun isFunctionExpression(tokenList: List<Token>): Boolean {
-        val expression = getExpression(tokenList)
-        return IsFunctionExpression().checkSyntax(expression)
-    }
-
-    private fun isFunctionExpressionValid(tokenList: List<Token>): Boolean {
-        val expression = getExpression(tokenList)
-        return tokenList[3].type == typeOf(expression[2].type)
-    }
-
-    private fun typeOf(tokenType: TokenType): TokenType? {
-        return dataTypeMap[tokenType]
     }
 }

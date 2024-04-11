@@ -27,6 +27,7 @@ enum class TokenType {
     CONST, // const
 
     // Functions
+    FUNCTION_TYPE,
     READ_INPUT,
     READ_ENV,
     WRITE_ENV,
