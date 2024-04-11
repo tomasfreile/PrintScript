@@ -5,7 +5,6 @@ import lexer.PrintScriptLexer
 import lexer.getTokenMapV11
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import parser.PrintScriptParser
 import parser.analysis.semantic.BooleanSemantic
 import parser.analysis.semantic.NumberSemantic
 import parser.analysis.semantic.SemanticRule
@@ -22,13 +21,14 @@ import parser.parser.AssignationParser
 import parser.parser.DeclarationParser
 import parser.parser.Parser
 import parser.parser.PrintParser
+import parser.parserBuilder.PrintScriptOnePointOneParserBuilder
 import token.TokenType
 
 class FormatterTest {
     private val formatterPath01 = "src/test/resources/formatterTest01.yaml"
     private val formatterPath02 = "src/test/resources/formatterTest02.yaml"
     private val lexer = PrintScriptLexer(getTokenMapV11())
-    private val parser = PrintScriptParser(getParsers())
+    private val parser = PrintScriptOnePointOneParserBuilder().build()
 
     private fun getParsers(): List<Parser> {
         return listOf(
@@ -79,7 +79,7 @@ class FormatterTest {
 
     private fun getTree(code: String): AstNode? {
         val tokenList = lexer.lex(code)
-        return parser.parse(tokenList)
+        return parser.createAST(tokenList)
     }
 
     @Test

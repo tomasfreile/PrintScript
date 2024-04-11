@@ -3,7 +3,7 @@ package lexer
 import lexer.factory.LexerBuilder
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import token.Coordinate
+import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
 

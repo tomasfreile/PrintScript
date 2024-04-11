@@ -11,7 +11,10 @@ class VariableNamingRule(private val namingConvention: NamingConvention) : Rule 
                 if (namingConvention.regex.toRegex().matches(node.identifier)) {
                     StaticCodeAnalyzerResult.Ok
                 } else {
-                    StaticCodeAnalyzerResult.Error("Variable name ${node.identifier} does not match ${namingConvention.display}")
+                    StaticCodeAnalyzerResult.Error(
+                        "Variable name ${node.identifier} does not match ${namingConvention.display}." +
+                            " Position: ${node.position.start.string() + " - " + node.position.end.string()}",
+                    )
                 }
             }
 
