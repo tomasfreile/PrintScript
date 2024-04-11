@@ -84,7 +84,7 @@ class PrintScriptInterpreterTest {
 //        for (token in tokenList) {
 //            println(token.value + " "+ token.type)
 //        }
-        return parser.parse(tokenList)
+        return parser.createAST(tokenList)
     }
 
     @Test

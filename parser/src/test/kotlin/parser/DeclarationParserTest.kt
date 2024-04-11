@@ -7,21 +7,7 @@ import ast.NilNode
 import ast.VariableDeclarationNode
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import parser.analysis.semantic.BooleanSemantic
-import parser.analysis.semantic.NumberSemantic
-import parser.analysis.semantic.SemanticRule
-import parser.analysis.semantic.StringSemantic
-import parser.analysis.syntax.IsArithmeticSyntax
-import parser.analysis.syntax.IsBooleanSyntax
-import parser.analysis.syntax.IsFunctionSyntax
-import parser.analysis.syntax.IsStringSyntax
-import parser.analysis.syntax.SyntaxRule
-import parser.nodeBuilder.ArithmeticNodeBuilder
-import parser.nodeBuilder.BooleanNodeBuilder
-import parser.nodeBuilder.FunctionNodeBuilder
-import parser.nodeBuilder.NodeBuilder
-import parser.nodeBuilder.StringNodeBuilder
-import parser.parser.DeclarationParser
+import parser.parserBuilder.PrintScriptOnePointOneBuilder
 import token.Coordinate
 import token.PrintScriptToken
 import token.TokenType
@@ -29,50 +15,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class DeclarationParserTest {
-    private val parser =
-        DeclarationParser(TokenType.SEMICOLON, getTypeMap(), getDeclarationList(), getSyntaxMap(), getSemanticMap(), getNodeBuilders())
-
-    private fun getSemanticMap(): Map<TokenType, SemanticRule> {
-        return mapOf(
-            Pair(TokenType.NUMBER_TYPE, NumberSemantic()),
-            Pair(TokenType.STRING_TYPE, StringSemantic()),
-            Pair(TokenType.BOOLEAN_TYPE, BooleanSemantic()),
-        )
-    }
-
-    private fun getDeclarationList(): List<TokenType> {
-        return listOf(
-            TokenType.LET,
-            TokenType.CONST,
-        )
-    }
-
-    private fun getTypeMap(): Map<TokenType, TokenType> {
-        return mapOf(
-            Pair(TokenType.NUMBER_LITERAL, TokenType.NUMBER_TYPE),
-            Pair(TokenType.STRING_LITERAL, TokenType.STRING_TYPE),
-            Pair(TokenType.BOOLEAN_LITERAL, TokenType.BOOLEAN_TYPE),
-            Pair(TokenType.READ_INPUT, TokenType.FUNCTION_TYPE),
-        )
-    }
-
-    private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
-        return mapOf(
-            Pair(TokenType.STRING_TYPE, IsStringSyntax()),
-            Pair(TokenType.NUMBER_TYPE, IsArithmeticSyntax()),
-            Pair(TokenType.BOOLEAN_TYPE, IsBooleanSyntax()),
-            Pair(TokenType.FUNCTION_TYPE, IsFunctionSyntax()),
-        )
-    }
-
-    private fun getNodeBuilders(): Map<TokenType, NodeBuilder> {
-        return mapOf(
-            Pair(TokenType.STRING_TYPE, StringNodeBuilder()),
-            Pair(TokenType.NUMBER_TYPE, ArithmeticNodeBuilder()),
-            Pair(TokenType.BOOLEAN_TYPE, BooleanNodeBuilder()),
-            Pair(TokenType.FUNCTION_TYPE, FunctionNodeBuilder()),
-        )
-    }
+    private val parser = PrintScriptOnePointOneBuilder().build()
 
     @Test
     fun test001_DeclarationParserCanHandleStringDeclaration() {
