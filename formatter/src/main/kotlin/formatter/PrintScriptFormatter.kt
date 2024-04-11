@@ -22,8 +22,8 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
             is PrintNode -> formatPrintNode(astNode, rulesReaderData)
             is VariableDeclarationNode -> formatVariableDeclarationNode(astNode, rulesReaderData)
             is AssignmentNode -> formatAssignmentNode(astNode, rulesReaderData)
-            is IfNode -> formatIfNode(astNode, rulesReaderData)
-            is FunctionNode -> formatFunctionNode(astNode, rulesReaderData)
+//            is IfNode -> formatIfNode(astNode, rulesReaderData)
+//            is FunctionNode -> formatFunctionNode(astNode, rulesReaderData)
             else -> ""
         }
     }
@@ -82,26 +82,26 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         return formatSemicolon(format)
     }
 
-    private fun formatIfNode(
-        node: IfNode,
-        rules: Map<String, Any>,
-    ): String {
-        val ifJump = rules["ifIndentation"] as Int
-        val indentationSpaces = " ".repeat(ifJump)
-        val condition = removeBreakLines(applyFormat(node.condition, rules))
-        val thenBlock = removeBreakLines(applyFormat(node.thenBlock, rules))
-        val elseBlock = removeBreakLines(applyFormat(node.elseBlock, rules))
-        return "if ($condition) {\n$indentationSpaces$thenBlock\n} else {\n$indentationSpaces$elseBlock\n}"
-    }
+//    private fun formatIfNode(
+//        node: IfNode,
+//        rules: Map<String, Any>,
+//    ): String {
+//        val ifJump = rules["ifIndentation"] as Int
+//        val indentationSpaces = " ".repeat(ifJump)
+//        val condition = removeBreakLines(applyFormat(node.condition, rules))
+//        val thenBlock = removeBreakLines(applyFormat(node.thenBlock, rules))
+//        val elseBlock = removeBreakLines(applyFormat(node.elseBlock, rules))
+//        return "if ($condition) {\n$indentationSpaces$thenBlock\n} else {\n$indentationSpaces$elseBlock\n}"
+//    }
 
-    private fun formatFunctionNode(
-        node: FunctionNode,
-        rules: Map<String, Any>,
-    ): String {
-        val function = defineFunctionSymbol(node.function)
-        val expression = applyFormat(node.expression, rules)
-        return "$function($expression)"
-    }
+//    private fun formatFunctionNode(
+//        node: FunctionNode,
+//        rules: Map<String, Any>,
+//    ): String {
+//        val function = defineFunctionSymbol(node.function)
+//        val expression = applyFormat(node.expression, rules)
+//        return "$function($expression)"
+//    }
 
     private fun formatSemicolon(result: String): String {
         return handleBeforeSpace(";", false, result) + "\n"
@@ -134,14 +134,14 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         }
     }
 
-    private fun defineFunctionSymbol(function: TokenType): String {
-        return when (function) {
-            TokenType.READ_INPUT -> "readInput"
-            TokenType.READ_ENV -> "readEnv"
-            TokenType.WRITE_ENV -> "writeEnv"
-            else -> ""
-        }
-    }
+//    private fun defineFunctionSymbol(function: TokenType): String {
+//        return when (function) {
+//            TokenType.READ_INPUT -> "readInput"
+//            TokenType.READ_ENV -> "readEnv"
+//            TokenType.WRITE_ENV -> "writeEnv"
+//            else -> ""
+//        }
+//    }
 
     private fun handleSpace(
         tokenValue: String,
@@ -181,132 +181,23 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         }
     }
 
-    private fun removeBreakLines(result: String): String {
-        return removeInitialBreakLines(removeFinalBreakLines(result))
-    }
-
-    private fun removeInitialBreakLines(result: String): String {
-        if (result.startsWith("\n")) {
-            return removeInitialBreakLines(result.drop(1))
-        } else {
-            return result
-        }
-    }
-
-    private fun removeFinalBreakLines(result: String): String {
-        if (result.endsWith("\n")) {
-            return removeFinalBreakLines(result.dropLast(1))
-        } else {
-            return result
-        }
-    }
-
-//    fun format(node: Node): String {
-//        val ruleReaderData = RuleReader(rulesPath).readFile()
-//        val tokenList = getTokenList(node)
-//        return applyFormat(tokenList, ruleReaderData, "")
+//    private fun removeBreakLines(result: String): String {
+//        return removeInitialBreakLines(removeFinalBreakLines(result))
 //    }
 //
-//    private fun getTokenList(node: Node?): List<Token> {
-//        return when (node) {
-//            is ASTSingleNode -> listOf(node.token) + getTokenList(node.node)
-//            is ASTBinaryNode -> getTokenList(node.left) + listOf(node.token) + getTokenList(node.right)
-//            else -> emptyList()
-//        }
-//    }
-//
-//    private fun applyFormat(
-//        tokenList: List<Token>,
-//        rulesData: Map<String, Any>,
-//        result: String,
-//    ): String {
-//        return when {
-//            tokenList.isEmpty() -> result
-//            else -> {
-//                applyRules(tokenList, rulesData, result)
-//            }
-//        }
-//    }
-//
-//    private fun applyRules(
-//        tokenList: List<Token>,
-//        rulesData: Map<String, Any>,
-//        result: String,
-//    ): String {
-//        val token = tokenList.first()
-//        val formattedToken = formatToken(token, rulesData, result)
-//        return applyFormat(tokenList.drop(1), rulesData, formattedToken)
-//    }
-//
-//    private fun formatToken(
-//        token: Token,
-//        rulesData: Map<String, Any>,
-//        result: String,
-//    ): String {
-//        val tokenValue = token.value
-//        return when (token.type) {
-//            TokenType.COLON -> formatColon(tokenValue, rulesData, result)
-//            TokenType.ASSIGNATION -> formatAssignation(tokenValue, rulesData, result)
-//            TokenType.PRINT -> formatPrintln(tokenValue, rulesData, result)
-//            TokenType.PLUS -> formatOperator(tokenValue, result)
-//            TokenType.MINUS -> formatOperator(tokenValue, result)
-//            TokenType.STAR -> formatOperator(tokenValue, result)
-//            TokenType.SEMICOLON -> formatSemicolon(tokenValue, result)
-//            else -> formatRegularToken(tokenValue, result)
-//        }
-//    }
-//
-//    private fun formatColon(
-//        tokenValue: String,
-//        rulesData: Map<String, Any>,
-//        result: String,
-//    ): String {
-//        val colonBefore = rulesData["colonBefore"] as Boolean
-//        val colonAfter = rulesData["colonAfter"] as Boolean
-//        val formattedBefore = handleBeforeSpace(tokenValue, colonBefore, result)
-//        return handleAfterSpace(formattedBefore, colonAfter)
-//    }
-//
-//    private fun formatAssignation(
-//        tokenValue: String,
-//        rulesData: Map<String, Any>,
-//        result: String,
-//    ): String {
-//        val equalsBefore = rulesData["assignationBefore"] as Boolean
-//        val equalsAfter = rulesData["assignationAfter"] as Boolean
-//        val formattedBefore = handleBeforeSpace(tokenValue, equalsBefore, result)
-//        return handleAfterSpace(formattedBefore, equalsAfter)
-//    }
-//
-//    private fun formatPrintln(
-//        tokenValue: String,
-//        rulesData: Map<String, Any>,
-//        result: String,
-//    ): String {
-//        val printJump = rulesData["printJump"] as Int
-//        if (result.endsWith(" ")) {
-//            val modifiedResult = result.dropLast(1)
-//            return modifiedResult + "\n".repeat(printJump) + tokenValue
+//    private fun removeInitialBreakLines(result: String): String {
+//        if (result.startsWith("\n")) {
+//            return removeInitialBreakLines(result.drop(1))
 //        } else {
-//            return result + "\n".repeat(printJump) + tokenValue
+//            return result
 //        }
 //    }
 //
-//    private fun formatOperator(
-//        tokenValue: String,
-//        result: String,
-//    ): String {
-//        val formattedBefore = handleBeforeSpace(tokenValue, true, result)
-//        return handleAfterSpace(formattedBefore, true)
+//    private fun removeFinalBreakLines(result: String): String {
+//        if (result.endsWith("\n")) {
+//            return removeFinalBreakLines(result.dropLast(1))
+//        } else {
+//            return result
+//        }
 //    }
-//
-
-//
-//    private fun formatRegularToken(
-//        tokenValue: String,
-//        result: String,
-//    ): String {
-//        return "$result$tokenValue "
-//    }
-//
 }
