@@ -21,9 +21,17 @@ class PrintScriptParserTest {
 
     private fun getParsers(): List<Parser> {
         return listOf(
-            DeclarationParser(),
-            PrintParser(),
-            AssignationParser(),
+            DeclarationParser(TokenType.SEMICOLON, getMap()),
+            PrintParser(TokenType.SEMICOLON),
+            AssignationParser(TokenType.SEMICOLON),
+        )
+    }
+
+    private fun getMap(): Map<TokenType, TokenType> {
+        return mapOf(
+            Pair(TokenType.NUMBER_LITERAL, TokenType.NUMBER_TYPE),
+            Pair(TokenType.STRING_LITERAL, TokenType.STRING_TYPE),
+            Pair(TokenType.BOOLEAN_LITERAL, TokenType.BOOLEAN_TYPE),
         )
     }
 
@@ -53,6 +61,7 @@ class PrintScriptParserTest {
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "a", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         val node = parser.parse(tokenList)
         assertTrue {
@@ -93,6 +102,7 @@ class PrintScriptParserTest {
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "a", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         val node = parser.parse(tokenList)
         assertTrue {

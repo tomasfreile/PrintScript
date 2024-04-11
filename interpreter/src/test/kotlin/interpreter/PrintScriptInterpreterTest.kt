@@ -11,6 +11,7 @@ import parser.parser.AssignationParser
 import parser.parser.DeclarationParser
 import parser.parser.Parser
 import parser.parser.PrintParser
+import token.TokenType
 import kotlin.test.assertEquals
 
 class PrintScriptInterpreterTest {
@@ -21,9 +22,17 @@ class PrintScriptInterpreterTest {
 
     private fun getParsers(): List<Parser> {
         return listOf(
-            DeclarationParser(),
-            PrintParser(),
-            AssignationParser(),
+            DeclarationParser(TokenType.SEMICOLON, getMap()),
+            PrintParser(TokenType.SEMICOLON),
+            AssignationParser(TokenType.SEMICOLON),
+        )
+    }
+
+    private fun getMap(): Map<TokenType, TokenType> {
+        return mapOf(
+            Pair(TokenType.NUMBER_LITERAL, TokenType.NUMBER_TYPE),
+            Pair(TokenType.STRING_LITERAL, TokenType.STRING_TYPE),
+            Pair(TokenType.BOOLEAN_LITERAL, TokenType.BOOLEAN_TYPE),
         )
     }
 
@@ -44,7 +53,7 @@ class PrintScriptInterpreterTest {
 
     @Test
     fun variableDeclarationTest() {
-        val string = "let num: number = 3"
+        val string = "let num: number = 3;"
         val result = interpreter.interpret(getTree(string), symbolTable)
         assertEquals(3, result)
     }
@@ -58,7 +67,7 @@ class PrintScriptInterpreterTest {
 
     @Test
     fun testDeclareVariableAndThenPrintIt() {
-        val string = "let num: number = 3"
+        val string = "let num: number = 3;"
         interpreter.interpret(getTree(string), symbolTable)
         val string2 = "println(num);"
         val result = interpreter.interpret(getTree(string2), symbolTable)

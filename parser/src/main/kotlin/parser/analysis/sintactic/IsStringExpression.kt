@@ -5,7 +5,7 @@ import parser.analysis.semantic.OperatorIsFormatted
 import token.Token
 import token.TokenType
 
-class IsStringConcat : SyntaxRule {
+class IsStringExpression : SyntaxRule {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
         if (!OperatorIsFormatted().checkSemantic(
                 tokenList,
@@ -15,7 +15,11 @@ class IsStringConcat : SyntaxRule {
         }
         for (token in tokenList) {
             when {
-                isInvalidOperator(token) -> throw InvalidOperatorException("Invalid Operator on line: " + token.start.row.toString())
+                isInvalidOperator(
+                    token,
+                ) -> throw InvalidOperatorException(
+                    "Invalid Operator on coord: " + "(" + token.start.row.toString() + "; " + token.start.column.toString() + ")",
+                )
                 isLiteral(token) || isPlus(token) -> continue
                 else -> return false
             }
@@ -25,7 +29,7 @@ class IsStringConcat : SyntaxRule {
 
     private fun isLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.STRING_LITERAL, TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL, TokenType.BOOLEAN_LITERAL -> true
+            TokenType.STRING_LITERAL, TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
             else -> false
         }
     }
