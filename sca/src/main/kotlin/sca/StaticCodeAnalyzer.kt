@@ -1,15 +1,15 @@
 package sca
 
-import ast.Node
+import ast.AstNode
 
 interface StaticCodeAnalyzer {
-    fun analyze(ast: Node): List<String>
+    fun analyze(ast: AstNode): List<String>
 }
 
 class StaticCodeAnalyzerImpl(fileName: String) : StaticCodeAnalyzer {
     private val rules = YamlReader().readRules(fileName)
 
-    override fun analyze(ast: Node): List<String> {
+    override fun analyze(ast: AstNode): List<String> {
         val report = mutableListOf<String>()
         for (rule in rules) {
             when (val result = rule.validate(ast)) {

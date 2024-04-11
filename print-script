@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Initialize an empty string to hold the arguments
+arguments=""
+
+# Loop through all arguments and concatenate them to the string
+for arg in "$@"; do
+    arguments+=" $arg"
+done
+
+./gradlew run --args="$arguments"
+exit 1

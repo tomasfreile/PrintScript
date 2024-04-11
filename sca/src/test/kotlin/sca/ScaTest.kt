@@ -1,29 +1,33 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package sca
 
-import ast.ASTBinaryNode
-import ast.ASTSingleNode
+import ast.*
 import org.junit.jupiter.api.Test
-import token.Coordinate
-import token.PrintScriptToken
+import position.Coordinate
+import position.TokenPosition
 import token.TokenType
 
 class ScaTest {
-    // use resources files
     private val noPrintExpressionsAndCamel =
         StaticCodeAnalyzerImpl("src/test/resources/NoPrintExpressionsAndCamelCase.yaml")
 
     private val printExpressionsAndSnake =
         StaticCodeAnalyzerImpl("src/test/resources/PrintExpressionsAndSnakeCase.yaml")
 
+    private val noReadInputExpressions =
+        StaticCodeAnalyzerImpl("src/test/resources/NoReadInputExpressions.yaml")
+
     @Test
     fun shouldReturnEmptyWhenPrintExpressionsAreDisabledAndNoPrintExpressionsArePresent() {
         val ast =
-            ASTSingleNode(
-                ASTSingleNode(
-                    null,
-                    PrintScriptToken(TokenType.VALUE_IDENTIFIER, "x", Coordinate(2, 3), Coordinate(2, 3)),
+            PrintNode(
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
-                PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(noPrintExpressionsAndCamel.analyze(ast).isEmpty())
     }
@@ -31,33 +35,28 @@ class ScaTest {
     @Test
     fun shouldReturnWarningWhenPrintExpressionsAreDisabledAndPrintExpressionsArePresent() {
         val ast =
-            ASTSingleNode(
-                ASTBinaryNode(
-                    ASTSingleNode(
-                        null,
-                        PrintScriptToken(TokenType.NUMBER, "1", Coordinate(2, 3), Coordinate(2, 3)),
-                    ),
-                    ASTSingleNode(
-                        null,
-                        PrintScriptToken(TokenType.NUMBER, "2", Coordinate(2, 3), Coordinate(2, 3)),
-                    ),
-                    PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+            PrintNode(
+                BinaryOperationNode(
+                    LiteralNode("1", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    TokenType.PLUS,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
-                PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
+                TokenPosition(Coordinate(0, 5), Coordinate(0, 10)),
             )
-
         assert(noPrintExpressionsAndCamel.analyze(ast).isNotEmpty())
     }
 
     @Test
     fun shouldReturnEmptyWhenPrintExpressionsAreEnabledAndNoPrintExpressionsArePresent() {
         val ast =
-            ASTSingleNode(
-                ASTSingleNode(
-                    null,
-                    PrintScriptToken(TokenType.VALUE_IDENTIFIER, "x", Coordinate(2, 3), Coordinate(2, 3)),
+            PrintNode(
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
-                PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(printExpressionsAndSnake.analyze(ast).isEmpty())
     }
@@ -65,43 +64,39 @@ class ScaTest {
     @Test
     fun shouldReturnEmptyWhenPrintExpressionsAreEnabledAndPrintExpressionsArePresent() {
         val ast =
-            ASTSingleNode(
-                ASTBinaryNode(
-                    ASTSingleNode(
-                        null,
-                        PrintScriptToken(TokenType.NUMBER, "1", Coordinate(2, 3), Coordinate(2, 3)),
+            PrintNode(
+                BinaryOperationNode(
+                    LiteralNode(
+                        "1",
+                        TokenType.NUMBER_LITERAL,
+                        TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                     ),
-                    ASTSingleNode(
-                        null,
-                        PrintScriptToken(TokenType.NUMBER, "2", Coordinate(2, 3), Coordinate(2, 3)),
+                    LiteralNode(
+                        "hola",
+                        TokenType.STRING_LITERAL,
+                        TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                     ),
-                    PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
+                    TokenType.PLUS,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
-                PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-
         assert(printExpressionsAndSnake.analyze(ast).isEmpty())
     }
 
     @Test
     fun shouldReturnEmptyWhenCaseConventionIsCamelCaseAndVariableNamesAreCamelCase() {
         val ast =
-            ASTSingleNode(
-                ASTSingleNode(
-                    null,
-                    PrintScriptToken(
-                        TokenType.VALUE_IDENTIFIER,
-                        "camelCase",
-                        Coordinate(2, 5),
-                        Coordinate(2, 9),
-                    ),
+            VariableDeclarationNode(
+                TokenType.LET,
+                "camelCase",
+                TokenType.NUMBER_TYPE,
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
-                PrintScriptToken(
-                    TokenType.VARIABLE_KEYWORD,
-                    "let",
-                    Coordinate(2, 3),
-                    Coordinate(2, 3),
-                ),
+                TokenPosition(Coordinate(0, 1), Coordinate(0, 6)),
             )
         assert(noPrintExpressionsAndCamel.analyze(ast).isEmpty())
     }
@@ -109,22 +104,16 @@ class ScaTest {
     @Test
     fun shouldReturnWarningWhenCaseConventionIsCamelCaseAndVariableNamesAreSnakeCase() {
         val ast =
-            ASTSingleNode(
-                ASTSingleNode(
-                    null,
-                    PrintScriptToken(
-                        TokenType.VALUE_IDENTIFIER,
-                        "snake_case",
-                        Coordinate(2, 5),
-                        Coordinate(2, 9),
-                    ),
+            VariableDeclarationNode(
+                TokenType.LET,
+                "snake_case",
+                TokenType.NUMBER_TYPE,
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
-                PrintScriptToken(
-                    TokenType.VARIABLE_KEYWORD,
-                    "let",
-                    Coordinate(2, 3),
-                    Coordinate(2, 3),
-                ),
+                TokenPosition(Coordinate(0, 1), Coordinate(0, 5)),
             )
         assert(noPrintExpressionsAndCamel.analyze(ast).isNotEmpty())
     }
@@ -132,22 +121,16 @@ class ScaTest {
     @Test
     fun shouldReturnEmptyWhenCaseConventionIsSnakeCaseAndVariableNamesAreSnakeCase() {
         val ast =
-            ASTSingleNode(
-                ASTSingleNode(
-                    null,
-                    PrintScriptToken(
-                        TokenType.VALUE_IDENTIFIER,
-                        "snake_case",
-                        Coordinate(2, 5),
-                        Coordinate(2, 9),
-                    ),
+            VariableDeclarationNode(
+                TokenType.LET,
+                "snake_case",
+                TokenType.NUMBER_TYPE,
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
-                PrintScriptToken(
-                    TokenType.VARIABLE_KEYWORD,
-                    "let",
-                    Coordinate(2, 3),
-                    Coordinate(2, 3),
-                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(printExpressionsAndSnake.analyze(ast).isEmpty())
     }
@@ -155,23 +138,53 @@ class ScaTest {
     @Test
     fun shouldReturnWarningWhenCaseConventionIsSnakeCaseAndVariableNamesAreCamelCase() {
         val ast =
-            ASTSingleNode(
-                ASTSingleNode(
-                    null,
-                    PrintScriptToken(
-                        TokenType.VALUE_IDENTIFIER,
-                        "camelCase",
-                        Coordinate(2, 5),
-                        Coordinate(2, 9),
-                    ),
+            VariableDeclarationNode(
+                TokenType.LET,
+                "camelCase",
+                TokenType.NUMBER_TYPE,
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
-                PrintScriptToken(
-                    TokenType.VARIABLE_KEYWORD,
-                    "let",
-                    Coordinate(2, 3),
-                    Coordinate(2, 3),
-                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(printExpressionsAndSnake.analyze(ast).isNotEmpty())
+    }
+
+    @Test
+    fun shouldReturnEmptyWhenReadInputExpressionsAreDisabledAndNoReadInputExpressionsArePresent() {
+        val ast =
+            VariableDeclarationNode(
+                TokenType.LET,
+                "variable",
+                TokenType.NUMBER_TYPE,
+                LiteralNode("1", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        assert(noReadInputExpressions.analyze(ast).isEmpty())
+    }
+
+    @Test
+    fun shouldReturnWarningWhenReadInputExpressionsAreDisabledAndReadInputExpressionsArePresent() {
+        val ast =
+            VariableDeclarationNode(
+                TokenType.LET,
+                "variable",
+                TokenType.NUMBER_TYPE,
+                FunctionNode(
+                    TokenType.READ_INPUT,
+                    BinaryOperationNode(
+                        LiteralNode("1", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                        LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                        TokenType.PLUS,
+                        TokenPosition(Coordinate(2, 2), Coordinate(2, 9)),
+                    ),
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        assert(noReadInputExpressions.analyze(ast).isNotEmpty())
+        println(noReadInputExpressions.analyze(ast).get(0))
     }
 }

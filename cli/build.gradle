@@ -1,0 +1,24 @@
+plugins {
+    id 'printscript.gradle.kotlin-common-conventions'
+    id 'application'
+}
+
+repositories {
+    mavenCentral() // Clikt is hosted on Maven Central
+}
+
+dependencies {
+    implementation project(':commons')
+    implementation project(':interpreter')
+    implementation project(':lexer')
+    implementation project(':parser')
+    implementation project(':sca')
+    implementation project(':formatter')
+    implementation("com.github.ajalt.clikt:clikt:4.3.0")
+
+}
+
+application {
+    mainClass = 'cli.PrintScriptKt'
+}
+
