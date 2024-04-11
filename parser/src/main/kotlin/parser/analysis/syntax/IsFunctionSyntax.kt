@@ -1,12 +1,12 @@
-package parser.analysis.syntax.expression
+package parser.analysis.syntax
 
 import token.Token
 import token.TokenType
 
-class IsFunctionExpression : Expression {
-    override fun isExpression(expression: List<Token>): Boolean {
+class IsFunctionSyntax : SyntaxRule {
+    override fun checkSyntax(tokenList: List<Token>): Boolean {
         return when {
-            hasEnoughLength(expression) -> checkStructure(expression)
+            hasEnoughLength(tokenList) -> checkStructure(tokenList)
             else -> false
         }
     }

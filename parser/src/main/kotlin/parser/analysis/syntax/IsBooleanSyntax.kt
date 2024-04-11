@@ -1,14 +1,14 @@
-package parser.analysis.syntax.expression
+package parser.analysis.syntax
 
 import token.Token
 import token.TokenType
 
 /*
-    By the moment Boolean expression has no operators
+    By the moment Boolean expressions has no operators
  */
-class IsBooleanExpression : Expression {
-    override fun isExpression(expression: List<Token>): Boolean {
-        for (token in expression) {
+class IsBooleanSyntax : SyntaxRule {
+    override fun checkSyntax(tokenList: List<Token>): Boolean {
+        for (token in tokenList) {
             when {
                 isLiteral(token) -> continue
                 else -> return false

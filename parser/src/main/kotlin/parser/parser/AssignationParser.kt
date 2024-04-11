@@ -4,15 +4,15 @@ import ast.AssignmentNode
 import ast.AstNode
 import parser.InvalidAssignationException
 import parser.analysis.semantic.SemanticRule
-import parser.analysis.syntax.expression.Expression
-import parser.analysis.syntax.rule.HasSentenceSeparator
+import parser.analysis.syntax.SyntaxRule
+import parser.analysis.syntax.common.HasSentenceSeparator
 import parser.nodeBuilder.NodeBuilder
 import token.Token
 import token.TokenType
 
 class AssignationParser(
     private val separator: TokenType,
-    private val expressionsSyntax: Map<TokenType, Expression>,
+    private val expressionsSyntax: Map<TokenType, SyntaxRule>,
     private val expressionsSemantic: Map<TokenType, SemanticRule>,
     private val nodeBuilders: Map<TokenType, NodeBuilder>,
 ) : Parser {
@@ -50,7 +50,7 @@ class AssignationParser(
         content: List<Token>,
     ): Boolean {
         val syntax = expressionsSyntax[tokenType]
-        return syntax != null && syntax.isExpression(content)
+        return syntax != null && syntax.checkSyntax(content)
     }
 
     private fun isSemanticValid(

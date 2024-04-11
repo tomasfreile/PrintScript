@@ -10,10 +10,10 @@ import parser.analysis.semantic.BooleanSemantic
 import parser.analysis.semantic.NumberSemantic
 import parser.analysis.semantic.SemanticRule
 import parser.analysis.semantic.StringSemantic
-import parser.analysis.syntax.expression.Expression
-import parser.analysis.syntax.expression.IsArithmeticExpression
-import parser.analysis.syntax.expression.IsBooleanExpression
-import parser.analysis.syntax.expression.IsStringExpression
+import parser.analysis.syntax.IsArithmeticSyntax
+import parser.analysis.syntax.IsBooleanSyntax
+import parser.analysis.syntax.IsStringSyntax
+import parser.analysis.syntax.SyntaxRule
 import parser.nodeBuilder.ArithmeticNodeBuilder
 import parser.nodeBuilder.BooleanNodeBuilder
 import parser.nodeBuilder.NodeBuilder
@@ -37,11 +37,11 @@ class PrintParserTest {
         )
     }
 
-    private fun getSyntaxMap(): Map<TokenType, Expression> {
+    private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
         return mapOf(
-            Pair(TokenType.STRING_TYPE, IsStringExpression()),
-            Pair(TokenType.NUMBER_TYPE, IsArithmeticExpression()),
-            Pair(TokenType.BOOLEAN_TYPE, IsBooleanExpression()),
+            Pair(TokenType.STRING_TYPE, IsStringSyntax()),
+            Pair(TokenType.NUMBER_TYPE, IsArithmeticSyntax()),
+            Pair(TokenType.BOOLEAN_TYPE, IsBooleanSyntax()),
         )
     }
 

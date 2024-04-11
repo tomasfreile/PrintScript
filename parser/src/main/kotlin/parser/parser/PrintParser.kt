@@ -4,15 +4,15 @@ import ast.AstNode
 import ast.PrintNode
 import parser.InvalidSyntaxException
 import parser.analysis.semantic.SemanticRule
-import parser.analysis.syntax.expression.Expression
-import parser.analysis.syntax.rule.HasSentenceSeparator
+import parser.analysis.syntax.SyntaxRule
+import parser.analysis.syntax.common.HasSentenceSeparator
 import parser.nodeBuilder.NodeBuilder
 import token.Token
 import token.TokenType
 
 class PrintParser(
     private val separator: TokenType,
-    private val expressionsSyntax: Map<TokenType, Expression>,
+    private val expressionsSyntax: Map<TokenType, SyntaxRule>,
     private val expressionsSemantic: Map<TokenType, SemanticRule>,
     private val nodeBuilders: Map<TokenType, NodeBuilder>,
 ) : Parser {
@@ -28,6 +28,9 @@ class PrintParser(
         for ((type, _) in expressionsSyntax) {
             when {
                 isExpressionValid(type, content) -> {
+                    /*
+                        Syntax may be valid, but Semantic doesn't
+                     */
                     if (isSemanticValid(type, content)) {
                         return buildNode(content, type)?.let {
                             createPrintAst(it)
@@ -60,7 +63,7 @@ class PrintParser(
         content: List<Token>,
     ): Boolean {
         val syntax = expressionsSyntax[tokenType]
-        return syntax != null && syntax.isExpression(content)
+        return syntax != null && syntax.checkSyntax(content)
     }
 
     private fun isPrint(tokenList: List<Token>): Boolean {

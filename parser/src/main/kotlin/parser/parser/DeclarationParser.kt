@@ -5,8 +5,8 @@ import ast.NilNode
 import ast.VariableDeclarationNode
 import parser.InvalidDeclarationStatement
 import parser.analysis.semantic.SemanticRule
-import parser.analysis.syntax.expression.Expression
-import parser.analysis.syntax.rule.HasSentenceSeparator
+import parser.analysis.syntax.SyntaxRule
+import parser.analysis.syntax.common.HasSentenceSeparator
 import parser.nodeBuilder.NodeBuilder
 import token.Token
 import token.TokenType
@@ -15,7 +15,7 @@ class DeclarationParser(
     private val separator: TokenType,
     private val dataTypeMap: Map<TokenType, TokenType>,
     private val declarationType: List<TokenType>,
-    private val expressionsSyntax: Map<TokenType, Expression>,
+    private val expressionsSyntax: Map<TokenType, SyntaxRule>,
     private val expressionsSemantic: Map<TokenType, SemanticRule>,
     private val nodeBuilders: Map<TokenType, NodeBuilder>,
 ) : Parser {
@@ -74,7 +74,7 @@ class DeclarationParser(
         return false
     }
 
-    private fun getExpressionSyntax(token: Token): Expression? {
+    private fun getExpressionSyntax(token: Token): SyntaxRule? {
         return expressionsSyntax[token.type]
     }
 
@@ -105,12 +105,20 @@ class DeclarationParser(
         val content = getContent(tokenList)
         return when {
             expressionSyntax != null && expressionSemantic != null -> {
-                val syntaxResult = expressionSyntax.isExpression(content)
-                val semanticResult = expressionSemantic.checkSemantic(content)
-                return syntaxResult && semanticResult
+                validate(expressionSyntax, expressionSemantic, content)
             }
             else -> false
         }
+    }
+
+    private fun validate(
+        expressionSyntax: SyntaxRule,
+        expressionSemantic: SemanticRule,
+        content: List<Token>,
+    ): Boolean {
+        val syntaxResult = expressionSyntax.checkSyntax(content)
+        val semanticResult = expressionSemantic.checkSemantic(content)
+        return syntaxResult && semanticResult
     }
 
     private fun buildNode(

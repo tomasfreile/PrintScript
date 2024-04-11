@@ -3,7 +3,7 @@ package parser.analysis.semantic.common
 import parser.InvalidOperatorException
 import parser.InvalidParenException
 import parser.analysis.semantic.SemanticRule
-import parser.analysis.syntax.rule.HasPairOfParen
+import parser.analysis.syntax.common.HasPairOfParen
 import token.Token
 import token.TokenType
 
