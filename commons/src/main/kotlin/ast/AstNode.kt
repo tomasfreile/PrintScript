@@ -37,8 +37,8 @@ data class AssignmentNode(val identifier: String, val expression: AstNode, overr
 // If statement
 data class IfNode(
     val condition: LiteralNode,
-    val thenBlock: AstNode,
-    val elseBlock: AstNode,
+    val thenBlock: List<AstNode>,
+    val elseBlock: List<AstNode>,
     override val position: TokenPosition,
 ) : AstNode()
 
