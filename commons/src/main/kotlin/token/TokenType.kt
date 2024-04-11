@@ -23,14 +23,13 @@ enum class TokenType {
     NUMBER_TYPE, // number
     STRING_TYPE, // string
     BOOLEAN_TYPE, // boolean
+
     LET, // let
     CONST, // const
 
     // Functions
-    FUNCTION_TYPE,
     READ_INPUT,
     READ_ENV,
-    WRITE_ENV,
 
     // Literals
     STRING_LITERAL, // "hola"
