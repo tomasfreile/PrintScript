@@ -26,6 +26,16 @@ class PrintScriptLexerTest {
     }
 
     @Test
+    fun decimals() {
+        val input = "1.2"
+        val expectedTokens =
+            listOf(
+                PrintScriptToken(TokenType.NUMBER_LITERAL, "1.2", Coordinate(0, 0), Coordinate(0, 3)),
+            )
+        compareExpectedWithOutput(input, expectedTokens)
+    }
+
+    @Test
     fun largeExpression() {
         val input = "123 + 2 * 3 - 4 / 5"
         val expectedTokens =
