@@ -5,6 +5,8 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
+import formatter.Formatter
+import formatter.PrintScriptFormatter
 import interpreter.PrintScriptInterpreter
 import interpreter.builder.InterpreterBuilder
 import interpreter.result.InterpreterResult
@@ -79,18 +81,18 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     }
 
     private fun formatCode(sentencesList: List<String>) {
-//        val formatter: Formatter = Formatter(config?.path ?: throw NullPointerException("Expected config file path for formatter."))
-//        val file = File(source.path)
-//        var text = ""
-//
-//        for (sentence in sentencesList) {
-//            val tokenList = lexer.lex(sentence)
-//            val tree = parser.parse(tokenList)
-//            val line = formatter.format(tree)
-//            text += line
-//        }
-//        file.writeText(text)
-        throw NotImplementedError("Formater needs to be refactored to comply with new-ast.")
+        val formatter: Formatter =
+            PrintScriptFormatter(config?.path ?: throw NullPointerException("Expected config file path for formatter."))
+        val file = File(source.path)
+        var text = ""
+
+        for (sentence in sentencesList) {
+            val tokenList = lexer.lex(sentence)
+            val tree = parser.createAST(tokenList)
+            val line = tree?.let { formatter.format(it) }
+            text += line
+        }
+        file.writeText(text)
     }
 
     private fun analyzeCode(sentencesList: List<String>) {
