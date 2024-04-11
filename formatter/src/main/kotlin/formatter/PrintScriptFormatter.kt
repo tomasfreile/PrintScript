@@ -29,6 +29,9 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
     }
 
     private fun formatLiteralNode(node: LiteralNode): String {
+        if (node.type == TokenType.STRING_LITERAL) {
+            return "\"${node.value}\""
+        }
         return node.value
     }
 
@@ -39,10 +42,7 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         val left = applyFormat(node.left, rules)
         val right = applyFormat(node.right, rules)
         val operator = defineOperatorSymbol(node.operator)
-        val equalsBefore = rules["assignationBefore"] as Boolean
-        val equalsAfter = rules["assignationAfter"] as Boolean
-        val formattedSpace = handleSpace(operator, equalsBefore, equalsAfter, left)
-        return formattedSpace + right
+        return "$left $operator $right"
     }
 
     private fun formatPrintNode(
@@ -50,7 +50,8 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         rules: Map<String, Any>,
     ): String {
         val printJump = rules["printJump"] as Int
-        return "\n".repeat(printJump) + "println( " + applyFormat(node.expression, rules) + " )"
+        val format = "\n".repeat(printJump) + "println(" + applyFormat(node.expression, rules) + ")"
+        return formatSemicolon(format)
     }
 
     private fun formatVariableDeclarationNode(
@@ -67,7 +68,8 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         val valueTypeSymbol = defineValueType(node.valueType)
         val valueType = colon + valueTypeSymbol
         val equals = handleSpace("=", equalsBefore, equalsAfter, valueType)
-        return equals + applyFormat(node.expression, rules)
+        val format = equals + applyFormat(node.expression, rules)
+        return formatSemicolon(format)
     }
 
     private fun formatAssignmentNode(
@@ -76,19 +78,20 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
     ): String {
         val equalsBefore = rules["assignationBefore"] as Boolean
         val equalsAfter = rules["assignationAfter"] as Boolean
-        return handleSpace("=", equalsBefore, equalsAfter, node.identifier) + applyFormat(node.expression, rules)
+        val format = handleSpace("=", equalsBefore, equalsAfter, node.identifier) + applyFormat(node.expression, rules)
+        return formatSemicolon(format)
     }
 
     private fun formatIfNode(
         node: IfNode,
         rules: Map<String, Any>,
     ): String {
-        val ifJump = rules["ifJump"] as Int
+        val ifJump = rules["ifIndentation"] as Int
         val indentationSpaces = " ".repeat(ifJump)
-        val condition = applyFormat(node.condition, rules)
-        val thenBlock = applyFormat(node.thenBlock, rules)
-        val elseBlock = applyFormat(node.elseBlock, rules)
-        return "if ( $condition ) {\n$indentationSpaces$thenBlock\n} else {\n$indentationSpaces$elseBlock\n}"
+        val condition = removeBreakLines(applyFormat(node.condition, rules))
+        val thenBlock = removeBreakLines(applyFormat(node.thenBlock, rules))
+        val elseBlock = removeBreakLines(applyFormat(node.elseBlock, rules))
+        return "if ($condition) {\n$indentationSpaces$thenBlock\n} else {\n$indentationSpaces$elseBlock\n}"
     }
 
     private fun formatFunctionNode(
@@ -100,9 +103,9 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         return "$function($expression)"
     }
 
-//    private fun formatSemicolon(result: String): String {
-//        return handleBeforeSpace(";", false, result) + "\n"
-//    }
+    private fun formatSemicolon(result: String): String {
+        return handleBeforeSpace(";", false, result) + "\n"
+    }
 
     private fun defineOperatorSymbol(operator: TokenType): String {
         return when (operator) {
@@ -135,6 +138,7 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         return when (function) {
             TokenType.READ_INPUT -> "readInput"
             TokenType.READ_ENV -> "readEnv"
+            TokenType.WRITE_ENV -> "writeEnv"
             else -> ""
         }
     }
@@ -174,6 +178,26 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
             "$result "
         } else {
             result
+        }
+    }
+
+    private fun removeBreakLines(result: String): String {
+        return removeInitialBreakLines(removeFinalBreakLines(result))
+    }
+
+    private fun removeInitialBreakLines(result: String): String {
+        if (result.startsWith("\n")) {
+            return removeInitialBreakLines(result.drop(1))
+        } else {
+            return result
+        }
+    }
+
+    private fun removeFinalBreakLines(result: String): String {
+        if (result.endsWith("\n")) {
+            return removeFinalBreakLines(result.dropLast(1))
+        } else {
+            return result
         }
     }
 

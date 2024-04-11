@@ -1,25 +1,40 @@
 package formatter
 
+import ast.AssignmentNode
 import ast.AstNode
+import ast.IfNode
+import ast.LiteralNode
+import ast.PrintNode
 import lexer.PrintScriptLexer
 import lexer.getTokenMapV11
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import parser.PrintScriptParser
 import parser.parser.AssignationParser
 import parser.parser.DeclarationParser
 import parser.parser.Parser
 import parser.parser.PrintParser
+import token.TokenType
 
 class FormatterTest {
-    val formatterPath01 = "src/test/resources/formatterTest01.yaml"
-    val formatterPath02 = "src/test/resources/formatterTest02.yaml"
+    private val formatterPath01 = "src/test/resources/formatterTest01.yaml"
+    private val formatterPath02 = "src/test/resources/formatterTest02.yaml"
     private val lexer = PrintScriptLexer(getTokenMapV11())
     private val parser = PrintScriptParser(getParsers())
 
     private fun getParsers(): List<Parser> {
         return listOf(
-            DeclarationParser(),
-            PrintParser(),
-            AssignationParser(),
+            DeclarationParser(TokenType.SEMICOLON, getMap()),
+            PrintParser(TokenType.SEMICOLON),
+            AssignationParser(TokenType.SEMICOLON),
+        )
+    }
+
+    private fun getMap(): Map<TokenType, TokenType> {
+        return mapOf(
+            Pair(TokenType.NUMBER_LITERAL, TokenType.NUMBER_TYPE),
+            Pair(TokenType.STRING_LITERAL, TokenType.STRING_TYPE),
+            Pair(TokenType.BOOLEAN_LITERAL, TokenType.BOOLEAN_TYPE),
         )
     }
 
@@ -28,417 +43,227 @@ class FormatterTest {
         return parser.parse(tokenList)
     }
 
-//    @Test
-//    fun test001_formatASimpleMicaelaDeclaration() {
-//        val string = "let name:string = 'micaela'"
-//        val ast = getTree(string)
-//        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-//        val result = formatter.format(ast)
-//        assertEquals("let name: string = 'micaela';" + "\n", result)
-//    }
+    @Test
+    fun test001_formatASimpleMicaelaDeclaration() {
+        val string = "let name:string = 'micaela';"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(ast)
+        assertEquals("let name: string = \"micaela\";" + "\n", result)
+    }
 
-//    @Test
-//    fun test001_formatASimpleMicaelaDeclaration() {
-//        val formatter = Formatter(formatterPath)
-//        val node =
-//            ASTSingleNode(
-//                ASTSingleNode(
-//                    ASTSingleNode(
-//                        ASTSingleNode(
-//                            ASTSingleNode(
-//                                ASTSingleNode(
-//                                    ASTSingleNode(
-//                                        null,
-//                                        PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    PrintScriptToken(TokenType.STRING_LITERAL, "'micaela'", Coordinate(2, 2), Coordinate(2, 2)),
-//                                ),
-//                                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 2), Coordinate(2, 2)),
-//                            ),
-//                            PrintScriptToken(TokenType.STRING_TYPE, "String", Coordinate(2, 2), Coordinate(2, 2)),
-//                        ),
-//                        PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 2), Coordinate(2, 2)),
-//                    ),
-//                    PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "name", Coordinate(2, 2), Coordinate(2, 2)),
-//                ),
-//                PrintScriptToken(TokenType.LET, "let", Coordinate(2, 2), Coordinate(2, 2)),
-//            )
-//        val result = formatter.format(node)
-//        assertEquals("let name: String = 'micaela';" + "\n", result)
-//    }
-//
-//    @Test
-//    fun test002_formatA2Plus2Sum() {
-//        val formatter = Formatter(formatterPath)
-//        val node =
-//            ASTSingleNode(
-//                ASTSingleNode(
-//                    ASTSingleNode(
-//                        ASTSingleNode(
-//                            ASTSingleNode(
-//                                ASTBinaryNode(
-//                                    ASTSingleNode(
-//                                        ASTSingleNode(
-//                                            null,
-//                                            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 2), Coordinate(2, 2)),
-//                                        ),
-//                                        PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    ASTSingleNode(
-//                                        null,
-//                                        PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 2), Coordinate(2, 2)),
-//                                ),
-//                                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 2), Coordinate(2, 2)),
-//                            ),
-//                            PrintScriptToken(TokenType.STRING_TYPE, "int", Coordinate(2, 2), Coordinate(2, 2)),
-//                        ),
-//                        PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 2), Coordinate(2, 2)),
-//                    ),
-//                    PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "sum", Coordinate(2, 2), Coordinate(2, 2)),
-//                ),
-//                PrintScriptToken(TokenType.LET, "let", Coordinate(2, 2), Coordinate(2, 2)),
-//            )
-//        val result = formatter.format(node)
-//        assertEquals("let sum: int = 2 + 2;" + "\n", result)
-//    }
-//
-//    @Test
-//    fun test003_formatA2Minus2Subtraction() {
-//        val formatter = Formatter(formatterPath)
-//        val node =
-//            ASTSingleNode(
-//                ASTSingleNode(
-//                    ASTSingleNode(
-//                        ASTSingleNode(
-//                            ASTSingleNode(
-//                                ASTBinaryNode(
-//                                    ASTSingleNode(
-//                                        ASTSingleNode(
-//                                            null,
-//                                            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 2), Coordinate(2, 2)),
-//                                        ),
-//                                        PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    ASTSingleNode(
-//                                        null,
-//                                        PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    PrintScriptToken(TokenType.MINUS, "-", Coordinate(2, 2), Coordinate(2, 2)),
-//                                ),
-//                                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 2), Coordinate(2, 2)),
-//                            ),
-//                            PrintScriptToken(TokenType.STRING_TYPE, "int", Coordinate(2, 2), Coordinate(2, 2)),
-//                        ),
-//                        PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 2), Coordinate(2, 2)),
-//                    ),
-//                    PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "subtraction", Coordinate(2, 2), Coordinate(2, 2)),
-//                ),
-//                PrintScriptToken(TokenType.LET, "let", Coordinate(2, 2), Coordinate(2, 2)),
-//            )
-//        val result = formatter.format(node)
-//        assertEquals("let subtraction: int = 2 - 2;" + "\n", result)
-//    }
-//
-//    @Test
-//    fun test004_formatA2Star2Multiplication() {
-//        val formatter = Formatter(formatterPath)
-//        val node =
-//            ASTSingleNode(
-//                ASTSingleNode(
-//                    ASTSingleNode(
-//                        ASTSingleNode(
-//                            ASTSingleNode(
-//                                ASTBinaryNode(
-//                                    ASTSingleNode(
-//                                        ASTSingleNode(
-//                                            null,
-//                                            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 2), Coordinate(2, 2)),
-//                                        ),
-//                                        PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    ASTSingleNode(
-//                                        null,
-//                                        PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 2), Coordinate(2, 2)),
-//                                ),
-//                                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 2), Coordinate(2, 2)),
-//                            ),
-//                            PrintScriptToken(TokenType.STRING_TYPE, "int", Coordinate(2, 2), Coordinate(2, 2)),
-//                        ),
-//                        PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 2), Coordinate(2, 2)),
-//                    ),
-//                    PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "multiplication", Coordinate(2, 2), Coordinate(2, 2)),
-//                ),
-//                PrintScriptToken(TokenType.LET, "let", Coordinate(2, 2), Coordinate(2, 2)),
-//            )
-//        val result = formatter.format(node)
-//        assertEquals("let multiplication: int = 2 * 2;" + "\n", result)
-//    }
-//
-//    @Test
-//    fun test005_formatprintln() {
-//        val formatter = Formatter(formatterPath)
-//        val node =
-//            ASTSingleNode(
-//                ASTSingleNode(
-//                    ASTSingleNode(
-//                        ASTSingleNode(
-//                            ASTSingleNode(
-//                                null,
-//                                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 2), Coordinate(2, 2)),
-//                            ),
-//                            PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 2), Coordinate(2, 2)),
-//                        ),
-//                        PrintScriptToken(TokenType.STRING_LITERAL, "'micaela'", Coordinate(2, 2), Coordinate(2, 2)),
-//                    ),
-//                    PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 2), Coordinate(2, 2)),
-//                ),
-//                PrintScriptToken(
-//                    TokenType.PRINT,
-//                    "println",
-//                    Coordinate(2, 2),
-//                    Coordinate(2, 2),
-//                ),
-//            )
-//        val result = formatter.format(node)
-//        assertEquals("\n" + "println( 'micaela' );" + "\n", result)
-//    }
-//
-//    @Test
-//    fun test006_formatAComplexOperation() {
-//        val formatter = Formatter(formatterPath)
-//        val node =
-//            ASTSingleNode(
-//                ASTSingleNode(
-//                    ASTSingleNode(
-//                        ASTSingleNode(
-//                            ASTSingleNode(
-//                                ASTBinaryNode(
-//                                    ASTSingleNode(
-//                                        ASTSingleNode(
-//                                            ASTSingleNode(
-//                                                ASTSingleNode(
-//                                                    ASTSingleNode(
-//                                                        ASTSingleNode(
-//                                                            ASTSingleNode(
-//                                                                null,
-//                                                                PrintScriptToken(
-//                                                                    TokenType.SEMICOLON,
-//                                                                    ";",
-//                                                                    Coordinate(2, 2),
-//                                                                    Coordinate(2, 2),
-//                                                                ),
-//                                                            ),
-//                                                            PrintScriptToken(
-//                                                                TokenType.RIGHT_PAREN,
-//                                                                ")",
-//                                                                Coordinate(2, 2),
-//                                                                Coordinate(2, 2),
-//                                                            ),
-//                                                        ),
-//                                                        PrintScriptToken(
-//                                                            TokenType.STRING_LITERAL,
-//                                                            "'micaela'",
-//                                                            Coordinate(2, 2),
-//                                                            Coordinate(2, 2),
-//                                                        ),
-//                                                    ),
-//                                                    PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 2), Coordinate(2, 2)),
-//                                                ),
-//                                                PrintScriptToken(
-//                                                    TokenType.PRINT,
-//                                                    "println",
-//                                                    Coordinate(2, 2),
-//                                                    Coordinate(2, 2),
-//                                                ),
-//                                            ),
-//                                            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 2), Coordinate(2, 2)),
-//                                        ),
-//                                        PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    ASTSingleNode(
-//                                        null,
-//                                        PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    PrintScriptToken(TokenType.MINUS, "-", Coordinate(2, 2), Coordinate(2, 2)),
-//                                ),
-//                                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 2), Coordinate(2, 2)),
-//                            ),
-//                            PrintScriptToken(TokenType.STRING_TYPE, "int", Coordinate(2, 2), Coordinate(2, 2)),
-//                        ),
-//                        PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 2), Coordinate(2, 2)),
-//                    ),
-//                    PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "subtraction", Coordinate(2, 2), Coordinate(2, 2)),
-//                ),
-//                PrintScriptToken(TokenType.LET, "let", Coordinate(2, 2), Coordinate(2, 2)),
-//            )
-//        val result = formatter.format(node)
-//        assertEquals("let subtraction: int = 2 - 2;" + "\n" + "\n" + "println( 'micaela' );" + "\n", result)
-//    }
-//
-//    @Test
-//    fun test007_formatASimpleMicaelaDeclarationWithOtherSetOfRules() {
-//        val formatter = Formatter(formatterPath02)
-//        val node =
-//            ASTSingleNode(
-//                ASTSingleNode(
-//                    ASTSingleNode(
-//                        ASTSingleNode(
-//                            ASTSingleNode(
-//                                ASTSingleNode(
-//                                    ASTSingleNode(
-//                                        null,
-//                                        PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    PrintScriptToken(TokenType.STRING, "'micaela'", Coordinate(2, 2), Coordinate(2, 2)),
-//                                ),
-//                                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 2), Coordinate(2, 2)),
-//                            ),
-//                            PrintScriptToken(TokenType.STRING_TYPE, "String", Coordinate(2, 2), Coordinate(2, 2)),
-//                        ),
-//                        PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 2), Coordinate(2, 2)),
-//                    ),
-//                    PrintScriptToken(TokenType.VALUE_IDENTIFIER, "name", Coordinate(2, 2), Coordinate(2, 2)),
-//                ),
-//                PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 2), Coordinate(2, 2)),
-//            )
-//        val result = formatter.format(node)
-//        assertEquals("let name:String='micaela';" + "\n", result)
-//    }
-//
-//    @Test
-//    fun test008_formatA2Plus2SumWithOtherSetOfRules() {
-//        val formatter = Formatter(formatterPath02)
-//        val node =
-//            ASTSingleNode(
-//                ASTSingleNode(
-//                    ASTSingleNode(
-//                        ASTSingleNode(
-//                            ASTSingleNode(
-//                                ASTBinaryNode(
-//                                    ASTSingleNode(
-//                                        ASTSingleNode(
-//                                            null,
-//                                            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 2), Coordinate(2, 2)),
-//                                        ),
-//                                        PrintScriptToken(TokenType.NUMBER, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    ASTSingleNode(
-//                                        null,
-//                                        PrintScriptToken(TokenType.NUMBER, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 2), Coordinate(2, 2)),
-//                                ),
-//                                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 2), Coordinate(2, 2)),
-//                            ),
-//                            PrintScriptToken(TokenType.STRING_TYPE, "int", Coordinate(2, 2), Coordinate(2, 2)),
-//                        ),
-//                        PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 2), Coordinate(2, 2)),
-//                    ),
-//                    PrintScriptToken(TokenType.VALUE_IDENTIFIER, "sum", Coordinate(2, 2), Coordinate(2, 2)),
-//                ),
-//                PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 2), Coordinate(2, 2)),
-//            )
-//        val result = formatter.format(node)
-//        assertEquals("let sum:int=2 + 2;" + "\n", result)
-//    }
-//
-//    @Test
-//    fun test009_formatprintlnWithOtherSetOfRules() {
-//        val formatter = Formatter(formatterPath02)
-//        val node =
-//            ASTSingleNode(
-//                ASTSingleNode(
-//                    ASTSingleNode(
-//                        ASTSingleNode(
-//                            ASTSingleNode(
-//                                null,
-//                                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 2), Coordinate(2, 2)),
-//                            ),
-//                            PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 2), Coordinate(2, 2)),
-//                        ),
-//                        PrintScriptToken(TokenType.STRING_TYPE, "'micaela'", Coordinate(2, 2), Coordinate(2, 2)),
-//                    ),
-//                    PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 2), Coordinate(2, 2)),
-//                ),
-//                PrintScriptToken(
-//                    TokenType.PRINT,
-//                    "println",
-//                    Coordinate(2, 2),
-//                    Coordinate(2, 2),
-//                ),
-//            )
-//        val result = formatter.format(node)
-//        assertEquals("\n" + "\n" + "println( 'micaela' );" + "\n", result)
-//    }
-//
-//    @Test
-//    fun test010_formatAComplexOperationWithOtherSetOfRules() {
-//        val formatter = Formatter(formatterPath02)
-//        val node =
-//            ASTSingleNode(
-//                ASTSingleNode(
-//                    ASTSingleNode(
-//                        ASTSingleNode(
-//                            ASTSingleNode(
-//                                ASTBinaryNode(
-//                                    ASTSingleNode(
-//                                        ASTSingleNode(
-//                                            ASTSingleNode(
-//                                                ASTSingleNode(
-//                                                    ASTSingleNode(
-//                                                        ASTSingleNode(
-//                                                            ASTSingleNode(
-//                                                                null,
-//                                                                PrintScriptToken(
-//                                                                    TokenType.SEMICOLON,
-//                                                                    ";",
-//                                                                    Coordinate(2, 2),
-//                                                                    Coordinate(2, 2),
-//                                                                ),
-//                                                            ),
-//                                                            PrintScriptToken(
-//                                                                TokenType.RIGHT_PAREN,
-//                                                                ")",
-//                                                                Coordinate(2, 2),
-//                                                                Coordinate(2, 2),
-//                                                            ),
-//                                                        ),
-//                                                        PrintScriptToken(TokenType.STRING, "'micaela'", Coordinate(2, 2), Coordinate(2, 2)),
-//                                                    ),
-//                                                    PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 2), Coordinate(2, 2)),
-//                                                ),
-//                                                PrintScriptToken(
-//                                                    TokenType.PRINT,
-//                                                    "println",
-//                                                    Coordinate(2, 2),
-//                                                    Coordinate(2, 2),
-//                                                ),
-//                                            ),
-//                                            PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 2), Coordinate(2, 2)),
-//                                        ),
-//                                        PrintScriptToken(TokenType.NUMBER, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    ASTSingleNode(
-//                                        null,
-//                                        PrintScriptToken(TokenType.NUMBER, "2", Coordinate(2, 2), Coordinate(2, 2)),
-//                                    ),
-//                                    PrintScriptToken(TokenType.MINUS, "-", Coordinate(2, 2), Coordinate(2, 2)),
-//                                ),
-//                                PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 2), Coordinate(2, 2)),
-//                            ),
-//                            PrintScriptToken(TokenType.STRING_TYPE, "int", Coordinate(2, 2), Coordinate(2, 2)),
-//                        ),
-//                        PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 2), Coordinate(2, 2)),
-//                    ),
-//                    PrintScriptToken(TokenType.VALUE_IDENTIFIER, "subtraction", Coordinate(2, 2), Coordinate(2, 2)),
-//                ),
-//                PrintScriptToken(TokenType.VARIABLE_KEYWORD, "let", Coordinate(2, 2), Coordinate(2, 2)),
-//            )
-//        val result = formatter.format(node)
-//        assertEquals("let subtraction:int=2 - 2;" + "\n" + "\n" + "\n" + "println( 'micaela' );" + "\n", result)
-//    }
+    @Test
+    fun test002_formatASimpleMicaelaDeclarationWithOtherSetOfRules() {
+        val string = "let name:string = 'micaela';"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(ast)
+        assertEquals("let name:string=\"micaela\";" + "\n", result)
+    }
+
+    @Test
+    fun test003_formatASimpleBooleanDeclaration() {
+        val string = "let isTrue:boolean = true;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(ast)
+        assertEquals("let isTrue: boolean = true;" + "\n", result)
+    }
+
+    @Test
+    fun test004_formatASimpleBooleanDeclarationWithOtherSetOfRules() {
+        val string = "let isTrue:boolean = true;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(ast)
+        assertEquals("let isTrue:boolean=true;" + "\n", result)
+    }
+
+    @Test
+    fun test005_formatASimpleNumberDeclaration() {
+        val string = "let num:number = 2;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(ast)
+        assertEquals("let num: number = 2;" + "\n", result)
+    }
+
+    @Test
+    fun test006_formatASimpleNumberDeclarationWithOtherSetOfRules() {
+        val string = "let num:number = 2;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(ast)
+        assertEquals("let num:number=2;" + "\n", result)
+    }
+
+    @Test
+    fun test007_formatASimpleSum() {
+        val string = "let sum:number = 2 + 2;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(ast)
+        assertEquals("let sum: number = 2 + 2;" + "\n", result)
+    }
+
+    @Test
+    fun test008_formatASimpleSumWithOtherSetOfRules() {
+        val string = "let sum:number = 2 + 2;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(ast)
+        assertEquals("let sum:number=2 + 2;" + "\n", result)
+    }
+
+    @Test
+    fun test009_formatASimpleSubtraction() {
+        val string = "let subtraction:number = 2 - 2;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(ast)
+        assertEquals("let subtraction: number = 2 - 2;" + "\n", result)
+    }
+
+    @Test
+    fun test010_formatASimpleSubtractionWithOtherSetOfRules() {
+        val string = "let subtraction:number = 2 - 2;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(ast)
+        assertEquals("let subtraction:number=2 - 2;" + "\n", result)
+    }
+
+    @Test
+    fun test011_formatASimpleMultiplication() {
+        val string = "let multiplication:number = 2 * 2;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(ast)
+        assertEquals("let multiplication: number = 2 * 2;" + "\n", result)
+    }
+
+    @Test
+    fun test012_formatASimpleMultiplicationWithOtherSetOfRules() {
+        val string = "let multiplication:number = 2 * 2;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(ast)
+        assertEquals("let multiplication:number=2 * 2;" + "\n", result)
+    }
+
+    @Test
+    fun test013_formatASimpleDivision() {
+        val string = "let division:number = 2 / 2;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(ast)
+        assertEquals("let division: number = 2 / 2;" + "\n", result)
+    }
+
+    @Test
+    fun test014_formatASimpleDivisionWithOtherSetOfRules() {
+        val string = "let division:number = 2 / 2;"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(ast)
+        assertEquals("let division:number=2 / 2;" + "\n", result)
+    }
+
+    @Test
+    fun test015_formatAConstDeclaration() {
+        val string = "const name:string = 'micaela';"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(ast)
+        assertEquals("const name: string = \"micaela\";" + "\n", result)
+    }
+
+    @Test
+    fun test016_formatAConstDeclarationWithOtherSetOfRules() {
+        val string = "const name:string = 'micaela';"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(ast)
+        assertEquals("const name:string=\"micaela\";" + "\n", result)
+    }
+
+    @Test
+    fun test017_formatASimplePrintDeclaration() {
+        val string = "println(1);"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(ast)
+        assertEquals("\n" + "println(1);" + "\n", result)
+    }
+
+    @Test
+    fun test018_formatASimplePrintDeclarationWithOtherSetOfRules() {
+        val string = "println(1);"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(ast)
+        assertEquals("\n" + "\n" + "println(1);" + "\n", result)
+    }
+
+    @Test
+    fun test019_formatASimpleAssignment() {
+        val string = "name = 'micaela';"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(ast)
+        assertEquals("name = \"micaela\";" + "\n", result)
+    }
+
+    @Test
+    fun test020_formatASimpleAssignmentWithOtherSetOfRules() {
+        val string = "name = 'micaela';"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(ast)
+        assertEquals("name=\"micaela\";" + "\n", result)
+    }
+
+    @Test
+    fun test021_formatASimpleReadInputFunction() {
+        val string = "condition = readInput('hello');"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(ast)
+        assertEquals("condition = readInput(\"hello\");" + "\n", result)
+    }
+
+    @Test
+    fun test022_formatASimpleReadInputFunctionWithOtherSetOfRules() {
+        val string = "condition = readInput('hello');"
+        val ast = getTree(string)
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(ast)
+        assertEquals("condition=readInput(\"hello\");" + "\n", result)
+    }
+
+    @Test
+    fun test023_formatAnIfOperation() {
+        val node =
+            IfNode(
+                LiteralNode("true", TokenType.BOOLEAN_LITERAL),
+                AssignmentNode("name", LiteralNode("micaela", TokenType.STRING_LITERAL)),
+                PrintNode(LiteralNode("False", TokenType.BOOLEAN_LITERAL)),
+            )
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(node)
+        assertEquals("if (true) {\n    name = \"micaela\";\n} else {\n    println(False);\n}", result)
+    }
+
+    @Test
+    fun test024_formatAnIfOperationWithOtherSetOfRules() {
+        val node =
+            IfNode(
+                LiteralNode("true", TokenType.BOOLEAN_LITERAL),
+                AssignmentNode("name", LiteralNode("micaela", TokenType.STRING_LITERAL)),
+                PrintNode(LiteralNode("False", TokenType.BOOLEAN_LITERAL)),
+            )
+        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
+        val result = formatter.format(node)
+        assertEquals("if (true) {\nname=\"micaela\";\n} else {\nprintln(False);\n}", result)
+    }
 }
