@@ -57,6 +57,7 @@ koverReport {
                     packages("ast")
                     packages("token")
                     packages("utils")
+                    packages("position")
                 }
 
             }

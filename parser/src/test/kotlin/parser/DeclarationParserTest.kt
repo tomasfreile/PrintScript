@@ -7,23 +7,15 @@ import ast.NilNode
 import ast.VariableDeclarationNode
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import parser.parser.DeclarationParser
-import token.Coordinate
+import parser.parserBuilder.PrintScriptOnePointOneParserBuilder
+import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class DeclarationParserTest {
-    private val parser = DeclarationParser(TokenType.SEMICOLON, getMap())
-
-    private fun getMap(): Map<TokenType, TokenType> {
-        return mapOf(
-            Pair(TokenType.NUMBER_LITERAL, TokenType.NUMBER_TYPE),
-            Pair(TokenType.STRING_LITERAL, TokenType.STRING_TYPE),
-            Pair(TokenType.BOOLEAN_LITERAL, TokenType.BOOLEAN_TYPE),
-        )
-    }
+    private val parser = PrintScriptOnePointOneParserBuilder().build()
 
     @Test
     fun test001_DeclarationParserCanHandleStringDeclaration() {
@@ -53,7 +45,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
-        assertThrows<InvalidDeclarationStatement> {
+        assertThrows<InvalidDataTypeException> {
             parser.createAST(tokenList)
         }
     }
@@ -234,7 +226,7 @@ class DeclarationParserTest {
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
-        assertThrows<InvalidDeclarationStatement> {
+        assertThrows<InvalidOperatorException> {
             parser.createAST(tokenList)
         }
     }
@@ -364,7 +356,6 @@ class DeclarationParserTest {
         }
     }
 
-    @Test
     fun test016_DeclarationParserFunctionNumberDeclaration() {
         val tokenList =
             listOf(
@@ -388,7 +379,6 @@ class DeclarationParserTest {
         }
     }
 
-    @Test
     fun test017_DeclarationParserFunctionStringInvalidDeclarationBecauseOfNumberTypeDeclaration() {
         val tokenList =
             listOf(

@@ -2,21 +2,20 @@ package parser.parser
 
 import ast.AssignmentNode
 import ast.AstNode
-import parser.InvalidSyntaxException
-import parser.analysis.semantic.OperatorIsFormatted
-import parser.analysis.sintactic.HasSentenceSeparator
-import parser.analysis.sintactic.IsArithmeticExpression
-import parser.analysis.sintactic.IsBooleanExpression
-import parser.analysis.sintactic.IsFunctionExpression
-import parser.analysis.sintactic.IsStringExpression
-import parser.nodeBuilder.ArithmeticNodeBuilder
-import parser.nodeBuilder.BooleanNodeBuilder
-import parser.nodeBuilder.FunctionNodeBuilder
-import parser.nodeBuilder.StringNodeBuilder
+import parser.InvalidAssignationException
+import parser.analysis.semantic.SemanticRule
+import parser.analysis.syntax.SyntaxRule
+import parser.analysis.syntax.common.HasSentenceSeparator
+import parser.nodeBuilder.NodeBuilder
 import token.Token
 import token.TokenType
 
-class AssignationParser(private val separator: TokenType) : Parser {
+class AssignationParser(
+    private val separator: TokenType,
+    private val expressionsSyntax: Map<TokenType, SyntaxRule>,
+    private val expressionsSemantic: Map<TokenType, SemanticRule>,
+    private val nodeBuilders: Map<TokenType, NodeBuilder>,
+) : Parser {
     override fun canHandle(tokenList: List<Token>): Boolean {
         return when {
             preCondition(tokenList) -> isAssignation(tokenList)
@@ -24,14 +23,42 @@ class AssignationParser(private val separator: TokenType) : Parser {
         }
     }
 
-    override fun createAST(tokenList: List<Token>): AstNode {
-        return when {
-            isFunctionExpression(tokenList) -> createFunctionNode(tokenList)
-            isNumberExpression(tokenList) -> createArithmeticAst(tokenList)
-            isStringExpression(tokenList) -> createStringAst(tokenList)
-            isBooleanExpression(tokenList) -> createBooleanAst(tokenList)
-            else -> throw InvalidSyntaxException("Invalid Syntax Assignation on line: " + tokenList.first().start.row)
+    override fun createAST(tokenList: List<Token>): AstNode? {
+        val content = getContent(tokenList)
+        for ((type, _) in expressionsSyntax) {
+            when {
+                isExpressionValid(type, content) -> {
+                    if (isSemanticValid(type, content)) {
+                        return buildNode(content, type)?.let {
+                            createAssignationAst(
+                                tokenList,
+                                it,
+                            )
+                        }
+                    }
+                }
+                else -> continue
+            }
         }
+        throw InvalidAssignationException(
+            "Invalid assignation on line: " + tokenList.first().start.row,
+        )
+    }
+
+    private fun isExpressionValid(
+        tokenType: TokenType,
+        content: List<Token>,
+    ): Boolean {
+        val syntax = expressionsSyntax[tokenType]
+        return syntax != null && syntax.checkSyntax(content)
+    }
+
+    private fun isSemanticValid(
+        tokenType: TokenType,
+        content: List<Token>,
+    ): Boolean {
+        val semantic = expressionsSemantic[tokenType]
+        return semantic != null && semantic.checkSemantic(content)
     }
 
     private fun preCondition(tokenList: List<Token>): Boolean {
@@ -46,57 +73,12 @@ class AssignationParser(private val separator: TokenType) : Parser {
         return points == 2
     }
 
-    private fun isNumberExpression(tokenList: List<Token>): Boolean {
-        val expression = getExpression(tokenList)
-        val formatResult = OperatorIsFormatted().checkSemantic(expression)
-        val arithmeticResult = IsArithmeticExpression().checkSyntax(expression)
-        return when {
-            formatResult && arithmeticResult -> true
-            else -> false
-        }
-    }
-
-    private fun isStringExpression(tokenList: List<Token>): Boolean {
-        val expression = getExpression(tokenList)
-        return IsStringExpression().checkSyntax(expression)
-    }
-
-    private fun isBooleanExpression(tokenList: List<Token>): Boolean {
-        val expression = getExpression(tokenList)
-        return IsBooleanExpression().checkSyntax(expression)
-    }
-
-    private fun isFunctionExpression(tokenList: List<Token>): Boolean {
-        val expression = getExpression(tokenList)
-        return IsFunctionExpression().checkSyntax(expression)
-    }
-
-    private fun createArithmeticAst(tokenList: List<Token>): AstNode {
-        return createAssignationAst(
-            tokenList,
-            ArithmeticNodeBuilder().build(getExpression(tokenList)),
-        )
-    }
-
-    private fun createStringAst(tokenList: List<Token>): AstNode {
-        return createAssignationAst(
-            tokenList,
-            StringNodeBuilder().build(getExpression(tokenList)),
-        )
-    }
-
-    private fun createBooleanAst(tokenList: List<Token>): AstNode {
-        return createAssignationAst(
-            tokenList,
-            BooleanNodeBuilder().build(getExpression(tokenList)),
-        )
-    }
-
-    private fun createFunctionNode(tokenList: List<Token>): AstNode {
-        return createAssignationAst(
-            tokenList,
-            FunctionNodeBuilder().build(getExpression(tokenList)),
-        )
+    private fun buildNode(
+        expression: List<Token>,
+        type: TokenType,
+    ): AstNode? {
+        val builder = nodeBuilders[type]
+        return builder?.build(expression)
     }
 
     private fun createAssignationAst(
@@ -106,10 +88,11 @@ class AssignationParser(private val separator: TokenType) : Parser {
         return AssignmentNode(
             tokenList[0].value,
             node,
+            node.position,
         )
     }
 
-    private fun getExpression(tokenList: List<Token>): List<Token> {
+    private fun getContent(tokenList: List<Token>): List<Token> {
         return tokenList.subList(2, tokenList.size - 1)
     }
 }

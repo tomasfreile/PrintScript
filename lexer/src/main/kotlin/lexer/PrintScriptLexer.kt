@@ -1,6 +1,6 @@
 package lexer
 
-import token.Coordinate
+import position.Coordinate
 import token.PrintScriptToken
 import token.Token
 import token.TokenType

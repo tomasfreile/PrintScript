@@ -11,7 +11,11 @@ class PrintShouldNotContainExpressions : Rule {
             is PrintNode -> {
                 when (node.expression) {
                     is LiteralNode -> StaticCodeAnalyzerResult.Ok
-                    else -> StaticCodeAnalyzerResult.Error("Print statement should not contain expressions")
+                    else ->
+                        StaticCodeAnalyzerResult.Error(
+                            "Print statement should not contain expressions. " +
+                                "Position: ${node.position.start.string() + " - " + node.position.end.string()}",
+                        )
                 }
             }
 

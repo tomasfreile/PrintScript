@@ -5,6 +5,8 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
+import formatter.Formatter
+import formatter.PrintScriptFormatter
 import interpreter.PrintScriptInterpreter
 import interpreter.builder.InterpreterBuilder
 import interpreter.result.InterpreterResult
@@ -14,13 +16,9 @@ import interpreter.variable.Variable
 import lexer.Lexer
 import lexer.factory.LexerBuilder
 import parser.PrintScriptParser
-import parser.parser.AssignationParser
-import parser.parser.DeclarationParser
-import parser.parser.Parser
-import parser.parser.PrintParser
+import parser.parserBuilder.PrintScriptOnePointZeroParserBuilder
 import sca.StaticCodeAnalyzer
 import sca.StaticCodeAnalyzerImpl
-import token.TokenType
 import java.io.BufferedReader
 import java.io.File
 
@@ -32,38 +30,48 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     private val config by option("-c", help = "config file").file(mustExist = true)
 
     val lexer: Lexer = LexerBuilder().build("1.0")
-    val parser: PrintScriptParser = PrintScriptParser(getParsers())
+    val parser: PrintScriptParser = PrintScriptOnePointZeroParserBuilder().build()
     var interpreter: PrintScriptInterpreter = InterpreterBuilder().build()
     val symbolTable: MutableMap<Variable, Any> = mutableMapOf()
 
     override fun run() {
         val sentencesList = getSentenceList()
-        when (operation) {
-            "execute" -> {
-                executeCode(sentencesList)
-            }
+        try {
+            when (operation) {
+                "execute" -> {
+                    executeCode(sentencesList)
+                }
 
-            "format" -> {
-                formatCode(sentencesList)
-            }
+                "format" -> {
+                    formatCode(sentencesList)
+                }
 
-            "analyze" -> {
-                val sca: StaticCodeAnalyzer =
-                    StaticCodeAnalyzerImpl(config?.path ?: throw NullPointerException("Expected config file path for sca."))
-                // TODO
-            }
+                "analyze" -> {
+                    analyzeCode(sentencesList)
+                }
 
-            "validate" -> {
-                // TODO
+                "validate" -> {
+                    validateCode(sentencesList)
+                }
             }
+        } catch (ex: Exception) {
+            println(ex.message)
         }
+    }
+
+    private fun validateCode(sentencesList: List<String>) {
+        for (sentence in sentencesList) {
+            val tokenList = lexer.lex(sentence)
+            val tree = parser.createAST(tokenList)
+        }
+        println("Validation successful!")
     }
 
     private fun executeCode(sentencesList: List<String>) {
         var result: InterpreterResult = Result("")
         for (sentence in sentencesList) {
             val tokenList = lexer.lex(sentence)
-            val tree = parser.parse(tokenList)
+            val tree = parser.createAST(tokenList)
             result = interpreter.interpret(tree, symbolTable) as InterpreterResult
         }
         when (result) {
@@ -73,18 +81,32 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     }
 
     private fun formatCode(sentencesList: List<String>) {
-//        val formatter: Formatter = Formatter(config?.path ?: throw NullPointerException("Expected config file path for formatter."))
-//        val file = File(source.path)
-//        var text = ""
-//
-//        for (sentence in sentencesList) {
-//            val tokenList = lexer.lex(sentence)
-//            val tree = parser.parse(tokenList)
-//            val line = formatter.format(tree)
-//            text += line
-//        }
-//        file.writeText(text)
-        throw NotImplementedError("Formater needs to be refactored to comply with new-ast.")
+        val formatter: Formatter =
+            PrintScriptFormatter(config?.path ?: throw NullPointerException("Expected config file path for formatter."))
+        val file = File(source.path)
+        var text = ""
+
+        for (sentence in sentencesList) {
+            val tokenList = lexer.lex(sentence)
+            val tree = parser.createAST(tokenList)
+            val line = tree?.let { formatter.format(it) }
+            text += line
+        }
+        file.writeText(text)
+    }
+
+    private fun analyzeCode(sentencesList: List<String>) {
+        val sca: StaticCodeAnalyzer =
+            StaticCodeAnalyzerImpl(config?.path ?: throw NullPointerException("Expected config file path for sca."))
+        var errorList: List<String> = listOf()
+        for (sentence in sentencesList) {
+            val tokenList = lexer.lex(sentence)
+            val tree = parser.createAST(tokenList)
+            errorList = errorList.plus(sca.analyze(tree ?: throw NullPointerException("Null ast tree")))
+        }
+        for (error in errorList) {
+            println(error)
+        }
     }
 
     private fun getSentenceList(): List<String> {
@@ -100,22 +122,6 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
             }
         }
         return sentencesList
-    }
-
-    private fun getParsers(): List<Parser> {
-        return listOf(
-            DeclarationParser(TokenType.SEMICOLON, getMap()),
-            PrintParser(TokenType.SEMICOLON),
-            AssignationParser(TokenType.SEMICOLON),
-        )
-    }
-
-    private fun getMap(): Map<TokenType, TokenType> {
-        return mapOf(
-            Pair(TokenType.NUMBER_LITERAL, TokenType.NUMBER_TYPE),
-            Pair(TokenType.STRING_LITERAL, TokenType.STRING_TYPE),
-            Pair(TokenType.BOOLEAN_LITERAL, TokenType.BOOLEAN_TYPE),
-        )
     }
 }
 
