@@ -8,7 +8,7 @@ import ast.VariableDeclarationNode
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import parser.parserBuilder.PrintScriptOnePointOneParserBuilder
-import token.Coordinate
+import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
 import kotlin.test.assertEquals

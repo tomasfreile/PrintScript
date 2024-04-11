@@ -87,6 +87,6 @@ class PrintParser(
     }
 
     private fun createPrintAst(node: AstNode): AstNode {
-        return PrintNode(node)
+        return PrintNode(node, node.position)
     }
 }

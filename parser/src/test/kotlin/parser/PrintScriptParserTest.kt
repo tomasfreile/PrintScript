@@ -1,13 +1,11 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package parser
 
-import ast.AssignmentNode
-import ast.BinaryOperationNode
-import ast.LiteralNode
-import ast.PrintNode
-import ast.VariableDeclarationNode
+import ast.*
 import org.junit.jupiter.api.Test
 import parser.parserBuilder.PrintScriptOnePointZeroParserBuilder
-import token.Coordinate
+import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
 import kotlin.test.assertEquals

@@ -19,7 +19,7 @@ import parser.nodeBuilder.BooleanNodeBuilder
 import parser.nodeBuilder.NodeBuilder
 import parser.nodeBuilder.StringNodeBuilder
 import parser.parser.AssignationParser
-import token.Coordinate
+import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
 import kotlin.test.assertEquals

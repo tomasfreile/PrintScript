@@ -4,7 +4,7 @@ import ast.ASTBinaryNode
 import ast.ASTSingleNode
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import token.Coordinate
+import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
 

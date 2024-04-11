@@ -2,6 +2,7 @@ package parser.nodeBuilder
 
 import ast.AstNode
 import ast.BinaryOperationNode
+import position.TokenPosition
 import token.Token
 import token.TokenType
 
@@ -25,6 +26,7 @@ class StringNodeBuilder : NodeBuilder {
             build(tokenList.subList(0, index)),
             build(tokenList.subList(index + 1, tokenList.size)),
             tokenList[index].type,
+            TokenPosition(tokenList.first().start, tokenList.last().end),
         )
     }
 

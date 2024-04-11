@@ -5,6 +5,8 @@ import ast.LiteralNode
 import ast.PrintNode
 import ast.VariableDeclarationNode
 import org.junit.jupiter.api.Test
+import position.Coordinate
+import position.TokenPosition
 import token.TokenType
 
 class ScaTest {
@@ -18,7 +20,12 @@ class ScaTest {
     fun shouldReturnEmptyWhenPrintExpressionsAreDisabledAndNoPrintExpressionsArePresent() {
         val ast =
             PrintNode(
-                LiteralNode("1", TokenType.NUMBER_LITERAL),
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(noPrintExpressionsAndCamel.analyze(ast).isEmpty())
     }
@@ -28,10 +35,12 @@ class ScaTest {
         val ast =
             PrintNode(
                 BinaryOperationNode(
-                    LiteralNode("1", TokenType.NUMBER_LITERAL),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL),
+                    LiteralNode("1", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.PLUS,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
+                TokenPosition(Coordinate(0, 5), Coordinate(0, 10)),
             )
         assert(noPrintExpressionsAndCamel.analyze(ast).isNotEmpty())
     }
@@ -40,7 +49,12 @@ class ScaTest {
     fun shouldReturnEmptyWhenPrintExpressionsAreEnabledAndNoPrintExpressionsArePresent() {
         val ast =
             PrintNode(
-                LiteralNode("1", TokenType.NUMBER_LITERAL),
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(printExpressionsAndSnake.analyze(ast).isEmpty())
     }
@@ -50,10 +64,20 @@ class ScaTest {
         val ast =
             PrintNode(
                 BinaryOperationNode(
-                    LiteralNode("1", TokenType.NUMBER_LITERAL),
-                    LiteralNode("hola", TokenType.STRING_LITERAL),
+                    LiteralNode(
+                        "1",
+                        TokenType.NUMBER_LITERAL,
+                        TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                    ),
+                    LiteralNode(
+                        "hola",
+                        TokenType.STRING_LITERAL,
+                        TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                    ),
                     TokenType.PLUS,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(printExpressionsAndSnake.analyze(ast).isEmpty())
     }
@@ -65,7 +89,12 @@ class ScaTest {
                 TokenType.LET,
                 "camelCase",
                 TokenType.NUMBER_TYPE,
-                LiteralNode("1", TokenType.NUMBER_LITERAL),
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 1), Coordinate(0, 6)),
             )
         assert(noPrintExpressionsAndCamel.analyze(ast).isEmpty())
     }
@@ -77,7 +106,12 @@ class ScaTest {
                 TokenType.LET,
                 "snake_case",
                 TokenType.NUMBER_TYPE,
-                LiteralNode("1", TokenType.NUMBER_LITERAL),
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 1), Coordinate(0, 5)),
             )
         assert(noPrintExpressionsAndCamel.analyze(ast).isNotEmpty())
     }
@@ -89,7 +123,12 @@ class ScaTest {
                 TokenType.LET,
                 "snake_case",
                 TokenType.NUMBER_TYPE,
-                LiteralNode("1", TokenType.NUMBER_LITERAL),
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(printExpressionsAndSnake.analyze(ast).isEmpty())
     }
@@ -101,7 +140,12 @@ class ScaTest {
                 TokenType.LET,
                 "camelCase",
                 TokenType.NUMBER_TYPE,
-                LiteralNode("1", TokenType.NUMBER_LITERAL),
+                LiteralNode(
+                    "1",
+                    TokenType.NUMBER_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(printExpressionsAndSnake.analyze(ast).isNotEmpty())
     }

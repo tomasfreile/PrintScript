@@ -88,6 +88,7 @@ class AssignationParser(
         return AssignmentNode(
             tokenList[0].value,
             node,
+            node.position,
         )
     }
 

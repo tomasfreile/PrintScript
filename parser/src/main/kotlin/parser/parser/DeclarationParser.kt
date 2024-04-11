@@ -142,6 +142,7 @@ class DeclarationParser(
             tokenList[1].value,
             tokenList[3].type,
             node,
+            node.position,
         )
     }
 
