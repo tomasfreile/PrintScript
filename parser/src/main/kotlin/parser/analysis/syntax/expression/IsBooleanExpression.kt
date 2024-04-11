@@ -1,4 +1,4 @@
-package parser.analysis.sintactic
+package parser.analysis.syntax.expression
 
 import token.Token
 import token.TokenType
@@ -6,11 +6,11 @@ import token.TokenType
 /*
     By the moment Boolean expression has no operators
  */
-class IsBooleanExpression : SyntaxRule {
-    override fun checkSyntax(tokenList: List<Token>): Boolean {
-        for (token in tokenList) {
+class IsBooleanExpression : Expression {
+    override fun isExpression(expression: List<Token>): Boolean {
+        for (token in expression) {
             when {
-                isLiteral(token) || ignore(token) -> continue
+                isLiteral(token) -> continue
                 else -> return false
             }
         }
@@ -20,13 +20,6 @@ class IsBooleanExpression : SyntaxRule {
     private fun isLiteral(token: Token): Boolean {
         return when (token.type) {
             TokenType.BOOLEAN_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
-            else -> false
-        }
-    }
-
-    private fun ignore(token: Token): Boolean {
-        return when (token.type) {
-            TokenType.SEMICOLON -> true
             else -> false
         }
     }

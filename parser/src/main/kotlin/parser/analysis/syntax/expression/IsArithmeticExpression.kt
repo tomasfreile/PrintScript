@@ -1,13 +1,14 @@
-package parser.analysis.sintactic
+package parser.analysis.syntax.expression
 
 import parser.InvalidSyntaxException
+import parser.analysis.syntax.rule.HasPairOfParen
 import token.Token
 import token.TokenType
 
-class IsArithmeticExpression : SyntaxRule {
-    override fun checkSyntax(tokenList: List<Token>): Boolean {
+class IsArithmeticExpression : Expression {
+    override fun isExpression(expression: List<Token>): Boolean {
         var index = 0
-        var tokenCopy = tokenList
+        var tokenCopy = expression
         while (condition(tokenCopy, index)) {
             val token = tokenCopy[index]
             index +=
@@ -48,14 +49,16 @@ class IsArithmeticExpression : SyntaxRule {
     private fun skipParenContent(tokenList: List<Token>): List<Token> {
         return when {
             isParenContentValid(tokenList) -> tokenList.subList(getRightParenIndex(tokenList) + 1, tokenList.size)
-            else -> throw InvalidSyntaxException("Invalid Syntax Exception on line: " + tokenList.first().start.row)
+            else -> throw InvalidSyntaxException(
+                "Invalid data type on coord: ( " + tokenList.first().start.row + "; " + tokenList.first().start.column + ")",
+            )
         }
     }
 
     private fun isParenContentValid(tokenList: List<Token>): Boolean {
         return if (isParenValid(tokenList)) {
             val parenContent = tokenList.subList(1, getRightParenIndex(tokenList))
-            checkSyntax(parenContent)
+            isExpression(parenContent)
         } else {
             false
         }
@@ -63,7 +66,7 @@ class IsArithmeticExpression : SyntaxRule {
 
     private fun ignore(token: Token): Boolean {
         return when (token.type) {
-            TokenType.RIGHT_PAREN, TokenType.SEMICOLON -> true
+            TokenType.RIGHT_PAREN -> true
             else -> false
         }
     }

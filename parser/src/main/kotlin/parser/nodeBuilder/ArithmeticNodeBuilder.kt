@@ -3,8 +3,8 @@ package parser.nodeBuilder
 import ast.AstNode
 import ast.BinaryOperationNode
 import parser.InvalidSyntaxException
-import parser.analysis.sintactic.HasOperationAfterParen
-import parser.analysis.sintactic.HasPairOfParen
+import parser.analysis.syntax.rule.HasOperationAfterParen
+import parser.analysis.syntax.rule.HasPairOfParen
 import token.Token
 import token.TokenType
 
