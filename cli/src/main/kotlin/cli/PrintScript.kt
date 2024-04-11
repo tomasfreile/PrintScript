@@ -14,13 +14,9 @@ import interpreter.variable.Variable
 import lexer.Lexer
 import lexer.factory.LexerBuilder
 import parser.PrintScriptParser
-import parser.parser.AssignationParser
-import parser.parser.DeclarationParser
-import parser.parser.Parser
-import parser.parser.PrintParser
+import parser.parserBuilder.PrintScriptOnePointZeroParserBuilder
 import sca.StaticCodeAnalyzer
 import sca.StaticCodeAnalyzerImpl
-import token.TokenType
 import java.io.BufferedReader
 import java.io.File
 
@@ -32,7 +28,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     private val config by option("-c", help = "config file").file(mustExist = true)
 
     val lexer: Lexer = LexerBuilder().build("1.0")
-    val parser: PrintScriptParser = PrintScriptParser(getParsers())
+    val parser: PrintScriptParser = PrintScriptOnePointZeroParserBuilder().build()
     var interpreter: PrintScriptInterpreter = InterpreterBuilder().build()
     val symbolTable: MutableMap<Variable, Any> = mutableMapOf()
 
@@ -64,7 +60,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     private fun validateCode(sentencesList: List<String>) {
         for (sentence in sentencesList) {
             val tokenList = lexer.lex(sentence)
-            val tree = parser.parse(tokenList)
+            val tree = parser.createAST(tokenList)
         }
         println("Validation successful!")
     }
@@ -73,7 +69,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
         var result: InterpreterResult = Result("")
         for (sentence in sentencesList) {
             val tokenList = lexer.lex(sentence)
-            val tree = parser.parse(tokenList)
+            val tree = parser.createAST(tokenList)
             result = interpreter.interpret(tree, symbolTable) as InterpreterResult
         }
         when (result) {
@@ -103,8 +99,8 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
         var errorList: List<String> = listOf()
         for (sentence in sentencesList) {
             val tokenList = lexer.lex(sentence)
-            val tree = parser.parse(tokenList)
-            errorList = errorList.plus(sca.analyze(tree))
+            val tree = parser.createAST(tokenList)
+            errorList = errorList.plus(sca.analyze(tree ?: throw NullPointerException("Null ast tree")))
         }
         for (error in errorList) {
             println(error)
@@ -124,22 +120,6 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
             }
         }
         return sentencesList
-    }
-
-    private fun getParsers(): List<Parser> {
-        return listOf(
-            DeclarationParser(TokenType.SEMICOLON, getMap()),
-            PrintParser(TokenType.SEMICOLON),
-            AssignationParser(TokenType.SEMICOLON),
-        )
-    }
-
-    private fun getMap(): Map<TokenType, TokenType> {
-        return mapOf(
-            Pair(TokenType.NUMBER_LITERAL, TokenType.NUMBER_TYPE),
-            Pair(TokenType.STRING_LITERAL, TokenType.STRING_TYPE),
-            Pair(TokenType.BOOLEAN_LITERAL, TokenType.BOOLEAN_TYPE),
-        )
     }
 }
 
