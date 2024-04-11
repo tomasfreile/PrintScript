@@ -1,5 +1,7 @@
 package token
 
+import position.Coordinate
+
 class PrintScriptToken(
     override val type: TokenType,
     override val value: String,

@@ -3,8 +3,9 @@ package parser.nodeBuilder
 import ast.AstNode
 import ast.BinaryOperationNode
 import parser.InvalidSyntaxException
-import parser.analysis.sintactic.HasOperationAfterParen
-import parser.analysis.sintactic.HasPairOfParen
+import parser.analysis.syntax.common.HasOperationAfterParen
+import parser.analysis.syntax.common.HasPairOfParen
+import position.TokenPosition
 import token.Token
 import token.TokenType
 
@@ -26,6 +27,7 @@ class ArithmeticNodeBuilder : NodeBuilder {
                 build(tokenList.subList(1, rightParenIndex)),
                 build(tokenList.subList(rightParenIndex + 2, tokenList.size)),
                 tokenList[rightParenIndex + 1].type,
+                TokenPosition(tokenList.first().start, tokenList.last().end),
             )
         } else {
             build(tokenList.subList(1, rightParenIndex))
@@ -44,6 +46,7 @@ class ArithmeticNodeBuilder : NodeBuilder {
             build(tokenList.subList(0, opIndex)),
             build(tokenList.subList(opIndex + 1, tokenList.size)),
             tokenList[opIndex].type,
+            TokenPosition(tokenList.first().start, tokenList.last().end),
         )
     }
 

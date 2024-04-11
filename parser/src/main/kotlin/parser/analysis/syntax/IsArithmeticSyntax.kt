@@ -1,10 +1,11 @@
-package parser.analysis.sintactic
+package parser.analysis.syntax
 
 import parser.InvalidSyntaxException
+import parser.analysis.syntax.common.HasPairOfParen
 import token.Token
 import token.TokenType
 
-class IsArithmeticExpression : SyntaxRule {
+class IsArithmeticSyntax : SyntaxRule {
     override fun checkSyntax(tokenList: List<Token>): Boolean {
         var index = 0
         var tokenCopy = tokenList
@@ -48,7 +49,9 @@ class IsArithmeticExpression : SyntaxRule {
     private fun skipParenContent(tokenList: List<Token>): List<Token> {
         return when {
             isParenContentValid(tokenList) -> tokenList.subList(getRightParenIndex(tokenList) + 1, tokenList.size)
-            else -> throw InvalidSyntaxException("Invalid Syntax Exception on line: " + tokenList.first().start.row)
+            else -> throw InvalidSyntaxException(
+                "Invalid data type on coord: ( " + tokenList.first().start.row + "; " + tokenList.first().start.column + ")",
+            )
         }
     }
 
@@ -63,7 +66,7 @@ class IsArithmeticExpression : SyntaxRule {
 
     private fun ignore(token: Token): Boolean {
         return when (token.type) {
-            TokenType.RIGHT_PAREN, TokenType.SEMICOLON -> true
+            TokenType.RIGHT_PAREN -> true
             else -> false
         }
     }

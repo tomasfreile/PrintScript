@@ -1,9 +1,13 @@
 package parser
 
-sealed class PrintScriptParserException : Exception()
+class InvalidSyntaxException(message: String) : Exception(message)
 
-class InvalidSyntaxException(message: String) : PrintScriptParserException()
+class InvalidOperatorException(message: String) : Exception(message)
 
-class InvalidOperatorException(message: String) : PrintScriptParserException()
+class InvalidDeclarationStatement(message: String) : Exception(message)
 
-class InvalidDeclarationStatement(message: String) : PrintScriptParserException()
+class InvalidDataTypeException(message: String) : Exception(message)
+
+class InvalidAssignationException(message: String) : Exception(message)
+
+class InvalidParenException(message: String) : Exception(message)

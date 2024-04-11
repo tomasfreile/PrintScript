@@ -1,5 +1,7 @@
 package token
 
+import position.Coordinate
+
 interface Token {
     val type: TokenType
     val value: String

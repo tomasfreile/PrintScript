@@ -1,5 +1,6 @@
-package parser.analysis.sintactic
+package parser.analysis.syntax.common
 
+import parser.analysis.syntax.SyntaxRule
 import token.Token
 import token.TokenType
 
