@@ -16,7 +16,7 @@ import parser.parser.Parser
 import parser.parser.PrintParser
 import token.TokenType
 
-class PrintScriptOnePointZeroBuilder : PrintScriptParserBuilder {
+class PrintScriptOnePointZeroParserBuilder : PrintScriptParserBuilder {
     override fun build(): PrintScriptParser {
         return PrintScriptParser(getParsers())
     }

@@ -6,7 +6,7 @@ import ast.LiteralNode
 import ast.PrintNode
 import ast.VariableDeclarationNode
 import org.junit.jupiter.api.Test
-import parser.parserBuilder.PrintScriptOnePointZeroBuilder
+import parser.parserBuilder.PrintScriptOnePointZeroParserBuilder
 import token.Coordinate
 import token.PrintScriptToken
 import token.TokenType
@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class PrintScriptParserTest {
-    private val parser = PrintScriptOnePointZeroBuilder().build()
+    private val parser = PrintScriptOnePointZeroParserBuilder().build()
 
     @Test
     fun test001_DeclarationParser() {
