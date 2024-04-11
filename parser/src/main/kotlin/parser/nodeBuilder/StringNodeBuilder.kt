@@ -2,10 +2,11 @@ package parser.nodeBuilder
 
 import ast.AstNode
 import ast.BinaryOperationNode
+import position.TokenPosition
 import token.Token
 import token.TokenType
 
-class ContentNodeBuilder : NodeBuilder {
+class StringNodeBuilder : NodeBuilder {
     override fun build(tokenList: List<Token>): AstNode {
         return when {
             isBreakRecursion(tokenList) -> buildLiteralNode(tokenList.first())
@@ -25,6 +26,7 @@ class ContentNodeBuilder : NodeBuilder {
             build(tokenList.subList(0, index)),
             build(tokenList.subList(index + 1, tokenList.size)),
             tokenList[index].type,
+            TokenPosition(tokenList.first().start, tokenList.last().end),
         )
     }
 

@@ -1,13 +1,14 @@
 package lexer
 
+import lexer.factory.LexerBuilder
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import token.Coordinate
+import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
 
 class PrintScriptLexerTest {
-    private val lexer = PrintScriptLexer(getTokenMapV11())
+    private val lexer = LexerBuilder().build("1.1")
 
     @Test
     fun simpleExpression() {

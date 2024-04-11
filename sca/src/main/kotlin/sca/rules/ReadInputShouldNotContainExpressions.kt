@@ -15,7 +15,10 @@ class ReadInputShouldNotContainExpressions : Rule {
                         if ((node.expression as FunctionNode).expression is LiteralNode) {
                             StaticCodeAnalyzerResult.Ok
                         } else {
-                            StaticCodeAnalyzerResult.Error("Read input statement should not contain expressions")
+                            StaticCodeAnalyzerResult.Error(
+                                "Read input statement should not contain expressions. " +
+                                    "Position: ${node.expression.position.start.string() + " - " + node.expression.position.end.string()}",
+                            )
                         }
                     }
                     else -> StaticCodeAnalyzerResult.Ok

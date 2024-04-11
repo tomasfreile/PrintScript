@@ -1,37 +1,24 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package parser
 
-import ast.AssignmentNode
-import ast.BinaryOperationNode
-import ast.LiteralNode
-import ast.PrintNode
-import ast.VariableDeclarationNode
+import ast.*
 import org.junit.jupiter.api.Test
-import parser.parser.AssignationParser
-import parser.parser.DeclarationParser
-import parser.parser.Parser
-import parser.parser.PrintParser
-import token.Coordinate
+import parser.parserBuilder.PrintScriptOnePointZeroParserBuilder
+import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class PrintScriptParserTest {
-    private val parser = PrintScriptParser(getParsers())
-
-    private fun getParsers(): List<Parser> {
-        return listOf(
-            DeclarationParser(),
-            PrintParser(),
-            AssignationParser(),
-        )
-    }
+    private val parser = PrintScriptOnePointZeroParserBuilder().build()
 
     @Test
     fun test001_DeclarationParser() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.CONST, "const", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LET, "let", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "number", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.COLON, ":", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.NUMBER_TYPE, "Int", Coordinate(2, 3), Coordinate(2, 3)),
@@ -53,8 +40,9 @@ class PrintScriptParserTest {
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "a", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node = parser.parse(tokenList)
+        val node = parser.createAST(tokenList)
         assertTrue {
             node is VariableDeclarationNode
             (node as VariableDeclarationNode).expression is BinaryOperationNode
@@ -93,8 +81,9 @@ class PrintScriptParserTest {
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "a", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node = parser.parse(tokenList)
+        val node = parser.createAST(tokenList)
         assertTrue {
             node is AssignmentNode
             node as AssignmentNode
@@ -136,7 +125,7 @@ class PrintScriptParserTest {
                 PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
-        val node = parser.parse(tokenList)
+        val node = parser.createAST(tokenList)
         println(node)
         if ((node as PrintNode).expression is BinaryOperationNode) {
             assertTrue((node.expression as BinaryOperationNode).left is BinaryOperationNode)

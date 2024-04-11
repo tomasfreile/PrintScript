@@ -1,7 +1,9 @@
-package parser.analysis.semantic
+package parser.analysis.semantic.common
 
-import parser.InvalidSyntaxException
-import parser.analysis.sintactic.HasPairOfParen
+import parser.InvalidOperatorException
+import parser.InvalidParenException
+import parser.analysis.semantic.SemanticRule
+import parser.analysis.syntax.common.HasPairOfParen
 import token.Token
 import token.TokenType
 
@@ -10,27 +12,28 @@ class OperatorIsFormatted : SemanticRule {
         return if (preCondition(tokenList)) {
             checkStructure(tokenList)
         } else {
-            false
+            throw InvalidOperatorException(
+                "Invalid precondition, expression starts or ends with operators on line: " + tokenList.first().start.row,
+            )
         }
     }
 
     private fun checkStructure(tokenList: List<Token>): Boolean {
         var index = 0
         var tokenCopy = tokenList
-        while (index < tokenCopy.size && tokenCopy.isNotEmpty()) {
+        while (condition(tokenCopy, index)) {
             val token = tokenCopy[index]
-            index +=
-                when {
-                    isLiteral(token) -> 1
-                    isLeftParen(token) -> {
-                        tokenCopy = skipParenContent(tokenCopy)
-                        index = 0
-                        continue
-                    }
-                    isRightParen(token) -> 1
-                    isOperator(token) -> if (isFormatted(tokenCopy, index)) 1 else return false
-                    else -> return false
+            when {
+                isLiteral(token) -> index += 1
+                isLeftParen(token) -> {
+                    tokenCopy = skipParenContent(tokenCopy)
+                    index = 0
+                    continue
                 }
+                isRightParen(token) -> index += 1
+                isOperator(token) -> if (isFormatted(tokenCopy, index)) index += 1 else throwException(token)
+                else -> throwException(token)
+            }
         }
         return true
     }
@@ -67,8 +70,10 @@ class OperatorIsFormatted : SemanticRule {
         return when {
             !isLeftParen(tokenList.first()) -> skipParenContent(tokenList.subList(1, tokenList.size))
             isParenContentValid(tokenList) -> tokenList.subList(getRightParenIndex(tokenList) + 1, tokenList.size)
-            else -> throw InvalidSyntaxException(
-                "Invalid Syntax Exception on line: " + tokenList.first().start.row + " | reason: Invalid Paren",
+            else -> throw InvalidParenException(
+                "Invalid Syntax Exception on coord: (" +
+                    tokenList.first().start.row + "; " + tokenList.first().start.column +
+                    ") | reason: Invalid Paren",
             )
         }
     }
@@ -102,7 +107,7 @@ class OperatorIsFormatted : SemanticRule {
         index: Int,
     ): Boolean { // L O L ;)
         return if (index == 0 && tokenList.size > 2) {
-            isOperator(tokenList[index]) && isLeftParen(tokenList[index + 1])
+            isOperator(tokenList[index]) && isLeftParen(tokenList[1])
         } else if (tokenList.size == 2) {
             isOperator(tokenList[index]) && isLiteral(tokenList[index + 1])
         } else {
@@ -114,5 +119,16 @@ class OperatorIsFormatted : SemanticRule {
 
     private fun preCondition(tokenList: List<Token>): Boolean {
         return !isOperator(tokenList[0]) && !isOperator(tokenList[tokenList.size - 1]) // No quiero que arranque ni termine con un operador
+    }
+
+    private fun condition(
+        tokenList: List<Token>,
+        index: Int,
+    ): Boolean {
+        return index < tokenList.size && tokenList.isNotEmpty()
+    }
+
+    private fun throwException(token: Token) {
+        throw InvalidOperatorException(message = "Invalid Operator on coord: (" + token.start.row + "; " + token.start.column + ")")
     }
 }

@@ -2,33 +2,68 @@ package parser.parser
 
 import ast.AstNode
 import ast.PrintNode
-import parser.analysis.sintactic.IsArithmeticExpression
-import parser.analysis.sintactic.IsStringConcat
-import parser.nodeBuilder.ArithmeticNodeBuilder
-import parser.nodeBuilder.ContentNodeBuilder
-import parser.nodeBuilder.LiteralNodeBuilder
+import parser.InvalidSyntaxException
+import parser.analysis.semantic.SemanticRule
+import parser.analysis.syntax.SyntaxRule
+import parser.analysis.syntax.common.HasSentenceSeparator
+import parser.nodeBuilder.NodeBuilder
 import token.Token
 import token.TokenType
 
-class PrintParser : Parser {
+class PrintParser(
+    private val separator: TokenType,
+    private val expressionsSyntax: Map<TokenType, SyntaxRule>,
+    private val expressionsSemantic: Map<TokenType, SemanticRule>,
+    private val nodeBuilders: Map<TokenType, NodeBuilder>,
+) : Parser {
     override fun canHandle(tokenList: List<Token>): Boolean {
         return when {
-            isEnoughSize(tokenList) -> isPrint(tokenList)
+            preCondition(tokenList) -> isPrint(tokenList)
             else -> false
         }
     }
 
-    override fun createAST(tokenList: List<Token>): AstNode {
-        val content = getExpression(tokenList)
-        return when {
-            isArithmeticExpression(content) -> createArithmeticBinaryNode(content)
-            isConcat(content) -> createBinaryNode(content)
-            else -> createLiteralNode(content)
+    override fun createAST(tokenList: List<Token>): AstNode? {
+        val content = getContent(tokenList)
+        for ((type, _) in expressionsSyntax) {
+            when {
+                isExpressionValid(type, content) -> {
+                    /*
+                        Syntax may be valid, but Semantic doesn't
+                     */
+                    if (isSemanticValid(type, content)) {
+                        return buildNode(content, type)?.let {
+                            createPrintAst(it)
+                        }
+                    }
+                }
+                else -> continue
+            }
         }
+        throw InvalidSyntaxException(
+            "Invalid print on line: " + tokenList.first().start.row,
+        )
     }
 
-    private fun isEnoughSize(tokenList: List<Token>): Boolean {
-        return tokenList.size >= 4
+    private fun preCondition(tokenList: List<Token>): Boolean {
+        return tokenList.size >= 4 &&
+            HasSentenceSeparator(separator).checkSyntax(tokenList)
+    }
+
+    private fun isSemanticValid(
+        tokenType: TokenType,
+        content: List<Token>,
+    ): Boolean {
+        val semantic = expressionsSemantic[tokenType]
+        return semantic != null && semantic.checkSemantic(content)
+    }
+
+    private fun isExpressionValid(
+        tokenType: TokenType,
+        content: List<Token>,
+    ): Boolean {
+        val syntax = expressionsSyntax[tokenType]
+        return syntax != null && syntax.checkSyntax(content)
     }
 
     private fun isPrint(tokenList: List<Token>): Boolean {
@@ -39,30 +74,19 @@ class PrintParser : Parser {
         return points == 3
     }
 
-    private fun getExpression(tokenList: List<Token>): List<Token> {
+    private fun getContent(tokenList: List<Token>): List<Token> {
         return tokenList.subList(2, tokenList.size - 2)
     }
 
-    private fun isConcat(expression: List<Token>): Boolean {
-        return when {
-            expression.size > 1 -> IsStringConcat().checkSyntax(expression)
-            else -> false
-        }
+    private fun buildNode(
+        expression: List<Token>,
+        type: TokenType,
+    ): AstNode? {
+        val builder = nodeBuilders[type]
+        return builder?.build(expression)
     }
 
-    private fun isArithmeticExpression(expression: List<Token>): Boolean {
-        return IsArithmeticExpression().checkSyntax(expression)
-    }
-
-    private fun createBinaryNode(expression: List<Token>): AstNode {
-        return PrintNode(ContentNodeBuilder().build(expression))
-    }
-
-    private fun createArithmeticBinaryNode(expression: List<Token>): AstNode {
-        return PrintNode(ArithmeticNodeBuilder().build(expression))
-    }
-
-    private fun createLiteralNode(expression: List<Token>): AstNode {
-        return PrintNode(LiteralNodeBuilder().build(expression))
+    private fun createPrintAst(node: AstNode): AstNode {
+        return PrintNode(node, node.position)
     }
 }
