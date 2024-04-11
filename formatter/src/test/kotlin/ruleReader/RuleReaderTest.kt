@@ -15,6 +15,7 @@ class RuleReaderTest {
                 "assignationBefore" to false,
                 "assignationAfter" to false,
                 "printJump" to 0,
+                "ifIndentation" to 4,
             )
         assertEquals(expectedFormatting, map)
     }
@@ -30,6 +31,7 @@ class RuleReaderTest {
                 "assignationBefore" to true,
                 "assignationAfter" to true,
                 "printJump" to 1,
+                "ifIndentation" to 4,
             )
         assertEquals(expectedFormatting, map)
     }
@@ -45,6 +47,7 @@ class RuleReaderTest {
                 "assignationBefore" to true,
                 "assignationAfter" to false,
                 "printJump" to 2,
+                "ifIndentation" to 4,
             )
         assertEquals(expectedFormatting, map)
     }
