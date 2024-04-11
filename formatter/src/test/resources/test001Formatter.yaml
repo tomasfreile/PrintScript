@@ -3,3 +3,4 @@ colonAfter: false
 assignationBefore: false
 assignationAfter: false
 printJump: 0
+ifIndentation: 4

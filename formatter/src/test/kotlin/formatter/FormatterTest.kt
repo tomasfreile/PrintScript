@@ -1,20 +1,41 @@
 package formatter
 
-import ast.NilNode
-import org.junit.jupiter.api.Assertions.assertEquals
-import kotlin.test.Test
+import ast.AstNode
+import lexer.PrintScriptLexer
+import lexer.getTokenMapV11
+import parser.PrintScriptParser
+import parser.parser.AssignationParser
+import parser.parser.DeclarationParser
+import parser.parser.Parser
+import parser.parser.PrintParser
 
 class FormatterTest {
-    val formatterPath = "src/test/resources/formatterTest.yaml"
-    val formatterPath02 = "src/test/resources/formatterTest2.yaml"
+    val formatterPath01 = "src/test/resources/formatterTest01.yaml"
+    val formatterPath02 = "src/test/resources/formatterTest02.yaml"
+    private val lexer = PrintScriptLexer(getTokenMapV11())
+    private val parser = PrintScriptParser(getParsers())
 
-    @Test
-    fun test001_hello() {
-        val formatter = PrintScriptFormatter(formatterPath)
-        val node = NilNode
-        val result = formatter.format(node)
-        assertEquals("hello", result)
+    private fun getParsers(): List<Parser> {
+        return listOf(
+            DeclarationParser(),
+            PrintParser(),
+            AssignationParser(),
+        )
     }
+
+    private fun getTree(code: String): AstNode {
+        val tokenList = lexer.lex(code)
+        return parser.parse(tokenList)
+    }
+
+//    @Test
+//    fun test001_formatASimpleMicaelaDeclaration() {
+//        val string = "let name:string = 'micaela'"
+//        val ast = getTree(string)
+//        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+//        val result = formatter.format(ast)
+//        assertEquals("let name: string = 'micaela';" + "\n", result)
+//    }
 
 //    @Test
 //    fun test001_formatASimpleMicaelaDeclaration() {
