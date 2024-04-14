@@ -22,7 +22,7 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
             is PrintNode -> formatPrintNode(astNode, rulesReaderData)
             is VariableDeclarationNode -> formatVariableDeclarationNode(astNode, rulesReaderData)
             is AssignmentNode -> formatAssignmentNode(astNode, rulesReaderData)
-//            is IfNode -> formatIfNode(astNode, rulesReaderData)
+            is IfNode -> formatIfNode(astNode, rulesReaderData)
 //            is FunctionNode -> formatFunctionNode(astNode, rulesReaderData)
             else -> ""
         }
@@ -90,17 +90,17 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         return formatSemicolon(format)
     }
 
-//    private fun formatIfNode(
-//        node: IfNode,
-//        rules: Map<String, Any>,
-//    ): String {
-//        val ifJump = rules["ifIndentation"] as Int
-//        val indentationSpaces = " ".repeat(ifJump)
-//        val condition = removeBreakLines(applyFormat(node.condition, rules))
-//        val thenBlock = removeBreakLines(applyFormat(node.thenBlock, rules))
-//        val elseBlock = removeBreakLines(applyFormat(node.elseBlock, rules))
-//        return "if ($condition) {\n$indentationSpaces$thenBlock\n} else {\n$indentationSpaces$elseBlock\n}"
-//    }
+    private fun formatIfNode(
+        node: IfNode,
+        rules: Map<String, Any>,
+    ): String {
+        val ifJump = rules["ifIndentation"] as Int
+        val indentationSpaces = "\t".repeat(ifJump)
+        val condition = applyFormat(node.condition, rules)
+        val thenBlock = applyFormat(node.thenBlock, rules)
+        val elseBlock = applyFormat(node.elseBlock, rules)
+        return "if ($condition) {\n$indentationSpaces$thenBlock\n} else {\n$indentationSpaces$elseBlock\n}"
+    }
 
 //    private fun formatFunctionNode(
 //        node: FunctionNode,
@@ -128,7 +128,7 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
     private fun defineVariableSymbol(declarationType: TokenType): String {
         return when (declarationType) {
             TokenType.LET -> "let"
-//            TokenType.CONST -> "const"
+            TokenType.CONST -> "const"
             else -> ""
         }
     }
@@ -189,23 +189,23 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         }
     }
 
-//    private fun removeBreakLines(result: String): String {
-//        return removeInitialBreakLines(removeFinalBreakLines(result))
-//    }
-//
-//    private fun removeInitialBreakLines(result: String): String {
-//        if (result.startsWith("\n")) {
-//            return removeInitialBreakLines(result.drop(1))
-//        } else {
-//            return result
-//        }
-//    }
-//
-//    private fun removeFinalBreakLines(result: String): String {
-//        if (result.endsWith("\n")) {
-//            return removeFinalBreakLines(result.dropLast(1))
-//        } else {
-//            return result
-//        }
-//    }
+    private fun removeBreakLines(result: String): String {
+        return removeInitialBreakLines(removeFinalBreakLines(result))
+    }
+
+    private fun removeInitialBreakLines(result: String): String {
+        if (result.startsWith("\n")) {
+            return removeInitialBreakLines(result.drop(1))
+        } else {
+            return result
+        }
+    }
+
+    private fun removeFinalBreakLines(result: String): String {
+        if (result.endsWith("\n")) {
+            return removeFinalBreakLines(result.dropLast(1))
+        } else {
+            return result
+        }
+    }
 }
