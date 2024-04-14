@@ -10,6 +10,7 @@ import formatter.PrintScriptFormatter
 import interpreter.PrintScriptInterpreter
 import interpreter.builder.InterpreterBuilder
 import interpreter.result.InterpreterResult
+import interpreter.result.MultipleResults
 import interpreter.result.PrintResult
 import interpreter.result.Result
 import interpreter.variable.Variable
@@ -31,7 +32,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
 
     val lexer: Lexer = LexerBuilder().build("1.0")
     val parser: PrintScriptParser = PrintScriptOnePointZeroParserBuilder().build()
-    var interpreter: PrintScriptInterpreter = InterpreterBuilder().build()
+    var interpreter: PrintScriptInterpreter = InterpreterBuilder().build("1.0")
     val symbolTable: MutableMap<Variable, Any> = mutableMapOf()
 
     override fun run() {
@@ -77,6 +78,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
         when (result) {
             is PrintResult -> println(result.toPrint)
             is Result -> Unit // If the result is not a print do nothing.
+            is MultipleResults -> TODO()
         }
     }
 

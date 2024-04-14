@@ -13,7 +13,7 @@ import parser.parserBuilder.PrintScriptOnePointOneParserBuilder
 import kotlin.test.assertEquals
 
 class PrintScriptInterpreterTest {
-    private val interpreter = InterpreterBuilder().build()
+    private val interpreter = InterpreterBuilder().build("1.1")
     private val lexer = PrintScriptLexer(getTokenMapV11())
     private val parser = PrintScriptOnePointOneParserBuilder().build()
     private val symbolTable = mutableMapOf<Variable, Any>()
@@ -63,5 +63,12 @@ class PrintScriptInterpreterTest {
         val result = interpreter.interpret(getTree(string2), symbolTable)
         result as PrintResult
         assertEquals("3", result.toPrint)
+    }
+
+    @Test
+    fun testDeclareVariableWithoutValue() {
+        val string = "let num: number;"
+        val result = interpreter.interpret(getTree(string), symbolTable)
+        assertEquals("num", symbolTable.keys.elementAt(0).name)
     }
 }

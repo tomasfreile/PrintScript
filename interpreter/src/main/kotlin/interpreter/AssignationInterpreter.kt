@@ -4,6 +4,7 @@ import ast.AssignmentNode
 import ast.AstNode
 import interpreter.result.Result
 import interpreter.variable.Variable
+import token.TokenType
 
 class AssignationInterpreter : Interpreter {
     override fun interpret(
@@ -14,6 +15,9 @@ class AssignationInterpreter : Interpreter {
         node as AssignmentNode
         val identifier = node.identifier
         val variable: Variable = getVariable(symbolTable, identifier)
+        if (variable.type != TokenType.LET) {
+            throw UnsupportedOperationException("Cannot assign a contstant. In position " + node.position.start + ":" + node.position.end)
+        }
         val value = interpreter.interpret(node, symbolTable)
         symbolTable[variable] = value
         return Result(value)
