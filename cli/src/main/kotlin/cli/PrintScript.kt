@@ -110,18 +110,48 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     }
 
     private fun getSentenceList(): List<String> {
-        val bufferedReader: BufferedReader = File(source.path).bufferedReader()
-        val file = bufferedReader.use { it.readText() }
-        var sentencesList: List<String> = emptyList()
-        var sentence: String = ""
-        for (char in file) {
-            sentence += char
-            if (char == ';') {
-                sentencesList = sentencesList.plus(sentence)
-                sentence = ""
-            }
+        val reader = source.bufferedReader()
+        val sentencesList = mutableListOf<String>()
+        var line: String?
+        while (reader.readLine().also { line = it } != null) {
+            sentencesList.add(getLine(reader, line!!))
         }
         return sentencesList
+    }
+
+    private fun readIfBlock(
+        reader: BufferedReader,
+        line: String,
+    ): String {
+        var result = line
+        val ifLine = line
+        val ifBlock = reader.readLine()
+        val line3 = reader.readLine()
+
+        if (line3 != null && line3.trim() == "} else {") {
+            val elseBlock = reader.readLine()
+            val elseEnd = reader.readLine()
+            result = ifLine + ifBlock + line3 + elseBlock + elseEnd
+        } else {
+            result = ifLine + ifBlock + line3
+        }
+        return result
+    }
+
+    private fun isIfStatement(line: String): Boolean {
+        return line.startsWith("if(") || line.startsWith("if (")
+    }
+
+    private fun getLine(
+        reader: BufferedReader,
+        line: String,
+    ): String {
+        var processedLine = line
+        if (isIfStatement(line)) {
+            processedLine = readIfBlock(reader, line)
+        }
+        println("Preprocessed line: $processedLine")
+        return processedLine
     }
 }
 
