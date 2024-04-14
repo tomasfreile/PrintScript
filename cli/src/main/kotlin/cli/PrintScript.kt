@@ -16,6 +16,7 @@ import interpreter.variable.Variable
 import lexer.Lexer
 import lexer.factory.LexerBuilder
 import parser.PrintScriptParser
+import parser.parserBuilder.PrintScriptOnePointOneParserBuilder
 import parser.parserBuilder.PrintScriptOnePointZeroParserBuilder
 import sca.StaticCodeAnalyzer
 import sca.StaticCodeAnalyzerImpl
@@ -26,11 +27,20 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     private val operation by argument(help = "the operation to apply to the file: validation, execution, formatting & analyzing")
         .choice("validate", "execute", "format", "analyze")
     private val source by argument(help = "source file").file(mustExist = true)
-    private val version by option("-v", help = "a version")
+    private val version by argument("-v", help = "a version")
     private val config by option("-c", help = "config file").file(mustExist = true)
 
-    val lexer: Lexer = LexerBuilder().build("1.0")
-    val parser: PrintScriptParser = PrintScriptOnePointZeroParserBuilder().build()
+    val lexer: Lexer = LexerBuilder().build(version)
+    val parser: PrintScriptParser = buildParser(version)
+
+    private fun buildParser(version: String): PrintScriptParser {
+        return when (version) {
+            "1.0" -> PrintScriptOnePointZeroParserBuilder().build()
+            "1.1" -> PrintScriptOnePointOneParserBuilder().build()
+            else -> throw IllegalArgumentException("Invalid version $version. Supported versions are 1.0 and 1.1")
+        }
+    }
+
     var interpreter: PrintScriptInterpreter = InterpreterBuilder().build()
     val symbolTable: MutableMap<Variable, Any> = mutableMapOf()
 
