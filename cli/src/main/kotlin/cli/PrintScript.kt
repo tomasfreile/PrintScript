@@ -75,10 +75,16 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
             val tree = parser.createAST(tokenList)
             result = interpreter.interpret(tree, symbolTable) as InterpreterResult
         }
+        printResults(result)
+    }
+
+    private fun printResults(result: InterpreterResult) {
         when (result) {
             is PrintResult -> println(result.toPrint)
             is Result -> Unit // If the result is not a print do nothing.
-            is MultipleResults -> TODO()
+            is MultipleResults -> for (subResult in result.values) {
+                printResults(subResult)
+            } // Run this function for multiple results.
         }
     }
 

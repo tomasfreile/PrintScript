@@ -1,8 +1,14 @@
-@file:Suppress("ktlint:standard:no-wildcard-imports")
-
 package interpreter.builder
 
-import interpreter.*
+import interpreter.AssignationInterpreter
+import interpreter.ConditionalInterpreter
+import interpreter.DeclarationInterpreter
+import interpreter.FunctionInterpreter
+import interpreter.LiteralInterpreter
+import interpreter.NilInterpreter
+import interpreter.OperationInterpreter
+import interpreter.PrintInterpreter
+import interpreter.PrintScriptInterpreter
 import interpreter.function.ReadEnvFunction
 import interpreter.literal.Boolean
 import interpreter.literal.Number
