@@ -75,14 +75,30 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
 
     private fun executeCode(sentencesList: List<String>) {
         var result: InterpreterResult = Result("")
-        for (sentence in sentencesList) {
-            val tokenList = lexer.lex(sentence)
-            val tree = parser.createAST(tokenList)
-            result = interpreter.interpret(tree, symbolTable) as InterpreterResult
-        }
-        when (result) {
-            is PrintResult -> println(result.toPrint)
-            is Result -> Unit // If the result is not a print, do nothing.
+        try {
+            for (sentence in sentencesList) {
+                try {
+                    val tokenList = lexer.lex(sentence)
+                    try {
+                        val tree = parser.createAST(tokenList)
+                        try {
+                            result = interpreter.interpret(tree, symbolTable) as InterpreterResult
+                            when (result) {
+                                is PrintResult -> println(result.toPrint)
+                                is Result -> Unit // If the result is not a print, do nothing.
+                            }
+                        } catch (e: Exception) {
+                            println("error in interpreting: $e")
+                        }
+                    } catch (e: Exception) {
+                        println("error in parsing: $e")
+                    }
+                } catch (e: Exception) {
+                    println("error in lexing: $e")
+                }
+            }
+        } catch (e: Exception) {
+            println("error in execution: $e")
         }
     }
 
@@ -115,7 +131,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
         val sentencesList = mutableListOf<String>()
         var line: String?
         while (reader.readLine().also { line = it } != null) {
-            sentencesList.add(getLine(reader, line!!))
+            getLine(reader, line!!)?.let { sentencesList.add(it) }
         }
         return sentencesList
     }
@@ -146,7 +162,10 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     private fun getLine(
         reader: BufferedReader,
         line: String,
-    ): String {
+    ): String? {
+        if (line.isBlank()) {
+            return null // Skip empty lines
+        }
         var processedLine = line
         if (isIfStatement(line)) {
             processedLine = readIfBlock(reader, line)
