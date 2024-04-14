@@ -1,7 +1,9 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package lexer
 
 import token.TokenType
-import java.util.EnumMap
+import java.util.*
 import java.util.regex.Pattern
 
 fun getTokenMapV10(): EnumMap<TokenType, Pattern> {
@@ -28,7 +30,7 @@ fun getTokenMapV10(): EnumMap<TokenType, Pattern> {
 
     // Literals
     tokenMap[TokenType.STRING_LITERAL] = Pattern.compile("\'[^']*\'|\"[^\"]*\"")
-    tokenMap[TokenType.NUMBER_LITERAL] = Pattern.compile("[0-9]+")
+    tokenMap[TokenType.NUMBER_LITERAL] = Pattern.compile("[0-9]+(\\.[0-9]+)?")
     tokenMap[TokenType.VALUE_IDENTIFIER_LITERAL] = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]*")
 
     return tokenMap

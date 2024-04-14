@@ -21,7 +21,7 @@ class IsFunctionSyntax : SyntaxRule {
 
     private fun isFunction(token: Token): Boolean {
         return when (token.type) {
-            TokenType.READ_ENV, TokenType.READ_INPUT, TokenType.WRITE_ENV -> true
+            TokenType.READ_ENV, TokenType.READ_INPUT -> true
             else -> false
         }
     }

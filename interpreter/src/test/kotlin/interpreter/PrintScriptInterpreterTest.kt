@@ -64,4 +64,24 @@ class PrintScriptInterpreterTest {
         result as PrintResult
         assertEquals("3", result.toPrint)
     }
+
+    @Test
+    fun testFloatAndStringConcatenation() {
+        val string = "let num: number = 3.14;"
+        interpreter.interpret(getTree(string), symbolTable)
+        val string2 = "println('pi is ' + num);"
+        val result = interpreter.interpret(getTree(string2), symbolTable)
+        result as PrintResult
+        assertEquals("pi is 3.14", result.toPrint)
+    }
+
+    @Test
+    fun testDecimalDeclarationThenPrintItAnOperation() {
+        val string = "let num: number = 3.14;"
+        interpreter.interpret(getTree(string), symbolTable)
+        val string2 = "println(num/2);"
+        val result = interpreter.interpret(getTree(string2), symbolTable)
+        result as PrintResult
+        assertEquals("1.57", result.toPrint)
+    }
 }
