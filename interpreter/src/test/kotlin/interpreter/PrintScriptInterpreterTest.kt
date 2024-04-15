@@ -132,6 +132,16 @@ class PrintScriptInterpreterTest {
     }
 
     @Test
+    fun testLetDeclarationCanBeReassigned() {
+        val string = "let num: number = 3;"
+        val string2 = "num = 4;"
+        interpreter.interpret(getTree(string), symbolTable)
+        val result = interpreter.interpret(getTree(string2), symbolTable)
+        result as Result
+        assertEquals(4, result.value)
+    }
+
+    @Test
     fun testEnvVariableIsCorrectlyPrinted() {
         symbolTable[Variable("PRINT_ENV", TokenType.STRING_TYPE, TokenType.CONST)] = "hola"
         val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
