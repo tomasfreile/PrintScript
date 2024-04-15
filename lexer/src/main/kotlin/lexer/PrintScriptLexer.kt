@@ -1,15 +1,19 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package lexer
 
 import position.Coordinate
 import token.PrintScriptToken
 import token.Token
 import token.TokenType
-import java.util.EnumMap
+import java.util.*
 import java.util.regex.Pattern
 
 class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexer {
+    private val tokenPattern: Pattern = tokenMap.values.joinToString("|").toRegex().toPattern()
+
     override fun lex(input: String): List<Token> {
-        val tokens = ArrayList<Token>()
+        val tokens = ArrayList<Token>(input.length)
         var line = 0
 
         input.lines().forEach {
@@ -27,7 +31,7 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
     ): List<Token> {
         val tokens = ArrayList<Token>()
         val types = tokenMap.keys.toList()
-        val matcher = tokenMap.values.joinToString("|").toRegex().toPattern().matcher(input)
+        val matcher = tokenPattern.matcher(input)
         var currentIndex = 0 // Track current index in the input string
 
         while (matcher.find()) {
