@@ -1,15 +1,8 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package interpreter.builder
 
-import interpreter.AssignationInterpreter
-import interpreter.CodeBlockInterpreter
-import interpreter.ConditionalInterpreter
-import interpreter.DeclarationInterpreter
-import interpreter.FunctionInterpreter
-import interpreter.LiteralInterpreter
-import interpreter.NilInterpreter
-import interpreter.OperationInterpreter
-import interpreter.PrintInterpreter
-import interpreter.PrintScriptInterpreter
+import interpreter.*
 import interpreter.function.ReadEnvFunction
 import interpreter.literal.Boolean
 import interpreter.literal.Number
@@ -27,7 +20,14 @@ class InterpreterBuilder {
                     OperationInterpreter(listOf(PlusOperation(), MinusOperation(), SlashOperation(), StarOperation()))
                 val literalInterpreter = LiteralInterpreter(listOf(Number(), String()))
                 val interpreters =
-                    listOf(operationInterpreter, literalInterpreter, AssignationInterpreter(), DeclarationInterpreter(), PrintInterpreter())
+                    listOf(
+                        operationInterpreter,
+                        literalInterpreter,
+                        AssignationInterpreter(),
+                        DeclarationInterpreter(),
+                        PrintInterpreter(),
+                        NilInterpreter(),
+                    )
                 return PrintScriptInterpreter(interpreters)
             }
             "1.1" -> {
