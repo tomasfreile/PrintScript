@@ -13,11 +13,23 @@ class ReadInputFunction : Function {
         node: FunctionNode,
         symbolTable: MutableMap<Variable, Any>,
     ): Any {
-        val input = readLine() ?: throw NullPointerException("input can't be null.")
+        val input = readLine() ?: symbolTable.get(getVariable(symbolTable, "input")) ?: throw NullPointerException("No input")
         return input
     }
 
     override fun canHandle(nodeType: TokenType): Boolean {
         return nodeType == type
+    }
+
+    private fun getVariable(
+        symbolTable: MutableMap<Variable, Any>,
+        identifier: String,
+    ): Variable {
+        for (variableSymbol in symbolTable.keys) {
+            if (variableSymbol.name == identifier) {
+                return variableSymbol
+            }
+        }
+        throw NullPointerException("Variable not declared")
     }
 }
