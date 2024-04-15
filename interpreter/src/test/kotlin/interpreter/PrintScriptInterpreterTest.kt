@@ -1,10 +1,8 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package interpreter
 
-import ast.AstNode
-import ast.CodeBlock
-import ast.FunctionNode
-import ast.IfNode
-import ast.LiteralNode
+import ast.*
 import interpreter.builder.InterpreterBuilder
 import interpreter.result.MultipleResults
 import interpreter.result.PrintResult
@@ -14,6 +12,7 @@ import lexer.PrintScriptLexer
 import lexer.getTokenMapV11
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import parser.parserBuilder.PrintScriptOnePointOneParserBuilder
 import position.Coordinate
 import position.TokenPosition
@@ -101,8 +100,40 @@ class PrintScriptInterpreterTest {
     }
 
     @Test
+    fun testAssignDeclarationWithoutValue() {
+        val string = "let num: number;"
+        val string2 = "num = 3;"
+        interpreter.interpret(getTree(string), symbolTable)
+        val result = interpreter.interpret(getTree(string2), symbolTable)
+        result as Result
+        assertEquals(3, result.value)
+    }
+
+    @Test
+    fun testAssignDeclarationWithoutValueAndThenPrintIt() {
+        val string = "let s: string;"
+        val string2 = "s = 'hola';"
+        interpreter.interpret(getTree(string), symbolTable)
+        interpreter.interpret(getTree(string2), symbolTable)
+        val string3 = "println(s);"
+        val result = interpreter.interpret(getTree(string3), symbolTable)
+        result as PrintResult
+        assertEquals("hola", result.toPrint)
+    }
+
+    @Test
+    fun testConstDeclarationCannotBeReassigned() {
+        val string = "const num: number = 3;"
+        val string2 = "num = 4;"
+        interpreter.interpret(getTree(string), symbolTable)
+        assertThrows<UnsupportedOperationException> {
+            interpreter.interpret(getTree(string2), symbolTable)
+        }
+    }
+
+    @Test
     fun testEnvVariableIsCorrectlyPrinted() {
-        symbolTable[Variable("PRINT_ENV", TokenType.STRING_TYPE)] = "hola"
+        symbolTable[Variable("PRINT_ENV", TokenType.STRING_TYPE, TokenType.CONST)] = "hola"
         val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
         val literalNode = LiteralNode("PRINT_ENV", TokenType.VALUE_IDENTIFIER_LITERAL, tokenPosition)
         val tree = FunctionNode(TokenType.READ_ENV, literalNode, tokenPosition)
