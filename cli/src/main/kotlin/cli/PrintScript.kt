@@ -7,8 +7,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
 import formatter.PrintScriptFormatter
-import interpreter.PrintScriptInterpreter
 import interpreter.builder.InterpreterBuilder
+import interpreter.interpreter.PrintScriptInterpreter
 import interpreter.result.InterpreterResult
 import interpreter.result.MultipleResults
 import interpreter.result.PrintResult
