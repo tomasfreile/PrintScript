@@ -11,13 +11,14 @@ import java.util.regex.Pattern
 
 class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexer {
     private val tokenPattern: Pattern = tokenMap.values.joinToString("|").toRegex().toPattern()
+    private val typePatterns: Map<TokenType, Pattern> = tokenMap.entries.associate { (type, pattern) -> type to pattern }
 
     override fun lex(input: String): List<Token> {
         val tokens = ArrayList<Token>(input.length)
         var line = 0
 
-        input.lines().forEach {
-            tokens.addAll(getTokensByLine(it, tokenMap, line))
+        input.lines().forEach { lineContent ->
+            tokens.addAll(getTokensByLine(lineContent, line))
             line++
         }
 
@@ -26,21 +27,18 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
 
     private fun getTokensByLine(
         input: String,
-        tokenMap: EnumMap<TokenType, Pattern>,
         line: Int,
     ): List<Token> {
         val tokens = ArrayList<Token>()
-        val types = tokenMap.keys.toList()
         val matcher = tokenPattern.matcher(input)
-        var currentIndex = 0 // Track current index in the input string
+        var currentIndex = 0
 
         while (matcher.find()) {
             val token = matcher.group()
-            val type = types[tokenMap.values.indexOfFirst { it.matcher(token).matches() }]
+            val type = findTokenType(token)
             val start = matcher.start()
             val end = matcher.end()
 
-            // Check if there are any characters between the current token and the previous one
             checkIllegalCharsBetweenTokens(input, currentIndex, start, line)
 
             if (type == TokenType.STRING_LITERAL) {
@@ -53,10 +51,14 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
             currentIndex = end
         }
 
-        // Check for invalid characters after the last token
         checkIllegalCharsAfterLastToken(input, currentIndex, line)
 
         return tokens
+    }
+
+    private fun findTokenType(token: String): TokenType {
+        val matchedEntry = typePatterns.entries.find { (_, pattern) -> pattern.matcher(token).matches() }
+        return matchedEntry?.key ?: throw IllegalStateException("Token type not found for token: $token")
     }
 
     private fun checkIllegalCharsAfterLastToken(
