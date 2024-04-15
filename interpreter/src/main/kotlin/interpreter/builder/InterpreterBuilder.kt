@@ -2,8 +2,8 @@
 
 package interpreter.builder
 
-import interpreter.*
 import interpreter.function.ReadEnvFunction
+import interpreter.interpreter.*
 import interpreter.literal.Boolean
 import interpreter.literal.Number
 import interpreter.literal.String

@@ -1,4 +1,4 @@
-package interpreter
+package interpreter.interpreter
 
 import ast.AssignmentNode
 import ast.AstNode

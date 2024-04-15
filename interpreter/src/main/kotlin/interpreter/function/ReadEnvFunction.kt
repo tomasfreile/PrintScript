@@ -1,7 +1,7 @@
 package interpreter.function
 
 import ast.FunctionNode
-import interpreter.PrintScriptInterpreter
+import interpreter.interpreter.PrintScriptInterpreter
 import interpreter.variable.Variable
 import token.TokenType
 
