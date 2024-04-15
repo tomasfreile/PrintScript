@@ -10,6 +10,7 @@ import formatter.PrintScriptFormatter
 import interpreter.PrintScriptInterpreter
 import interpreter.builder.InterpreterBuilder
 import interpreter.result.InterpreterResult
+import interpreter.result.MultipleResults
 import interpreter.result.PrintResult
 import interpreter.result.Result
 import interpreter.variable.Variable
@@ -42,7 +43,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     override fun run() {
         lexer = LexerBuilder().build(version)
         parser = buildParser(version)
-        interpreter = InterpreterBuilder().build()
+        interpreter = InterpreterBuilder().build(version)
 
         val sentencesList = getSentenceList()
         try {
@@ -74,7 +75,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     }
 
     private fun executeCode(sentencesList: List<String>) {
-        var result: InterpreterResult = Result("")
+        var result: InterpreterResult
         try {
             for (sentence in sentencesList) {
                 try {
@@ -83,10 +84,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
                         val tree = parser.createAST(tokenList)
                         try {
                             result = interpreter.interpret(tree, symbolTable) as InterpreterResult
-                            when (result) {
-                                is PrintResult -> println(result.toPrint)
-                                is Result -> Unit // If the result is not a print, do nothing.
-                            }
+                            printResults(result)
                         } catch (e: Exception) {
                             println("error in interpreting: $e")
                         }
@@ -99,6 +97,16 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
             }
         } catch (e: Exception) {
             println("error in execution: $e")
+        }
+    }
+
+    private fun printResults(result: InterpreterResult) {
+        when (result) {
+            is PrintResult -> println(result.toPrint)
+            is Result -> Unit // If the result is not a print do nothing.
+            is MultipleResults -> for (subResult in result.values) {
+                printResults(subResult)
+            } // Run this function for multiple results.
         }
     }
 
