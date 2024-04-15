@@ -152,6 +152,15 @@ class PrintScriptInterpreterTest {
     }
 
     @Test
+    fun testReadInputCanBePreAssigned() {
+        symbolTable[Variable("input", TokenType.STRING_TYPE, TokenType.LET)] = "hola"
+        val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
+        val tree = FunctionNode(TokenType.READ_INPUT, LiteralNode("Write a number", TokenType.STRING_LITERAL, tokenPosition), tokenPosition)
+        val result = interpreter.interpret(tree, symbolTable)
+        assertEquals("hola", result)
+    }
+
+    @Test
     fun testBooleanLiteralReturn() {
         val string = "let bool: boolean = true;"
         val result = interpreter.interpret(getTree(string), symbolTable) as Result
