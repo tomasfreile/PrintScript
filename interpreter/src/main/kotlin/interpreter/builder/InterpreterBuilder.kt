@@ -1,6 +1,7 @@
 package interpreter.builder
 
 import interpreter.AssignationInterpreter
+import interpreter.CodeBlockInterpreter
 import interpreter.ConditionalInterpreter
 import interpreter.DeclarationInterpreter
 import interpreter.FunctionInterpreter
@@ -44,6 +45,7 @@ class InterpreterBuilder {
                         ConditionalInterpreter(),
                         functionInterpreter,
                         NilInterpreter(),
+                        CodeBlockInterpreter(),
                     )
                 return PrintScriptInterpreter(interpreters)
             }

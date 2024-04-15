@@ -1,9 +1,12 @@
 package interpreter
 
 import ast.AstNode
+import ast.CodeBlock
 import ast.FunctionNode
+import ast.IfNode
 import ast.LiteralNode
 import interpreter.builder.InterpreterBuilder
+import interpreter.result.MultipleResults
 import interpreter.result.PrintResult
 import interpreter.result.Result
 import interpreter.variable.Variable
@@ -23,12 +26,12 @@ class PrintScriptInterpreterTest {
     private val parser = PrintScriptOnePointOneParserBuilder().build()
     private val symbolTable = mutableMapOf<Variable, Any>()
 
-    private fun getTree(code: String): AstNode? {
+    private fun getTree(code: String): AstNode {
         val tokenList = lexer.lex(code)
 //        for (token in tokenList) {
 //            println(token.value + " "+ token.type)
 //        }
-        return parser.createAST(tokenList)
+        return parser.createAST(tokenList) ?: throw NullPointerException("Parser return null")
     }
 
     @BeforeEach
@@ -104,6 +107,41 @@ class PrintScriptInterpreterTest {
         val literalNode = LiteralNode("PRINT_ENV", TokenType.VALUE_IDENTIFIER_LITERAL, tokenPosition)
         val tree = FunctionNode(TokenType.READ_ENV, literalNode, tokenPosition)
         val result = interpreter.interpret(tree, symbolTable)
-        assertEquals("hola", result) // No Interpreter result because its an internal test.
+        assertEquals("hola", result) // No Interpreter result because it's an internal test.
+    }
+
+    @Test
+    fun testBooleanLiteralReturn() {
+        val string = "let bool: boolean = true;"
+        val result = interpreter.interpret(getTree(string), symbolTable) as Result
+        assertEquals(true, result.value)
+    }
+
+    @Test
+    fun testIfNodeThatHasTrueConditional() {
+        val string1 = "println('hola');"
+        val string2 = "println('chau');"
+        val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
+        val literalNode = LiteralNode("true", TokenType.BOOLEAN_LITERAL, tokenPosition)
+        val thenBlock = CodeBlock(listOf(getTree(string1)), tokenPosition)
+        val elseBlock = CodeBlock(listOf(getTree(string2)), tokenPosition)
+        val ifNode = IfNode(literalNode, thenBlock, elseBlock, tokenPosition)
+        val result = interpreter.interpret(ifNode, symbolTable) as MultipleResults
+        val printResult = result.values[0] as PrintResult
+        assertEquals("hola", printResult.toPrint)
+    }
+
+    @Test
+    fun testIfNodeThatHasFalseConditional() {
+        val string1 = "println('hola');"
+        val string2 = "println('chau');"
+        val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
+        val literalNode = LiteralNode("false", TokenType.BOOLEAN_LITERAL, tokenPosition)
+        val thenBlock = CodeBlock(listOf(getTree(string1)), tokenPosition)
+        val elseBlock = CodeBlock(listOf(getTree(string2)), tokenPosition)
+        val ifNode = IfNode(literalNode, thenBlock, elseBlock, tokenPosition)
+        val result = interpreter.interpret(ifNode, symbolTable) as MultipleResults
+        val printResult = result.values[0] as PrintResult
+        assertEquals("chau", printResult.toPrint)
     }
 }
