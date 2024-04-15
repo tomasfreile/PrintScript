@@ -69,8 +69,8 @@ class PrintParser(
     private fun isPrint(tokenList: List<Token>): Boolean {
         var points = 0
         if (tokenList[0].type == TokenType.PRINT) points += 1
-        if (tokenList[1].type == TokenType.LEFT_PAREN) points += 1
-        if (tokenList[tokenList.size - 2].type == TokenType.RIGHT_PAREN) points += 1
+        if (tokenList[1].type == TokenType.LEFTPAREN) points += 1
+        if (tokenList[tokenList.size - 2].type == TokenType.RIGHTPAREN) points += 1
         return points == 3
     }
 

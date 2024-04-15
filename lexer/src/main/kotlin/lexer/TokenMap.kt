@@ -4,50 +4,52 @@ package lexer
 
 import token.TokenType
 import java.util.*
-import java.util.regex.Pattern
 
-fun getTokenMapV10(): EnumMap<TokenType, Pattern> {
-    val tokenMap = EnumMap<TokenType, Pattern>(TokenType::class.java)
+fun getTokenMapV10(): EnumMap<TokenType, TokenRegexMatcher> {
+    val tokenMap = EnumMap<TokenType, TokenRegexMatcher>(TokenType::class.java)
 
     // Single-character tokens.
-    tokenMap[TokenType.ASSIGNATION] = Pattern.compile("=")
-    tokenMap[TokenType.LEFT_PAREN] = Pattern.compile("\\(")
-    tokenMap[TokenType.RIGHT_PAREN] = Pattern.compile("\\)")
-    tokenMap[TokenType.PLUS] = Pattern.compile("\\+")
-    tokenMap[TokenType.MINUS] = Pattern.compile("-")
-    tokenMap[TokenType.STAR] = Pattern.compile("\\*")
-    tokenMap[TokenType.SLASH] = Pattern.compile("/")
+    tokenMap[TokenType.ASSIGNATION] = TokenRegexMatcher(TokenType.ASSIGNATION, "=")
+    tokenMap[TokenType.LEFTPAREN] = TokenRegexMatcher(TokenType.LEFTPAREN, "\\(")
+    tokenMap[TokenType.RIGHTPAREN] = TokenRegexMatcher(TokenType.RIGHTPAREN, "\\)")
+    tokenMap[TokenType.PLUS] = TokenRegexMatcher(TokenType.PLUS, "\\+")
+    tokenMap[TokenType.MINUS] = TokenRegexMatcher(TokenType.MINUS, "-")
+    tokenMap[TokenType.STAR] = TokenRegexMatcher(TokenType.STAR, "\\*")
+    tokenMap[TokenType.SLASH] = TokenRegexMatcher(TokenType.SLASH, "/")
 
     // Separators
-    tokenMap[TokenType.SEMICOLON] = Pattern.compile(";")
-    tokenMap[TokenType.COLON] = Pattern.compile(":")
+    tokenMap[TokenType.SEMICOLON] = TokenRegexMatcher(TokenType.SEMICOLON, ";")
+    tokenMap[TokenType.COLON] = TokenRegexMatcher(TokenType.COLON, ":")
 
     // Keywords
-    tokenMap[TokenType.PRINT] = Pattern.compile("\\bprintln")
-    tokenMap[TokenType.NUMBER_TYPE] = Pattern.compile("\\bnumber\\b")
-    tokenMap[TokenType.STRING_TYPE] = Pattern.compile("\\bstring\\b")
-    tokenMap[TokenType.LET] = Pattern.compile("\\blet\\b")
+    tokenMap[TokenType.PRINT] = TokenRegexMatcher(TokenType.PRINT, "\\bprintln")
+    tokenMap[TokenType.NUMBERTYPE] = TokenRegexMatcher(TokenType.NUMBERTYPE, "(?:)number(\\b|;)")
+    tokenMap[TokenType.STRINGTYPE] = TokenRegexMatcher(TokenType.STRINGTYPE, "(?:)string(\\b|;)")
+    tokenMap[TokenType.LET] = TokenRegexMatcher(TokenType.LET, "\\blet\\b")
 
     // Literals
-    tokenMap[TokenType.STRING_LITERAL] = Pattern.compile("\'[^']*\'|\"[^\"]*\"")
-    tokenMap[TokenType.NUMBER_LITERAL] = Pattern.compile("[0-9]+(\\.[0-9]+)?")
-    tokenMap[TokenType.VALUE_IDENTIFIER_LITERAL] = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]*")
+    tokenMap[TokenType.STRINGLITERAL] = TokenRegexMatcher(TokenType.STRINGLITERAL, "\'[^\']*\'|\"[^\"]*\"")
+    tokenMap[TokenType.NUMBERLITERAL] = TokenRegexMatcher(TokenType.NUMBERLITERAL, "[0-9]+(\\.[0-9]+)?")
+    tokenMap[TokenType.VALUEIDENTIFIERLITERAL] = TokenRegexMatcher(TokenType.VALUEIDENTIFIERLITERAL, "[a-zA-Z_][a-zA-Z0-9_]*")
+
+    // Invalid
+    tokenMap[TokenType.INVALID] = TokenRegexMatcher(TokenType.INVALID, "[^ \\n]")
 
     return tokenMap
 }
 
-fun getTokenMapV11(): EnumMap<TokenType, Pattern> {
+fun getTokenMapV11(): EnumMap<TokenType, TokenRegexMatcher> {
     val tokenMap = getTokenMapV10()
 
-    tokenMap[TokenType.BOOLEAN_TYPE] = Pattern.compile("\\bboolean\\b")
-    tokenMap[TokenType.CONST] = Pattern.compile("\\bconst\\b")
-    tokenMap[TokenType.READ_INPUT] = Pattern.compile("\\breadInput\\b")
-    tokenMap[TokenType.READ_ENV] = Pattern.compile("\\breadEnv\\b")
-    tokenMap[TokenType.BOOLEAN_LITERAL] = Pattern.compile("\\btrue\\b")
-    tokenMap[TokenType.IF] = Pattern.compile("\\bif\\b")
-    tokenMap[TokenType.ELSE] = Pattern.compile("\\belse\\b")
-    tokenMap[TokenType.LEFT_BRACE] = Pattern.compile("\\{")
-    tokenMap[TokenType.RIGHT_BRACE] = Pattern.compile("}")
+    tokenMap[TokenType.BOOLEANTYPE] = TokenRegexMatcher(TokenType.BOOLEANTYPE, "(?:)boolean(\\b|;)")
+    tokenMap[TokenType.CONST] = TokenRegexMatcher(TokenType.CONST, "\\bconst\\b")
+    tokenMap[TokenType.READINPUT] = TokenRegexMatcher(TokenType.READINPUT, "\\breadInput")
+    tokenMap[TokenType.READENV] = TokenRegexMatcher(TokenType.READENV, "\\breadEnv")
+    tokenMap[TokenType.BOOLEANLITERAL] = TokenRegexMatcher(TokenType.BOOLEANLITERAL, "(?:true|false)")
+    tokenMap[TokenType.IF] = TokenRegexMatcher(TokenType.IF, "\\bif\\b")
+    tokenMap[TokenType.ELSE] = TokenRegexMatcher(TokenType.ELSE, "\\belse\\b")
+    tokenMap[TokenType.LEFTBRACE] = TokenRegexMatcher(TokenType.LEFTBRACE, "\\{")
+    tokenMap[TokenType.RIGHTBRACE] = TokenRegexMatcher(TokenType.RIGHTBRACE, "\\}")
 
     return tokenMap
 }

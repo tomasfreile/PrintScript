@@ -27,7 +27,7 @@ class IsArithmeticSyntax : SyntaxRule {
 
     private fun isLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
+            TokenType.NUMBERLITERAL, TokenType.VALUEIDENTIFIERLITERAL -> true
             else -> false
         }
     }
@@ -41,7 +41,7 @@ class IsArithmeticSyntax : SyntaxRule {
 
     private fun isParen(token: Token): Boolean {
         return when (token.type) {
-            TokenType.LEFT_PAREN -> true
+            TokenType.LEFTPAREN -> true
             else -> false
         }
     }
@@ -66,7 +66,7 @@ class IsArithmeticSyntax : SyntaxRule {
 
     private fun ignore(token: Token): Boolean {
         return when (token.type) {
-            TokenType.RIGHT_PAREN -> true
+            TokenType.RIGHTPAREN -> true
             else -> false
         }
     }
@@ -75,7 +75,7 @@ class IsArithmeticSyntax : SyntaxRule {
         var i = 0
         for (token in tokenList) {
             when (token.type) {
-                TokenType.RIGHT_PAREN -> return i
+                TokenType.RIGHTPAREN -> return i
                 else -> i += 1
             }
         }

@@ -46,7 +46,7 @@ class DeclarationParser(
     private fun isDeclaration(tokenList: List<Token>): Boolean {
         var points = 0
         if (hasValidDeclarationType(tokenList[0])) points += 1
-        if (tokenList[1].type == TokenType.VALUE_IDENTIFIER_LITERAL) points += 1
+        if (tokenList[1].type == TokenType.VALUEIDENTIFIERLITERAL) points += 1
         if (tokenList[2].type == TokenType.COLON) points += 1
         if (hasValidType(tokenList[3])) points += 1
         return points == 4

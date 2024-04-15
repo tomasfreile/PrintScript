@@ -17,7 +17,7 @@ class NumberSemantic : SemanticRule {
     private fun hasNoString(tokenList: List<Token>): Boolean {
         for (token in tokenList) {
             when (token.type) {
-                TokenType.STRING_LITERAL -> throw InvalidDataTypeException(
+                TokenType.STRINGLITERAL -> throw InvalidDataTypeException(
                     "Invalid data type: Expected Number Type data on." + "\n Failed on coord: (" +
                         tokenList.first().start.row + "; " + tokenList.first().start.column +
                         ")",

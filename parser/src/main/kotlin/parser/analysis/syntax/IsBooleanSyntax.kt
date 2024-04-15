@@ -19,7 +19,7 @@ class IsBooleanSyntax : SyntaxRule {
 
     private fun isLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.BOOLEAN_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
+            TokenType.BOOLEANLITERAL, TokenType.VALUEIDENTIFIERLITERAL -> true
             else -> false
         }
     }

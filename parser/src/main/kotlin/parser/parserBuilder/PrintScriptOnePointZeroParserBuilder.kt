@@ -31,8 +31,8 @@ class PrintScriptOnePointZeroParserBuilder : PrintScriptParserBuilder {
 
     private fun getSemanticMap(): Map<TokenType, SemanticRule> {
         return mapOf(
-            Pair(TokenType.NUMBER_TYPE, NumberSemantic()),
-            Pair(TokenType.STRING_TYPE, StringSemantic()),
+            Pair(TokenType.NUMBERTYPE, NumberSemantic()),
+            Pair(TokenType.STRINGTYPE, StringSemantic()),
         )
     }
 
@@ -44,22 +44,22 @@ class PrintScriptOnePointZeroParserBuilder : PrintScriptParserBuilder {
 
     private fun getTypeMap(): Map<TokenType, TokenType> {
         return mapOf(
-            Pair(TokenType.NUMBER_LITERAL, TokenType.NUMBER_TYPE),
-            Pair(TokenType.STRING_LITERAL, TokenType.STRING_TYPE),
+            Pair(TokenType.NUMBERLITERAL, TokenType.NUMBERTYPE),
+            Pair(TokenType.STRINGLITERAL, TokenType.STRINGTYPE),
         )
     }
 
     private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
         return mapOf(
-            Pair(TokenType.STRING_TYPE, IsStringSyntax()),
-            Pair(TokenType.NUMBER_TYPE, IsArithmeticSyntax()),
+            Pair(TokenType.STRINGTYPE, IsStringSyntax()),
+            Pair(TokenType.NUMBERTYPE, IsArithmeticSyntax()),
         )
     }
 
     private fun getNodeBuilders(): Map<TokenType, NodeBuilder> {
         return mapOf(
-            Pair(TokenType.STRING_TYPE, StringNodeBuilder()),
-            Pair(TokenType.NUMBER_TYPE, ArithmeticNodeBuilder()),
+            Pair(TokenType.STRINGTYPE, StringNodeBuilder()),
+            Pair(TokenType.NUMBERTYPE, ArithmeticNodeBuilder()),
         )
     }
 }

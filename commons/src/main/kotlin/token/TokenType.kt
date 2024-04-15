@@ -3,14 +3,14 @@ package token
 enum class TokenType {
     // Single-character tokens.
     ASSIGNATION, // =
-    LEFT_PAREN,
-    RIGHT_PAREN,
+    LEFTPAREN,
+    RIGHTPAREN,
     PLUS, // +
     MINUS, // -
     STAR, // *
     SLASH, // /
-    LEFT_BRACE, // {
-    RIGHT_BRACE, // }
+    LEFTBRACE, // {
+    RIGHTBRACE, // }
 
     // Separators
     SEMICOLON, // ;
@@ -20,20 +20,23 @@ enum class TokenType {
     PRINT, // print
     IF, // if
     ELSE, // else
-    NUMBER_TYPE, // number
-    STRING_TYPE, // string
-    BOOLEAN_TYPE, // boolean
+    NUMBERTYPE, // number
+    STRINGTYPE, // string
+    BOOLEANTYPE, // boolean
 
     LET, // let
     CONST, // const
 
     // Functions
-    READ_INPUT,
-    READ_ENV,
+    READINPUT,
+    READENV,
 
     // Literals
-    STRING_LITERAL, // "hola"
-    NUMBER_LITERAL, // 123
-    BOOLEAN_LITERAL, // true or false
-    VALUE_IDENTIFIER_LITERAL, // let VALUE_IDENTIFIER: STRING
+    STRINGLITERAL, // "hola"
+    NUMBERLITERAL, // 123
+    BOOLEANLITERAL, // true or false
+    VALUEIDENTIFIERLITERAL, // let VALUE_IDENTIFIER: STRING
+
+    // Invalid
+    INVALID,
 }

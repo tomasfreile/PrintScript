@@ -23,10 +23,10 @@ class StringSemantic : SemanticRule {
             TokenType.MINUS,
             TokenType.STAR,
             TokenType.SLASH,
-            TokenType.LEFT_PAREN,
-            TokenType.RIGHT_PAREN,
-            TokenType.LEFT_BRACE,
-            TokenType.RIGHT_BRACE,
+            TokenType.LEFTPAREN,
+            TokenType.RIGHTPAREN,
+            TokenType.LEFTBRACE,
+            TokenType.RIGHTBRACE,
         )
     }
 }

@@ -77,7 +77,7 @@ class ArithmeticNodeBuilder : NodeBuilder {
         var i = 0
         while (i < tokenList.size) {
             when (tokenList[i].type) {
-                TokenType.LEFT_PAREN -> i = ignoreParenToIndex(tokenList, i)
+                TokenType.LEFTPAREN -> i = ignoreParenToIndex(tokenList, i)
                 type -> return i
                 else -> i++
             }
@@ -104,14 +104,14 @@ class ArithmeticNodeBuilder : NodeBuilder {
 
     private fun isLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
+            TokenType.NUMBERLITERAL, TokenType.VALUEIDENTIFIERLITERAL -> true
             else -> false
         }
     }
 
     private fun isLeftParen(token: Token): Boolean {
         return when (token.type) {
-            TokenType.LEFT_PAREN -> true
+            TokenType.LEFTPAREN -> true
             else -> false
         }
     }
@@ -128,7 +128,7 @@ class ArithmeticNodeBuilder : NodeBuilder {
         actual: Int,
     ): Int {
         if (isParenValid(tokenList, actual)) {
-            return actual + getOperatorIndex(tokenList.subList(actual + 1, tokenList.size), TokenType.RIGHT_PAREN) + 2
+            return actual + getOperatorIndex(tokenList.subList(actual + 1, tokenList.size), TokenType.RIGHTPAREN) + 2
         } else {
             throw InvalidSyntaxException("Invalid Paren Syntax on line: " + tokenList[actual].start.row)
         }
@@ -138,7 +138,7 @@ class ArithmeticNodeBuilder : NodeBuilder {
         var i = 0
         for (token in tokenList) {
             when (token.type) {
-                TokenType.RIGHT_PAREN -> return i
+                TokenType.RIGHTPAREN -> return i
                 else -> i += 1
             }
         }

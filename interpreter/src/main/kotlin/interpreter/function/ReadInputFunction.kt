@@ -6,7 +6,7 @@ import interpreter.variable.Variable
 import token.TokenType
 
 class ReadInputFunction : Function {
-    override val type: TokenType = TokenType.READ_INPUT
+    override val type: TokenType = TokenType.READINPUT
 
     override fun run(
         interpreter: PrintScriptInterpreter,

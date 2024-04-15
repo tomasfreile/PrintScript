@@ -29,7 +29,7 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
     }
 
     private fun formatLiteralNode(node: LiteralNode): String {
-        if (node.type == TokenType.STRING_LITERAL) {
+        if (node.type == TokenType.STRINGLITERAL) {
             return "\"${node.value}\""
         }
         return node.value
@@ -135,9 +135,9 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
 
     private fun defineValueType(valueType: TokenType): String {
         return when (valueType) {
-            TokenType.NUMBER_TYPE -> "number"
-            TokenType.STRING_TYPE -> "string"
-            TokenType.BOOLEAN_TYPE -> "boolean"
+            TokenType.NUMBERTYPE -> "number"
+            TokenType.STRINGTYPE -> "string"
+            TokenType.BOOLEANTYPE -> "boolean"
             else -> ""
         }
     }

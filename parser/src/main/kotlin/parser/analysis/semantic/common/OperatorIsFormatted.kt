@@ -40,7 +40,7 @@ class OperatorIsFormatted : SemanticRule {
 
     private fun isLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.STRING_LITERAL, TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL, TokenType.BOOLEAN_LITERAL -> true
+            TokenType.STRINGLITERAL, TokenType.NUMBERLITERAL, TokenType.VALUEIDENTIFIERLITERAL, TokenType.BOOLEANLITERAL -> true
             else -> false
         }
     }
@@ -54,14 +54,14 @@ class OperatorIsFormatted : SemanticRule {
 
     private fun isLeftParen(token: Token): Boolean {
         return when (token.type) {
-            TokenType.LEFT_PAREN -> true
+            TokenType.LEFTPAREN -> true
             else -> false
         }
     }
 
     private fun isRightParen(token: Token): Boolean {
         return when (token.type) {
-            TokenType.RIGHT_PAREN -> true
+            TokenType.RIGHTPAREN -> true
             else -> false
         }
     }
@@ -91,7 +91,7 @@ class OperatorIsFormatted : SemanticRule {
         var i = 0
         for (token in tokenList) {
             when (token.type) {
-                TokenType.RIGHT_PAREN -> return i
+                TokenType.RIGHTPAREN -> return i
                 else -> i += 1
             }
         }

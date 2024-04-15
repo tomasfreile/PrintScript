@@ -31,25 +31,25 @@ class PrintParserTest {
 
     private fun getSemanticMap(): Map<TokenType, SemanticRule> {
         return mapOf(
-            Pair(TokenType.NUMBER_TYPE, NumberSemantic()),
-            Pair(TokenType.STRING_TYPE, StringSemantic()),
-            Pair(TokenType.BOOLEAN_TYPE, BooleanSemantic()),
+            Pair(TokenType.NUMBERTYPE, NumberSemantic()),
+            Pair(TokenType.STRINGTYPE, StringSemantic()),
+            Pair(TokenType.BOOLEANTYPE, BooleanSemantic()),
         )
     }
 
     private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
         return mapOf(
-            Pair(TokenType.STRING_TYPE, IsStringSyntax()),
-            Pair(TokenType.NUMBER_TYPE, IsArithmeticSyntax()),
-            Pair(TokenType.BOOLEAN_TYPE, IsBooleanSyntax()),
+            Pair(TokenType.STRINGTYPE, IsStringSyntax()),
+            Pair(TokenType.NUMBERTYPE, IsArithmeticSyntax()),
+            Pair(TokenType.BOOLEANTYPE, IsBooleanSyntax()),
         )
     }
 
     private fun getNodeBuilders(): Map<TokenType, NodeBuilder> {
         return mapOf(
-            Pair(TokenType.STRING_TYPE, StringNodeBuilder()),
-            Pair(TokenType.NUMBER_TYPE, ArithmeticNodeBuilder()),
-            Pair(TokenType.BOOLEAN_TYPE, BooleanNodeBuilder()),
+            Pair(TokenType.STRINGTYPE, StringNodeBuilder()),
+            Pair(TokenType.NUMBERTYPE, ArithmeticNodeBuilder()),
+            Pair(TokenType.BOOLEANTYPE, BooleanNodeBuilder()),
         )
     }
 
@@ -58,9 +58,9 @@ class PrintParserTest {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "Hello World", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "Hello World", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parse.canHandle(tokenList))
@@ -72,11 +72,11 @@ class PrintParserTest {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "World", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "World", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parse.canHandle(tokenList))
@@ -93,11 +93,11 @@ class PrintParserTest {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parse.canHandle(tokenList))
@@ -115,11 +115,11 @@ class PrintParserTest {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SLASH, "/", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "World", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "World", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertFailsWith<InvalidSyntaxException> {
@@ -132,10 +132,10 @@ class PrintParserTest {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertFailsWith<InvalidOperatorException> {
@@ -148,11 +148,11 @@ class PrintParserTest {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parse.canHandle(tokenList))
@@ -168,19 +168,19 @@ class PrintParserTest {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parse.canHandle(tokenList))
@@ -193,25 +193,25 @@ class PrintParserTest {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "8", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "8", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "6", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "6", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parse.canHandle(tokenList))
@@ -230,9 +230,9 @@ class PrintParserTest {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.BOOLEAN_LITERAL, "True", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.BOOLEANLITERAL, "True", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parse.canHandle(tokenList))
@@ -243,7 +243,7 @@ class PrintParserTest {
             node.expression is LiteralNode
         }
         node as PrintNode
-        assertEquals((node.expression as LiteralNode).type, TokenType.BOOLEAN_LITERAL)
+        assertEquals((node.expression as LiteralNode).type, TokenType.BOOLEANLITERAL)
     }
 
     @Test
@@ -251,11 +251,11 @@ class PrintParserTest {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.BOOLEAN_LITERAL, "true", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.BOOLEANLITERAL, "true", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "hello", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parse.canHandle(tokenList))
@@ -268,12 +268,12 @@ class PrintParserTest {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.PRINT, "println", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.READ_INPUT, "readInput", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "hello", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.READINPUT, "readInput", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parse.canHandle(tokenList))
@@ -284,6 +284,6 @@ class PrintParserTest {
             node.expression is FunctionNode
         }
         node as PrintNode
-        assertEquals(((node.expression as FunctionNode).expression as LiteralNode).type, TokenType.STRING_LITERAL)
+        assertEquals(((node.expression as FunctionNode).expression as LiteralNode).type, TokenType.STRINGLITERAL)
     }
 }

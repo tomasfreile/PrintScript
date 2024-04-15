@@ -30,25 +30,25 @@ class AssignationParserTest {
 
     private fun getSemanticMap(): Map<TokenType, SemanticRule> {
         return mapOf(
-            Pair(TokenType.NUMBER_TYPE, NumberSemantic()),
-            Pair(TokenType.STRING_TYPE, StringSemantic()),
-            Pair(TokenType.BOOLEAN_TYPE, BooleanSemantic()),
+            Pair(TokenType.NUMBERTYPE, NumberSemantic()),
+            Pair(TokenType.STRINGTYPE, StringSemantic()),
+            Pair(TokenType.BOOLEANTYPE, BooleanSemantic()),
         )
     }
 
     private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
         return mapOf(
-            Pair(TokenType.STRING_TYPE, IsStringSyntax()),
-            Pair(TokenType.NUMBER_TYPE, IsArithmeticSyntax()),
-            Pair(TokenType.BOOLEAN_TYPE, IsBooleanSyntax()),
+            Pair(TokenType.STRINGTYPE, IsStringSyntax()),
+            Pair(TokenType.NUMBERTYPE, IsArithmeticSyntax()),
+            Pair(TokenType.BOOLEANTYPE, IsBooleanSyntax()),
         )
     }
 
     private fun getNodeBuilders(): Map<TokenType, NodeBuilder> {
         return mapOf(
-            Pair(TokenType.STRING_TYPE, StringNodeBuilder()),
-            Pair(TokenType.NUMBER_TYPE, ArithmeticNodeBuilder()),
-            Pair(TokenType.BOOLEAN_TYPE, BooleanNodeBuilder()),
+            Pair(TokenType.STRINGTYPE, StringNodeBuilder()),
+            Pair(TokenType.NUMBERTYPE, ArithmeticNodeBuilder()),
+            Pair(TokenType.BOOLEANTYPE, BooleanNodeBuilder()),
         )
     }
 
@@ -56,9 +56,9 @@ class AssignationParserTest {
     fun test001_AssignationParserSimpleStringAssignation() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "name", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "name", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "Tatiana", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "Tatiana", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
@@ -73,9 +73,9 @@ class AssignationParserTest {
     fun test002_AssignationParserSimpleNumberAssignation() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "three", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "three", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
@@ -84,18 +84,18 @@ class AssignationParserTest {
             node is AssignmentNode
         }
         assertEquals((node as AssignmentNode).identifier, "three")
-        assertEquals((node.expression as LiteralNode).type, TokenType.NUMBER_LITERAL)
+        assertEquals((node.expression as LiteralNode).type, TokenType.NUMBERLITERAL)
     }
 
     @Test
     fun test003_AssignationParserArithmeticExpressionAssignation() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "three", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "three", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SLASH, "/", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
@@ -104,18 +104,18 @@ class AssignationParserTest {
             (node as AssignmentNode).expression is BinaryOperationNode
         }
         assertEquals(((node as AssignmentNode).expression as BinaryOperationNode).operator, TokenType.SLASH)
-        assertEquals(((node.expression as BinaryOperationNode).left as LiteralNode).type, TokenType.NUMBER_LITERAL)
+        assertEquals(((node.expression as BinaryOperationNode).left as LiteralNode).type, TokenType.NUMBERLITERAL)
     }
 
     @Test
     fun test004_AssignationParserInvalidConcatBecauseOfOperator() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "three", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "three", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SLASH, "/", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
@@ -128,11 +128,11 @@ class AssignationParserTest {
     fun test005_AssignationParserConcatStringAndNumber() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "three", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "three", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "Hello", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
@@ -150,25 +150,25 @@ class AssignationParserTest {
     fun test006_AssignationParsersSimpleArithmeticOperationWithParen() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "number", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "number", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "5", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "5", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SLASH, "/", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "10", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "10", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "2", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "a", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "a", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
@@ -193,25 +193,25 @@ class AssignationParserTest {
     fun test007_AssignationParserInvalidArithmeticOperationWithParenBecauseOfString() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "number", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "number", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "4", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "5", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "5", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SLASH, "/", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "10", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "10", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.STAR, "*", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "2", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "2", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "a", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "a", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
@@ -224,9 +224,9 @@ class AssignationParserTest {
     fun test008_AssignationParserBooleanLiteral() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "condition", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "condition", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.BOOLEAN_LITERAL, "True", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.BOOLEANLITERAL, "True", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
@@ -237,18 +237,18 @@ class AssignationParserTest {
             node.expression is LiteralNode
         }
         assertEquals((node as AssignmentNode).identifier, "condition")
-        assertEquals((node.expression as LiteralNode).type, TokenType.BOOLEAN_LITERAL)
+        assertEquals((node.expression as LiteralNode).type, TokenType.BOOLEANLITERAL)
     }
 
     @Test
     fun test009_AssignationParserInvalidBooleanExpressionBecauseOfNumber() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "condition", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "condition", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.BOOLEAN_LITERAL, "true", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.BOOLEANLITERAL, "true", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.PLUS, "+", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.NUMBER_LITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.NUMBERLITERAL, "3", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
@@ -260,12 +260,12 @@ class AssignationParserTest {
     fun test010_AssignationParserReadInputFunctionExpression() {
         val tokenList =
             listOf(
-                PrintScriptToken(TokenType.VALUE_IDENTIFIER_LITERAL, "condition", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "condition", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.READ_INPUT, "readInput", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.LEFT_PAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRING_LITERAL, "hello", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.RIGHT_PAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.READINPUT, "readInput", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
@@ -276,6 +276,6 @@ class AssignationParserTest {
             node.expression is FunctionNode
         }
         node as AssignmentNode
-        assertEquals(((node.expression as FunctionNode).expression as LiteralNode).type, TokenType.STRING_LITERAL)
+        assertEquals(((node.expression as FunctionNode).expression as LiteralNode).type, TokenType.STRINGLITERAL)
     }
 }

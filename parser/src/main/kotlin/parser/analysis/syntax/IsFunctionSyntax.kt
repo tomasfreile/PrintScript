@@ -21,21 +21,21 @@ class IsFunctionSyntax : SyntaxRule {
 
     private fun isFunction(token: Token): Boolean {
         return when (token.type) {
-            TokenType.READ_ENV, TokenType.READ_INPUT -> true
+            TokenType.READENV, TokenType.READINPUT -> true
             else -> false
         }
     }
 
     private fun isLeftParen(token: Token): Boolean {
         return when (token.type) {
-            TokenType.LEFT_PAREN -> true
+            TokenType.LEFTPAREN -> true
             else -> false
         }
     }
 
     private fun isRightParen(token: Token): Boolean {
         return when (token.type) {
-            TokenType.RIGHT_PAREN -> true
+            TokenType.RIGHTPAREN -> true
             else -> false
         }
     }

@@ -9,7 +9,7 @@ class HasPairOfParen : SyntaxRule {
         var index = 0
         for (token in tokenList) {
             when (token.type) {
-                TokenType.LEFT_PAREN -> {
+                TokenType.LEFTPAREN -> {
                     val rightParenIndex = getRightParenIndex(tokenList, index)
                     return rightParenIndex > 0
                 }
@@ -26,7 +26,7 @@ class HasPairOfParen : SyntaxRule {
         var index = 0
         for (token in tokenList.subList(from, tokenList.size)) {
             when (token.type) {
-                TokenType.RIGHT_PAREN -> return index
+                TokenType.RIGHTPAREN -> return index
                 else -> index += 1
             }
         }
