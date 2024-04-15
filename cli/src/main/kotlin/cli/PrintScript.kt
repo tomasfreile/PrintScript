@@ -75,7 +75,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     }
 
     private fun executeCode(sentencesList: List<String>) {
-        var result: InterpreterResult = Result("")
+        var result: InterpreterResult
         try {
             for (sentence in sentencesList) {
                 try {
