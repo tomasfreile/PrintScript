@@ -43,7 +43,7 @@ fun getTokenMapV11(): EnumMap<TokenType, Pattern> {
     tokenMap[TokenType.CONST] = Pattern.compile("\\bconst\\b")
     tokenMap[TokenType.READ_INPUT] = Pattern.compile("\\breadInput\\b")
     tokenMap[TokenType.READ_ENV] = Pattern.compile("\\breadEnv\\b")
-    tokenMap[TokenType.BOOLEAN_LITERAL] = Pattern.compile("\\btrue\\b")
+    tokenMap[TokenType.BOOLEAN_LITERAL] = Pattern.compile("\\btrue\\b|\\bfalse\\b")
     tokenMap[TokenType.IF] = Pattern.compile("\\bif\\b")
     tokenMap[TokenType.ELSE] = Pattern.compile("\\belse\\b")
     tokenMap[TokenType.LEFT_BRACE] = Pattern.compile("\\{")
