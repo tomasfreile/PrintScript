@@ -34,11 +34,14 @@ data class VariableDeclarationNode(
 // Assignment statement
 data class AssignmentNode(val identifier: String, val expression: AstNode, override val position: TokenPosition) : AstNode()
 
+// Code
+data class CodeBlock(val nodes: List<AstNode>, override val position: TokenPosition) : AstNode()
+
 // If statement
 data class IfNode(
     val condition: LiteralNode,
-    val thenBlock: List<AstNode>,
-    val elseBlock: List<AstNode>,
+    val thenBlock: CodeBlock,
+    val elseBlock: CodeBlock,
     override val position: TokenPosition,
 ) : AstNode()
 

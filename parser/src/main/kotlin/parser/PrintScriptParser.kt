@@ -22,6 +22,6 @@ class PrintScriptParser(private val parserList: List<Parser>) : Parser {
                 else -> continue
             }
         }
-        throw InvalidSyntaxException("Invalid syntax")
+        throw InvalidSyntaxException("Invalid syntax on line ${tokenList.first().start.row}")
     }
 }

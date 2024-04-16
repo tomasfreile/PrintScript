@@ -7,8 +7,8 @@ To copy pre-commit script to .git/hooks run:
 ./gradlew installGitHook
 ```
 
-### Linter check
-To check linter:
+### Check
+To check linter and coverage:
 ```bash
 ./gradlew check
 ```
@@ -16,7 +16,7 @@ To check linter:
 ## Run Code
 You can run PrintScript code using:
 ```bash
-./print-script execute <source>
+./print-script <version> execute <source>
 ```
 For help run:
 ```bash

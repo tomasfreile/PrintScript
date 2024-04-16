@@ -8,6 +8,7 @@ import parser.analysis.semantic.SemanticRule
 import parser.analysis.syntax.SyntaxRule
 import parser.analysis.syntax.common.HasSentenceSeparator
 import parser.nodeBuilder.NodeBuilder
+import position.TokenPosition
 import token.Token
 import token.TokenType
 
@@ -142,7 +143,7 @@ class DeclarationParser(
             tokenList[1].value,
             tokenList[3].type,
             node,
-            node.position,
+            TokenPosition(tokenList[1].start, tokenList[1].end),
         )
     }
 
