@@ -63,6 +63,30 @@ class PrintScriptInterpreterTest {
     }
 
     @Test
+    fun testDivisionPrint() {
+        val string = "println(3 / 3);"
+        val result = interpreter.interpret(getTree(string), symbolTable)
+        result as PrintResult
+        assertEquals("1", result.toPrint)
+    }
+
+    @Test
+    fun testSubPrint() {
+        val string = "println(3 - 3);"
+        val result = interpreter.interpret(getTree(string), symbolTable)
+        result as PrintResult
+        assertEquals("0", result.toPrint)
+    }
+
+    @Test
+    fun testMulPrint() {
+        val string = "println(3 * 3);"
+        val result = interpreter.interpret(getTree(string), symbolTable)
+        result as PrintResult
+        assertEquals("9", result.toPrint)
+    }
+
+    @Test
     fun testDeclareVariableAndThenPrintIt() {
         val string = "let num: number = 3;"
         interpreter.interpret(getTree(string), symbolTable)
@@ -95,7 +119,7 @@ class PrintScriptInterpreterTest {
     @Test
     fun testDeclareVariableWithoutValue() {
         val string = "let num: number;"
-        val result = interpreter.interpret(getTree(string), symbolTable)
+        interpreter.interpret(getTree(string), symbolTable)
         assertEquals("num", symbolTable.keys.elementAt(0).name)
     }
 
