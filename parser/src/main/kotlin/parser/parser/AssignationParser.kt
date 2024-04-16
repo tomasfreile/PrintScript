@@ -5,7 +5,7 @@ import ast.AstNode
 import parser.InvalidAssignationException
 import parser.analysis.semantic.SemanticRule
 import parser.analysis.syntax.SyntaxRule
-import parser.analysis.syntax.common.HasSentenceSeparator
+import parser.analysis.syntax.common.HasSentenceDelimiter
 import parser.nodeBuilder.NodeBuilder
 import token.Token
 import token.TokenType
@@ -63,7 +63,7 @@ class AssignationParser(
 
     private fun preCondition(tokenList: List<Token>): Boolean {
         return tokenList.size >= 3 &&
-            HasSentenceSeparator(separator).checkSyntax(tokenList)
+            HasSentenceDelimiter(separator).checkSyntax(tokenList)
     }
 
     private fun isAssignation(tokenList: List<Token>): Boolean {

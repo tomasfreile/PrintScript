@@ -5,13 +5,13 @@ import lexer.PrintScriptLexer
 import lexer.getTokenMapV11
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import parser.parserBuilder.PrintScriptOnePointZeroParserBuilder
+import parser.parserBuilder.printScript10.PrintScript10ParserBuilder
 
 class FormatterTest {
     private val formatterPath01 = "src/test/resources/formatterTest01.yaml"
     private val formatterPath02 = "src/test/resources/formatterTest02.yaml"
     private val lexer = PrintScriptLexer(getTokenMapV11())
-    private val parser = PrintScriptOnePointZeroParserBuilder().build()
+    private val parser = PrintScript10ParserBuilder().build()
 
     private fun getTree(code: String): AstNode? {
         val tokenList = lexer.lex(code)

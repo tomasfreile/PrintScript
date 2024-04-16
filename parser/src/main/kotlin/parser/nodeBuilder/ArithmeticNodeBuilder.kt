@@ -4,7 +4,7 @@ import ast.AstNode
 import ast.BinaryOperationNode
 import parser.InvalidSyntaxException
 import parser.analysis.syntax.common.HasOperationAfterParen
-import parser.analysis.syntax.common.HasPairOfParen
+import parser.analysis.syntax.common.HasPairSeparator
 import position.TokenPosition
 import token.Token
 import token.TokenType
@@ -120,7 +120,10 @@ class ArithmeticNodeBuilder : NodeBuilder {
         tokenList: List<Token>,
         from: Int,
     ): Boolean {
-        return HasPairOfParen().checkSyntax(tokenList.subList(from, tokenList.size))
+        return HasPairSeparator(
+            TokenType.LEFT_PAREN,
+            TokenType.RIGHT_PAREN,
+        ).checkSyntax(tokenList.subList(from, tokenList.size))
     }
 
     private fun ignoreParenToIndex(
