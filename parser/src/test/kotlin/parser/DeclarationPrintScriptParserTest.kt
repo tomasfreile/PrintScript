@@ -7,15 +7,15 @@ import ast.NilNode
 import ast.VariableDeclarationNode
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import parser.parserBuilder.PrintScriptOnePointOneParserBuilder
+import parser.parserBuilder.printScript11.DeclarationParser11Builder
 import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class DeclarationParserTest {
-    private val parser = PrintScriptOnePointOneParserBuilder().build()
+class DeclarationPrintScriptParserTest {
+    private val parser = DeclarationParser11Builder().build()
 
     @Test
     fun test001_DeclarationParserCanHandleStringDeclaration() {

@@ -15,8 +15,8 @@ import interpreter.result.Result
 import interpreter.variable.Variable
 import lexer.Lexer
 import lexer.factory.LexerBuilder
-import parser.PrintScriptParser
-import parser.parserBuilder.PrintScriptOnePointZeroParserBuilder
+import parser.parser.Parser
+import parser.parserBuilder.printScript10.PrintScript10ParserBuilder
 import sca.StaticCodeAnalyzer
 import sca.StaticCodeAnalyzerImpl
 import java.io.BufferedReader
@@ -30,7 +30,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     private val config by option("-c", help = "config file").file(mustExist = true)
 
     val lexer: Lexer = LexerBuilder().build("1.0")
-    val parser: PrintScriptParser = PrintScriptOnePointZeroParserBuilder().build()
+    val printScriptParser: Parser = PrintScript10ParserBuilder().build()
     var interpreter: PrintScriptInterpreter = InterpreterBuilder().build()
     val symbolTable: MutableMap<Variable, Any> = mutableMapOf()
 
@@ -62,7 +62,8 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
     private fun validateCode(sentencesList: List<String>) {
         for (sentence in sentencesList) {
             val tokenList = lexer.lex(sentence)
-            val tree = parser.createAST(tokenList)
+            val tree = printScriptParser.createAST(tokenList)
+            println(tree)
         }
         println("Validation successful!")
     }
@@ -71,7 +72,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
         var result: InterpreterResult = Result("")
         for (sentence in sentencesList) {
             val tokenList = lexer.lex(sentence)
-            val tree = parser.createAST(tokenList)
+            val tree = printScriptParser.createAST(tokenList)
             result = interpreter.interpret(tree, symbolTable) as InterpreterResult
         }
         when (result) {
@@ -88,7 +89,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
 
         for (sentence in sentencesList) {
             val tokenList = lexer.lex(sentence)
-            val tree = parser.createAST(tokenList)
+            val tree = printScriptParser.createAST(tokenList)
             val line = tree?.let { formatter.format(it) }
             text += line
         }
@@ -101,7 +102,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Operation> <Source> <Versi
         var errorList: List<String> = listOf()
         for (sentence in sentencesList) {
             val tokenList = lexer.lex(sentence)
-            val tree = parser.createAST(tokenList)
+            val tree = printScriptParser.createAST(tokenList)
             errorList = errorList.plus(sca.analyze(tree ?: throw NullPointerException("Null ast tree")))
         }
         for (error in errorList) {

@@ -40,8 +40,8 @@ data class CodeBlock(val nodes: List<AstNode>, override val position: TokenPosit
 // If statement
 data class IfNode(
     val condition: LiteralNode,
-    val thenBlock: CodeBlock,
-    val elseBlock: CodeBlock,
+    val thenBlock: AstNode,
+    val elseBlock: AstNode,
     override val position: TokenPosition,
 ) : AstNode()
 

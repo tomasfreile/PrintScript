@@ -9,13 +9,13 @@ import lexer.PrintScriptLexer
 import lexer.getTokenMapV11
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import parser.parserBuilder.PrintScriptOnePointOneParserBuilder
+import parser.parserBuilder.printScript11.PrintScript11ParserBuilder
 import kotlin.test.assertEquals
 
 class PrintScriptInterpreterTest {
     private val interpreter = InterpreterBuilder().build()
     private val lexer = PrintScriptLexer(getTokenMapV11())
-    private val parser = PrintScriptOnePointOneParserBuilder().build()
+    private val parser = PrintScript11ParserBuilder().build()
     private val symbolTable = mutableMapOf<Variable, Any>()
 
     private fun getTree(code: String): AstNode? {

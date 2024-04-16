@@ -1,4 +1,4 @@
-package parser.parserBuilder
+package parser.parserBuilder.printScript10
 
 import parser.PrintScriptParser
 import parser.analysis.semantic.NumberSemantic
@@ -14,10 +14,11 @@ import parser.parser.AssignationParser
 import parser.parser.DeclarationParser
 import parser.parser.Parser
 import parser.parser.PrintParser
+import parser.parserBuilder.ParserBuilder
 import token.TokenType
 
-class PrintScriptOnePointZeroParserBuilder : PrintScriptParserBuilder {
-    override fun build(): PrintScriptParser {
+class PrintScript10ParserBuilder : ParserBuilder {
+    override fun build(): Parser {
         return PrintScriptParser(getParsers())
     }
 

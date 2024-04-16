@@ -6,7 +6,7 @@ import ast.VariableDeclarationNode
 import parser.InvalidDeclarationStatement
 import parser.analysis.semantic.SemanticRule
 import parser.analysis.syntax.SyntaxRule
-import parser.analysis.syntax.common.HasSentenceSeparator
+import parser.analysis.syntax.common.HasSentenceDelimiter
 import parser.nodeBuilder.NodeBuilder
 import token.Token
 import token.TokenType
@@ -28,7 +28,7 @@ class DeclarationParser(
 
     private fun preCondition(tokenList: List<Token>): Boolean {
         return tokenList.size >= 4 &&
-            HasSentenceSeparator(separator).checkSyntax(tokenList)
+            HasSentenceDelimiter(separator).checkSyntax(tokenList)
     }
 
     override fun createAST(tokenList: List<Token>): AstNode? {
