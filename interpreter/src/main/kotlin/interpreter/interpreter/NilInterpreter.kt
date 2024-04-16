@@ -2,7 +2,6 @@ package interpreter.interpreter
 
 import ast.AstNode
 import ast.NilNode
-import interpreter.result.Result
 import interpreter.variable.Variable
 
 class NilInterpreter : Interpreter {
@@ -12,7 +11,7 @@ class NilInterpreter : Interpreter {
         symbolTable: MutableMap<Variable, Any>,
     ): Any {
         node as NilNode
-        return Result(node)
+        return node
     }
 
     override fun canHandle(node: AstNode): Boolean {
