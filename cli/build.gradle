@@ -1,5 +1,5 @@
 plugins {
-    id 'printscript.gradle.kotlin-common-conventions'
+    id 'printscript.gradle.kotlin-library-conventions'
     id 'application'
 }
 
