@@ -202,12 +202,6 @@ class PrintScriptLexerTest {
     ) {
         val actualTokens = lexer.lex(input)
 
-        // print token type
-
-        for (i in actualTokens.indices) {
-            println(actualTokens[i].type)
-        }
-
         Assertions.assertEquals(expectedTokens.size, actualTokens.size)
 
         for (i in expectedTokens.indices) {
