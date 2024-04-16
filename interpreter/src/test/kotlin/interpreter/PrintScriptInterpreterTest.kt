@@ -194,4 +194,16 @@ class PrintScriptInterpreterTest {
         val printResult = result.values[0] as PrintResult
         assertEquals("chau", printResult.toPrint)
     }
+
+    @Test
+    fun testIfNodeWithoutElseBlockWhenCOnditionIsFalse() {
+        val string1 = "println('hola');"
+        val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
+        val literalNode = LiteralNode("false", TokenType.BOOLEAN_LITERAL, tokenPosition)
+        val thenBlock = CodeBlock(listOf(getTree(string1)), tokenPosition)
+        val elseBlock = NilNode
+        val ifNode = IfNode(literalNode, thenBlock, elseBlock, tokenPosition)
+        val result: Result = interpreter.interpret(ifNode, symbolTable) as Result
+        assertEquals(Result(NilNode), result)
+    }
 }
