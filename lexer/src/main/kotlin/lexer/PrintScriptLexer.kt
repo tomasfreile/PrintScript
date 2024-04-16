@@ -10,7 +10,10 @@ import java.util.*
 import java.util.regex.Pattern
 
 class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexer {
+    // Pattern to match any token type
     private val tokenPattern: Pattern = tokenMap.values.joinToString("|").toRegex().toPattern()
+
+    // Map of token types to their respective regex patterns
     private val typePatterns: Map<TokenType, Pattern> = tokenMap.entries.associate { (type, pattern) -> type to pattern }
 
     override fun lex(input: String): List<Token> {
@@ -34,20 +37,25 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
         var currentIndex = 0
 
         while (matcher.find()) {
-            val token = matcher.group()
-            val type = findTokenType(token)
+            val tokenValue = matcher.group()
+            val type = findTokenType(tokenValue)
             val start = matcher.start()
             val end = matcher.end()
 
             checkIllegalCharsBetweenTokens(input, currentIndex, start, line)
 
-            if (type == TokenType.STRING_LITERAL) {
-                tokens.add(
-                    PrintScriptToken(type, token.substring(1, token.length - 1), Coordinate(line, start + 1), Coordinate(line, end - 1)),
-                )
-            } else {
-                tokens.add(PrintScriptToken(type, token, Coordinate(line, start), Coordinate(line, end)))
-            }
+            val token =
+                if (type == TokenType.STRING_LITERAL) {
+                    PrintScriptToken(
+                        type,
+                        tokenValue.substring(1, tokenValue.length - 1),
+                        Coordinate(line, matcher.start() + 1),
+                        Coordinate(line, matcher.end() - 1),
+                    )
+                } else {
+                    PrintScriptToken(type, tokenValue, Coordinate(line, matcher.start()), Coordinate(line, matcher.end()))
+                }
+            tokens.add(token)
             currentIndex = end
         }
 
@@ -56,6 +64,7 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
         return tokens
     }
 
+    // Function to find the TokenType of a token string
     private fun findTokenType(token: String): TokenType {
         val matchedEntry = typePatterns.entries.find { (_, pattern) -> pattern.matcher(token).matches() }
         return matchedEntry?.key ?: throw IllegalStateException("Token type not found for token: $token")
