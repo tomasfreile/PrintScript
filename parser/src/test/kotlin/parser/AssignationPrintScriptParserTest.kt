@@ -25,7 +25,7 @@ import token.TokenType
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class AssignationParserTest {
+class AssignationPrintScriptParserTest {
     private val parser = AssignationParser(TokenType.SEMICOLON, getSyntaxMap(), getSemanticMap(), getNodeBuilders())
 
     private fun getSemanticMap(): Map<TokenType, SemanticRule> {

@@ -5,13 +5,13 @@ import lexer.PrintScriptLexer
 import lexer.getTokenMapV11
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import parser.parserBuilder.PrintScriptOnePointZeroParserBuilder
+import parser.parserBuilder.printScript10.PrintScript10ParserBuilder
 
 class FormatterTest {
     private val formatterPath01 = "src/test/resources/formatterTest01.yaml"
     private val formatterPath02 = "src/test/resources/formatterTest02.yaml"
     private val lexer = PrintScriptLexer(getTokenMapV11())
-    private val parser = PrintScriptOnePointZeroParserBuilder().build()
+    private val parser = PrintScript10ParserBuilder().build()
 
     private fun getTree(code: String): AstNode? {
         val tokenList = lexer.lex(code)
@@ -273,9 +273,9 @@ class FormatterTest {
 //    fun test023_formatAnIfOperation() {
 //        val node =
 //            IfNode(
-//                LiteralNode("true", TokenType.BOOLEAN_LITERAL),
-//                AssignmentNode("name", LiteralNode("micaela", TokenType.STRING_LITERAL)),
-//                PrintNode(LiteralNode("False", TokenType.BOOLEAN_LITERAL)),
+//                LiteralNode("true", TokenType.BOOLEANLITERAL),
+//                AssignmentNode("name", LiteralNode("micaela", TokenType.STRINGLITERAL)),
+//                PrintNode(LiteralNode("False", TokenType.BOOLEANLITERAL)),
 //            )
 //        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
 //        val result = formatter.format(node)
@@ -286,9 +286,9 @@ class FormatterTest {
 //    fun test024_formatAnIfOperationWithOtherSetOfRules() {
 //        val node =
 //            IfNode(
-//                LiteralNode("true", TokenType.BOOLEAN_LITERAL),
-//                AssignmentNode("name", LiteralNode("micaela", TokenType.STRING_LITERAL)),
-//                PrintNode(LiteralNode("False", TokenType.BOOLEAN_LITERAL)),
+//                LiteralNode("true", TokenType.BOOLEANLITERAL),
+//                AssignmentNode("name", LiteralNode("micaela", TokenType.STRINGLITERAL)),
+//                PrintNode(LiteralNode("False", TokenType.BOOLEANLITERAL)),
 //            )
 //        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
 //        val result = formatter.format(node)

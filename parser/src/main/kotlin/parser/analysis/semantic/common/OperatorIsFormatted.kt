@@ -3,7 +3,7 @@ package parser.analysis.semantic.common
 import parser.InvalidOperatorException
 import parser.InvalidParenException
 import parser.analysis.semantic.SemanticRule
-import parser.analysis.syntax.common.HasPairOfParen
+import parser.analysis.syntax.common.HasPairSeparator
 import token.Token
 import token.TokenType
 
@@ -99,7 +99,10 @@ class OperatorIsFormatted : SemanticRule {
     }
 
     private fun isParenValid(tokenList: List<Token>): Boolean {
-        return HasPairOfParen().checkSyntax(tokenList)
+        return HasPairSeparator(
+            TokenType.LEFTPAREN,
+            TokenType.RIGHTPAREN,
+        ).checkSyntax(tokenList)
     }
 
     private fun isFormatted(

@@ -26,7 +26,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
-class PrintParserTest {
+class PrintPrintScriptParserTest {
     private val parse = PrintParser(TokenType.SEMICOLON, getSyntaxMap(), getSemanticMap(), getNodeBuilders())
 
     private fun getSemanticMap(): Map<TokenType, SemanticRule> {

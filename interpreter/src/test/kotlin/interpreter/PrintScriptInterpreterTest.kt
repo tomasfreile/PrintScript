@@ -13,7 +13,7 @@ import lexer.getTokenMapV11
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import parser.parserBuilder.PrintScriptOnePointOneParserBuilder
+import parser.parserBuilder.printScript11.PrintScript11ParserBuilder
 import position.Coordinate
 import position.TokenPosition
 import token.TokenType
@@ -22,7 +22,7 @@ import kotlin.test.assertEquals
 class PrintScriptInterpreterTest {
     private val interpreter = InterpreterBuilder().build("1.1")
     private val lexer = PrintScriptLexer(getTokenMapV11())
-    private val parser = PrintScriptOnePointOneParserBuilder().build()
+    private val parser = PrintScript11ParserBuilder().build()
     private val symbolTable = mutableMapOf<Variable, Any>()
 
     private fun getTree(code: String): AstNode {
