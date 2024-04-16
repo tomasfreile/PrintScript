@@ -14,8 +14,8 @@ class CodeBlockInterpreter : Interpreter {
     ): Any {
         node as CodeBlock
         var resultList = listOf<InterpreterResult>()
-        for (node in node.nodes) {
-            resultList = resultList.plus(interpreter.interpret(node, symbolTable) as InterpreterResult)
+        for (subNode in node.nodes) {
+            resultList = resultList.plus(interpreter.interpret(subNode, symbolTable) as InterpreterResult)
         }
         return MultipleResults(resultList)
     }
