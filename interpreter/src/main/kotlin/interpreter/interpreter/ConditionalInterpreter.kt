@@ -2,6 +2,8 @@ package interpreter.interpreter
 
 import ast.AstNode
 import ast.IfNode
+import ast.NilNode
+import interpreter.result.Result
 import interpreter.variable.Variable
 
 class ConditionalInterpreter : Interpreter {
@@ -15,6 +17,9 @@ class ConditionalInterpreter : Interpreter {
         return if (conditionValue) {
             interpreter.interpret(node.thenBlock, symbolTable)
         } else {
+            if (node.elseBlock == NilNode) {
+                return Result(NilNode)
+            }
             interpreter.interpret(node.elseBlock, symbolTable)
         }
     }
