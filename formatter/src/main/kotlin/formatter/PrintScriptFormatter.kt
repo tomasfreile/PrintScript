@@ -18,6 +18,7 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
     ): String {
         return when (astNode) {
             is LiteralNode -> formatLiteralNode(astNode)
+            is CodeBlock -> formatCodeBlock(astNode, rulesReaderData)
             is BinaryOperationNode -> formatBinaryOperationNode(astNode, rulesReaderData)
             is PrintNode -> formatPrintNode(astNode, rulesReaderData)
             is VariableDeclarationNode -> formatVariableDeclarationNode(astNode, rulesReaderData)
@@ -94,22 +95,32 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         node: IfNode,
         rules: Map<String, Any>,
     ): String {
-        val ifJump = rules["ifIndentation"] as Int
-        val indentationSpaces = "\t".repeat(ifJump)
+        val indentationAmount = rules["ifIndentation"] as Int
         val condition = applyFormat(node.condition, rules)
-        val thenBlock = applyFormat(node.thenBlock, rules)
-        val elseBlock = applyFormat(node.elseBlock, rules)
-        return "if ($condition) {\n$indentationSpaces$thenBlock\n} else {\n$indentationSpaces$elseBlock\n}"
+        val thenBlock = applyIndentations(applyFormat(node.thenBlock, rules), indentationAmount)
+        val elseBlock = applyIndentations(applyFormat(node.elseBlock, rules), indentationAmount)
+        return "if ($condition) {\n$thenBlock\n} else {\n$elseBlock\n}\n"
     }
 
-//    private fun formatFunctionNode(
-//        node: FunctionNode,
-//        rules: Map<String, Any>,
-//    ): String {
-//        val function = defineFunctionSymbol(node.function)
-//        val expression = applyFormat(node.expression, rules)
-//        return "$function($expression)"
-//    }
+    private fun formatCodeBlock(
+        node: CodeBlock,
+        rules: Map<String, Any>,
+    ): String {
+        return formatCodeBlockLoop(node, rules, "")
+    }
+
+    private fun formatCodeBlockLoop(
+        node: CodeBlock,
+        rules: Map<String, Any>,
+        result: String,
+    ): String {
+        return if (node.nodes.isEmpty()) {
+            result
+        } else {
+            val newResult = result + applyFormat(node.nodes[0], rules)
+            formatCodeBlockLoop(CodeBlock(node.nodes.drop(1), node.position), rules, newResult)
+        }
+    }
 
     private fun formatSemicolon(result: String): String {
         return handleBeforeSpace(";", false, result) + "\n"
@@ -141,15 +152,6 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
             else -> ""
         }
     }
-
-//    private fun defineFunctionSymbol(function: TokenType): String {
-//        return when (function) {
-//            TokenType.READ_INPUT -> "readInput"
-//            TokenType.READ_ENV -> "readEnv"
-//            TokenType.WRITE_ENV -> "writeEnv"
-//            else -> ""
-//        }
-//    }
 
     private fun handleSpace(
         tokenValue: String,
@@ -189,23 +191,46 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         }
     }
 
-    private fun removeBreakLines(result: String): String {
-        return removeInitialBreakLines(removeFinalBreakLines(result))
+    private fun applyIndentations(
+        result: String,
+        indentations: Int,
+    ): String {
+        val indentationSpaces = "\t".repeat(indentations)
+        val dividedResult = result.split("\n")
+
+        return applyIndentationsLoop(dividedResult, indentationSpaces, "")
     }
 
-    private fun removeInitialBreakLines(result: String): String {
-        if (result.startsWith("\n")) {
-            return removeInitialBreakLines(result.drop(1))
-        } else {
+    private fun applyIndentationsLoop(
+        dividedResult: List<String>,
+        indentations: String,
+        result: String,
+    ): String {
+        if (dividedResult.isEmpty()) {
             return result
+        } else if (dividedResult.size == 1) {
+            return result + indentations + dividedResult[0]
+        } else {
+            val newResult = result + indentations + dividedResult[0] + "\n"
+            return applyIndentationsLoop(dividedResult.drop(1), indentations, newResult)
         }
     }
 
-    private fun removeFinalBreakLines(result: String): String {
-        if (result.endsWith("\n")) {
-            return removeFinalBreakLines(result.dropLast(1))
-        } else {
-            return result
-        }
-    }
+    //    private fun formatFunctionNode(
+//        node: FunctionNode,
+//        rules: Map<String, Any>,
+//    ): String {
+//        val function = defineFunctionSymbol(node.function)
+//        val expression = applyFormat(node.expression, rules)
+//        return "$function($expression)"
+//    }
+
+    //    private fun defineFunctionSymbol(function: TokenType): String {
+//        return when (function) {
+//            TokenType.READ_INPUT -> "readInput"
+//            TokenType.READ_ENV -> "readEnv"
+//            TokenType.WRITE_ENV -> "writeEnv"
+//            else -> ""
+//        }
+//    }
 }
