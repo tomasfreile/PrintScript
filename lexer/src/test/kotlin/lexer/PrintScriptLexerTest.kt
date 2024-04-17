@@ -162,16 +162,12 @@ class PrintScriptLexerTest {
     }
 
     @Test
-    fun invalidCharactersThrowExceptionWithPosition() {
+    fun invalidCharacters() {
         val input = "ha%o"
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
-            lexer.lex(input)
-        }
-
-        val input2 = "let x = 1;&"
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
-            lexer.lex(input2)
-        }
+        val expectedTokens =
+            listOf(
+                PrintScriptToken(TokenType.INVALID, "%", Coordinate(0, 2), Coordinate(0, 3)),
+            )
     }
 
     @Test

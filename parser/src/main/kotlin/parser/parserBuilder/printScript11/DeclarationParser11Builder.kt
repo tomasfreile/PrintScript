@@ -6,7 +6,10 @@ import parser.analysis.semantic.BooleanSemantic
 import parser.analysis.semantic.NumberSemantic
 import parser.analysis.semantic.SemanticRule
 import parser.analysis.semantic.StringSemantic
-import parser.analysis.syntax.*
+import parser.analysis.syntax.IsArithmeticSyntax
+import parser.analysis.syntax.IsBooleanSyntax
+import parser.analysis.syntax.IsStringSyntax
+import parser.analysis.syntax.SyntaxRule
 import parser.analysis.syntax.ifSyntax.IsIfElseSyntax
 import parser.nodeBuilder.ArithmeticNodeBuilder
 import parser.nodeBuilder.BooleanNodeBuilder
@@ -54,8 +57,8 @@ class DeclarationParser11Builder : ParserBuilder {
 
     private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
         return mapOf(
-            Pair(TokenType.STRINGTYPE, IsStringSyntax()),
             Pair(TokenType.NUMBERTYPE, IsArithmeticSyntax()),
+            Pair(TokenType.STRINGTYPE, IsStringSyntax()),
             Pair(TokenType.BOOLEANTYPE, IsBooleanSyntax()),
             Pair(TokenType.IF, IsIfElseSyntax()),
         )

@@ -36,4 +36,7 @@ enum class TokenType {
     NUMBERLITERAL, // 123
     BOOLEANLITERAL, // true or false
     VALUEIDENTIFIERLITERAL, // let VALUE_IDENTIFIER: STRING
+
+    // Invalid
+    INVALID,
 }

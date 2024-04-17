@@ -281,6 +281,7 @@ class FormatterTest {
                     TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
+                TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val formatter: Formatter = PrintScriptFormatter(formatterPath01)
@@ -298,6 +299,7 @@ class FormatterTest {
                     TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
+                TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val formatter: Formatter = PrintScriptFormatter(formatterPath02)
@@ -711,6 +713,7 @@ class FormatterTest {
                     TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
+                TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node6 =
@@ -802,6 +805,7 @@ class FormatterTest {
                     TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
+                TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node6 =
@@ -851,6 +855,7 @@ class FormatterTest {
             AssignmentNode(
                 "name",
                 LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =
@@ -888,6 +893,7 @@ class FormatterTest {
                     TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
+                TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =
@@ -975,6 +981,7 @@ class FormatterTest {
                     TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
+                TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node6 =
@@ -1123,6 +1130,7 @@ class FormatterTest {
                     TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
+                TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node6 =
@@ -1229,6 +1237,7 @@ class FormatterTest {
             AssignmentNode(
                 "name",
                 LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =
@@ -1284,6 +1293,7 @@ class FormatterTest {
                     TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
+                TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =

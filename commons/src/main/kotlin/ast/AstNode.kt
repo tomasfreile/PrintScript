@@ -32,7 +32,12 @@ data class VariableDeclarationNode(
 ) : AstNode()
 
 // Assignment statement
-data class AssignmentNode(val identifier: String, val expression: AstNode, override val position: TokenPosition) : AstNode()
+data class AssignmentNode(
+    val identifier: String,
+    val expression: AstNode,
+    val valueType: TokenType,
+    override val position: TokenPosition,
+) : AstNode()
 
 // Code
 data class CodeBlock(val nodes: List<AstNode>, override val position: TokenPosition) : AstNode()
