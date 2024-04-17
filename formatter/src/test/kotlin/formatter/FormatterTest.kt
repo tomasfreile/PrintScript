@@ -18,6 +18,8 @@ import token.TokenType
 class FormatterTest {
     private val formatterPath01 = "src/test/resources/formatterTest01.yaml"
     private val formatterPath02 = "src/test/resources/formatterTest02.yaml"
+    private val formatter1 = PrintScriptFormatterBuilder().build("1.1", formatterPath01)
+    private val formatter2 = PrintScriptFormatterBuilder().build("1.1", formatterPath02)
 
     @Test
     fun test001_formatASimpleMicaelaDeclaration() {
@@ -29,8 +31,7 @@ class FormatterTest {
                 LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("let name: string = \"micaela\";" + "\n", result)
     }
 
@@ -44,8 +45,7 @@ class FormatterTest {
                 LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("let name:string=\"micaela\";" + "\n", result)
     }
 
@@ -59,8 +59,7 @@ class FormatterTest {
                 LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("let num: number = 2;" + "\n", result)
     }
 
@@ -74,8 +73,7 @@ class FormatterTest {
                 LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("let num:number=2;" + "\n", result)
     }
 
@@ -94,8 +92,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("let sum: number = 2 + 2;" + "\n", result)
     }
 
@@ -114,8 +111,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("let sum:number=2 + 2;" + "\n", result)
     }
 
@@ -134,8 +130,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("let subtraction: number = 2 - 2;" + "\n", result)
     }
 
@@ -154,8 +149,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("let subtraction:number=2 - 2;" + "\n", result)
     }
 
@@ -174,8 +168,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("let multiplication: number = 2 * 2;" + "\n", result)
     }
 
@@ -194,8 +187,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("let multiplication:number=2 * 2;" + "\n", result)
     }
 
@@ -214,8 +206,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("let division: number = 2 / 2;" + "\n", result)
     }
 
@@ -234,8 +225,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("let division:number=2 / 2;" + "\n", result)
     }
 
@@ -250,8 +240,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("\n" + "println(1);" + "\n", result)
     }
 
@@ -266,8 +255,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("\n" + "\n" + "println(1);" + "\n", result)
     }
 
@@ -284,8 +272,7 @@ class FormatterTest {
                 TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("name = \"micaela\";" + "\n", result)
     }
 
@@ -302,8 +289,7 @@ class FormatterTest {
                 TokenType.STRINGTYPE,
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("name=\"micaela\";" + "\n", result)
     }
 
@@ -339,8 +325,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("let result: number = (2 + 2) * 3;" + "\n", result)
     }
 
@@ -376,8 +361,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("let result:number=(2 + 2) * 3;" + "\n", result)
     }
 
@@ -413,8 +397,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("let result: number = 2 + (2 * 3);" + "\n", result)
     }
 
@@ -450,8 +433,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("let result:number=2 + (2 * 3);" + "\n", result)
     }
 
@@ -496,8 +478,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("let result: number = (2 + 2) * (3 - 1);" + "\n", result)
     }
 
@@ -542,8 +523,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("let result:number=(2 + 2) * (3 - 1);" + "\n", result)
     }
 
@@ -557,8 +537,7 @@ class FormatterTest {
                 LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("const name: string = \"micaela\";" + "\n", result)
     }
 
@@ -572,8 +551,7 @@ class FormatterTest {
                 LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("const name:string=\"micaela\";" + "\n", result)
     }
 
@@ -591,8 +569,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("let isTrue: boolean = True;" + "\n", result)
     }
 
@@ -610,8 +587,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("let isTrue:boolean=True;" + "\n", result)
     }
 
@@ -635,8 +611,7 @@ class FormatterTest {
             )
         val nodeList = listOf(node1, node2)
         val codeBlock: AstNode = CodeBlock(nodeList, TokenPosition(Coordinate(0, 0), Coordinate(0, 0)))
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(codeBlock)
+        val result = formatter1.format(codeBlock)
         assertEquals("let name: string = \"micaela\";\nlet num: number = 2;\n", result)
     }
 
@@ -660,8 +635,7 @@ class FormatterTest {
             )
         val nodeList = listOf(node1, node2)
         val codeBlock: AstNode = CodeBlock(nodeList, TokenPosition(Coordinate(0, 0), Coordinate(0, 0)))
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(codeBlock)
+        val result = formatter2.format(codeBlock)
         assertEquals("let name:string=\"micaela\";\nlet num:number=2;\n", result)
     }
 
@@ -748,8 +722,7 @@ class FormatterTest {
             )
         val nodeList = listOf(node1, node2, node3, node4, node5, node6)
         val codeBlock: AstNode = CodeBlock(nodeList, TokenPosition(Coordinate(0, 0), Coordinate(0, 0)))
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(codeBlock)
+        val result = formatter1.format(codeBlock)
         assertEquals(
             "let name: string = \"micaela\";\nlet num: number = 2;\nlet sum: number = 2 + 2;\n\nprintln(1);\nname = \"micaela\";\n" +
                 "let result: number = 2 + (2 * 3);\n",
@@ -840,8 +813,7 @@ class FormatterTest {
             )
         val nodeList = listOf(node1, node2, node3, node4, node5, node6)
         val codeBlock: AstNode = CodeBlock(nodeList, TokenPosition(Coordinate(0, 0), Coordinate(0, 0)))
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(codeBlock)
+        val result = formatter2.format(codeBlock)
         assertEquals(
             "let name:string=\"micaela\";\nlet num:number=2;\nlet sum:number=2 + 2;\n\n\nprintln(1);\nname=\"micaela\";\n" +
                 "let result:number=2 + (2 * 3);\n",
@@ -878,8 +850,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("if (True) {\n\tname = \"micaela\";\n\t\n} else {\n\t\n\tprintln(False);\n\t\n}\n", result)
     }
 
@@ -924,8 +895,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals(
             "if (True) {\n\t\tname=\"micaela\";\n\t\t\n} else {\n\t\t" +
                 "\n\t\t\n\t\tprintln(False);\n\t\t\n}\n",
@@ -1060,8 +1030,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals(
             "if (True) {\n\tlet name: string = \"micaela\";\n\tlet num: number = 2;\n\tlet sum: number = 2 + 2;" + "\n" +
                 "\t\n" +
@@ -1209,8 +1178,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals(
             "if (True) {\n\t\tlet name:string=\"micaela\";\n\t\tlet num:number=2;\n\t\tlet sum:number=2 + 2;" + "\n" +
                 "\t\t\n" + "\t\t\n" +
@@ -1274,8 +1242,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals(
             "if (True) {\n\tif (True) {\n\t\tname = \"micaela\";\n\t\t\n\t} else {\n\t\t\n\t\tprintln(False);\n\t\t\n\t}\n\t" +
                 "\n} else {\n\t\n\tprintln(False);\n\t\n}\n",
@@ -1342,8 +1309,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals(
             "if (True) {\n" +
                 "\t\tif (True) {\n" +
@@ -1378,8 +1344,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter1.format(node)
         assertEquals("readEnv(\"env1\");\n", result)
     }
 
@@ -1395,26 +1360,7 @@ class FormatterTest {
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
-        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-        val result = formatter.format(node)
+        val result = formatter2.format(node)
         assertEquals("readInput(\"hello\");\n", result)
     }
-//    @Test
-//    fun test037_formatASimpleReadInputFunction() {
-//        val string = "condition = readInput(hello);"
-//        val ast = getTree(string)
-//        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
-//        val result = ast?.let { formatter.format(it) }
-//        assertEquals("condition = readInput(hello);" + "\n", result)
-//    }
-//
-//    @Test
-//    fun test022_formatASimpleReadInputFunctionWithOtherSetOfRules() {
-//        val string = "condition = readInput('hello');"
-//        val ast = getTree(string)
-//        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
-//        val result = ast?.let { formatter.format(it) }
-//        assertEquals("condition=readInput(\"hello\");" + "\n", result)
-//    }
-//
 }

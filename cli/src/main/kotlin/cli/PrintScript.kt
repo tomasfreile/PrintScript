@@ -6,7 +6,7 @@ import com.github.ajalt.clikt.parameters.arguments.validate
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
-import formatter.PrintScriptFormatter
+import formatter.PrintScriptFormatterBuilder
 import interpreter.builder.InterpreterBuilder
 import interpreter.interpreter.PrintScriptInterpreter
 import interpreter.result.InterpreterResult
@@ -111,7 +111,11 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     }
 
     private fun formatCode(sentencesList: List<String>) {
-        val formatter = PrintScriptFormatter(requireNotNull(config?.path) { "Expected config file path for formatter." })
+        val formatter =
+            PrintScriptFormatterBuilder().build(
+                "1.1",
+                requireNotNull(config?.path) { "Expected config file path for formatter." },
+            )
         val file = File(source.path)
         var text = ""
         for (sentence in sentencesList) {
