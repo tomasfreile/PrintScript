@@ -68,7 +68,7 @@ class AssignationParser(
 
     private fun isAssignation(tokenList: List<Token>): Boolean {
         var points = 0
-        if (tokenList[0].type == TokenType.VALUE_IDENTIFIER_LITERAL) points += 1
+        if (tokenList[0].type == TokenType.VALUEIDENTIFIERLITERAL) points += 1
         if (tokenList[1].type == TokenType.ASSIGNATION) points += 1
         return points == 2
     }

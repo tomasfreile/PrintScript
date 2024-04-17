@@ -25,12 +25,13 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
             is AssignmentNode -> formatAssignmentNode(astNode, rulesReaderData)
             is IfNode -> formatIfNode(astNode, rulesReaderData)
             is FunctionNode -> formatFunctionNode(astNode, rulesReaderData)
-            else -> ""
+            is NilNode -> ""
+            else -> throw UnsupportedOperationException("Unsupported node type: ${astNode.javaClass}")
         }
     }
 
     private fun formatLiteralNode(node: LiteralNode): String {
-        if (node.type == TokenType.STRING_LITERAL) {
+        if (node.type == TokenType.STRINGLITERAL) {
             return "\"${node.value}\""
         }
         return node.value
@@ -155,9 +156,9 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
 
     private fun defineValueType(valueType: TokenType): String {
         return when (valueType) {
-            TokenType.NUMBER_TYPE -> "number"
-            TokenType.STRING_TYPE -> "string"
-            TokenType.BOOLEAN_TYPE -> "boolean"
+            TokenType.NUMBERTYPE -> "number"
+            TokenType.STRINGTYPE -> "string"
+            TokenType.BOOLEANTYPE -> "boolean"
             else -> ""
         }
     }
@@ -227,8 +228,8 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
 
     private fun defineFunctionSymbol(function: TokenType): String {
         return when (function) {
-            TokenType.READ_INPUT -> "readInput"
-            TokenType.READ_ENV -> "readEnv"
+            TokenType.READINPUT -> "readInput"
+            TokenType.READENV -> "readEnv"
             else -> ""
         }
     }

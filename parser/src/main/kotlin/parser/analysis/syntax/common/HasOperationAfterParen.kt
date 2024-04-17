@@ -24,7 +24,7 @@ class HasOperationAfterParen : SyntaxRule {
         var i = 0
         for (token in tokenList) {
             when (token.type) {
-                TokenType.RIGHT_PAREN -> break
+                TokenType.RIGHTPAREN -> break
                 else -> i += 1
             }
         }
@@ -40,14 +40,14 @@ class HasOperationAfterParen : SyntaxRule {
 
     private fun isLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
+            TokenType.NUMBERLITERAL, TokenType.VALUEIDENTIFIERLITERAL -> true
             else -> false
         }
     }
 
     private fun isLeftParen(token: Token): Boolean {
         return when (token.type) {
-            TokenType.LEFT_PAREN -> true
+            TokenType.LEFTPAREN -> true
             else -> false
         }
     }

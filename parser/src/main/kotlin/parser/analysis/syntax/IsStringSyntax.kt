@@ -16,7 +16,7 @@ class IsStringSyntax : SyntaxRule {
 
     private fun isLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.STRING_LITERAL, TokenType.NUMBER_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL -> true
+            TokenType.STRINGLITERAL, TokenType.NUMBERLITERAL, TokenType.VALUEIDENTIFIERLITERAL -> true
             else -> false
         }
     }

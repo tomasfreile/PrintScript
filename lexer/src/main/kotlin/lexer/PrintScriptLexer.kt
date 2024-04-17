@@ -45,7 +45,7 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
             checkIllegalCharsBetweenTokens(input, currentIndex, start, line)
 
             val token =
-                if (type == TokenType.STRING_LITERAL) {
+                if (type == TokenType.STRINGLITERAL) {
                     PrintScriptToken(
                         type,
                         tokenValue.substring(1, tokenValue.length - 1),

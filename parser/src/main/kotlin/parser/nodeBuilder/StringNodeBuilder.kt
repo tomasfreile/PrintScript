@@ -47,7 +47,7 @@ class StringNodeBuilder : NodeBuilder {
 
     private fun isLiteral(token: Token): Boolean {
         return when (token.type) {
-            TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL, TokenType.VALUE_IDENTIFIER_LITERAL, TokenType.BOOLEAN_LITERAL -> true
+            TokenType.NUMBERLITERAL, TokenType.STRINGLITERAL, TokenType.VALUEIDENTIFIERLITERAL, TokenType.BOOLEANLITERAL -> true
             else -> false
         }
     }

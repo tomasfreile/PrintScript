@@ -51,17 +51,17 @@ class IfParserBuilder : ParserBuilder {
 
     private fun getSemanticMap(): Map<TokenType, SemanticRule> {
         return mapOf(
-            Pair(TokenType.NUMBER_TYPE, NumberSemantic()),
-            Pair(TokenType.STRING_TYPE, StringSemantic()),
-            Pair(TokenType.BOOLEAN_TYPE, BooleanSemantic()),
+            Pair(TokenType.NUMBERTYPE, NumberSemantic()),
+            Pair(TokenType.STRINGTYPE, StringSemantic()),
+            Pair(TokenType.BOOLEANTYPE, BooleanSemantic()),
         )
     }
 
     private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
         return mapOf(
-            Pair(TokenType.STRING_TYPE, IsStringSyntax()),
-            Pair(TokenType.NUMBER_TYPE, IsArithmeticSyntax()),
-            Pair(TokenType.BOOLEAN_TYPE, IsBooleanSyntax()),
+            Pair(TokenType.STRINGTYPE, IsStringSyntax()),
+            Pair(TokenType.NUMBERTYPE, IsArithmeticSyntax()),
+            Pair(TokenType.BOOLEANTYPE, IsBooleanSyntax()),
             Pair(TokenType.IF, IsIfElseSyntax()),
         )
     }

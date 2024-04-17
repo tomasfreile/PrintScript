@@ -25,8 +25,8 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "name",
-                TokenType.STRING_TYPE,
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val formatter: Formatter = PrintScriptFormatter(formatterPath01)
@@ -40,8 +40,8 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "name",
-                TokenType.STRING_TYPE,
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val formatter: Formatter = PrintScriptFormatter(formatterPath02)
@@ -55,8 +55,8 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "num",
-                TokenType.NUMBER_TYPE,
-                LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.NUMBERTYPE,
+                LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val formatter: Formatter = PrintScriptFormatter(formatterPath01)
@@ -70,8 +70,8 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "num",
-                TokenType.NUMBER_TYPE,
-                LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.NUMBERTYPE,
+                LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val formatter: Formatter = PrintScriptFormatter(formatterPath02)
@@ -85,10 +85,10 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "sum",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.PLUS,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -105,10 +105,10 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "sum",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.PLUS,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -125,10 +125,10 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "subtraction",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.MINUS,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -145,10 +145,10 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "subtraction",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.MINUS,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -165,10 +165,10 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "multiplication",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.STAR,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -185,10 +185,10 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "multiplication",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.STAR,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -205,10 +205,10 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "division",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.SLASH,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -225,10 +225,10 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "division",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.SLASH,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -245,7 +245,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "1",
-                    TokenType.NUMBER_LITERAL,
+                    TokenType.NUMBERLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -261,7 +261,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "1",
-                    TokenType.NUMBER_LITERAL,
+                    TokenType.NUMBERLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -278,7 +278,7 @@ class FormatterTest {
                 "name",
                 LiteralNode(
                     "micaela",
-                    TokenType.STRING_LITERAL,
+                    TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -295,7 +295,7 @@ class FormatterTest {
                 "name",
                 LiteralNode(
                     "micaela",
-                    TokenType.STRING_LITERAL,
+                    TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -311,17 +311,17 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "result",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
                     BinaryOperationNode(
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.PLUS,
@@ -329,7 +329,7 @@ class FormatterTest {
                     ),
                     LiteralNode(
                         "3",
-                        TokenType.NUMBER_LITERAL,
+                        TokenType.NUMBERLITERAL,
                         TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                     ),
                     TokenType.STAR,
@@ -348,17 +348,17 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "result",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
                     BinaryOperationNode(
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.PLUS,
@@ -366,7 +366,7 @@ class FormatterTest {
                     ),
                     LiteralNode(
                         "3",
-                        TokenType.NUMBER_LITERAL,
+                        TokenType.NUMBERLITERAL,
                         TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                     ),
                     TokenType.STAR,
@@ -385,22 +385,22 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "result",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
                     LiteralNode(
                         "2",
-                        TokenType.NUMBER_LITERAL,
+                        TokenType.NUMBERLITERAL,
                         TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                     ),
                     BinaryOperationNode(
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "3",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.STAR,
@@ -422,22 +422,22 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "result",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
                     LiteralNode(
                         "2",
-                        TokenType.NUMBER_LITERAL,
+                        TokenType.NUMBERLITERAL,
                         TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                     ),
                     BinaryOperationNode(
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "3",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.STAR,
@@ -459,17 +459,17 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "result",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
                     BinaryOperationNode(
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.PLUS,
@@ -478,12 +478,12 @@ class FormatterTest {
                     BinaryOperationNode(
                         LiteralNode(
                             "3",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "1",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.MINUS,
@@ -505,17 +505,17 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "result",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
                     BinaryOperationNode(
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.PLUS,
@@ -524,12 +524,12 @@ class FormatterTest {
                     BinaryOperationNode(
                         LiteralNode(
                             "3",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "1",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.MINUS,
@@ -551,8 +551,8 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.CONST,
                 "name",
-                TokenType.STRING_TYPE,
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val formatter: Formatter = PrintScriptFormatter(formatterPath01)
@@ -566,8 +566,8 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.CONST,
                 "name",
-                TokenType.STRING_TYPE,
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val formatter: Formatter = PrintScriptFormatter(formatterPath02)
@@ -581,10 +581,10 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "isTrue",
-                TokenType.BOOLEAN_TYPE,
+                TokenType.BOOLEANTYPE,
                 LiteralNode(
                     "True",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -600,10 +600,10 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "isTrue",
-                TokenType.BOOLEAN_TYPE,
+                TokenType.BOOLEANTYPE,
                 LiteralNode(
                     "True",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -619,16 +619,16 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "name",
-                TokenType.STRING_TYPE,
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =
             VariableDeclarationNode(
                 TokenType.LET,
                 "num",
-                TokenType.NUMBER_TYPE,
-                LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.NUMBERTYPE,
+                LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val nodeList = listOf(node1, node2)
@@ -644,16 +644,16 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "name",
-                TokenType.STRING_TYPE,
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =
             VariableDeclarationNode(
                 TokenType.LET,
                 "num",
-                TokenType.NUMBER_TYPE,
-                LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.NUMBERTYPE,
+                LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val nodeList = listOf(node1, node2)
@@ -669,26 +669,26 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "name",
-                TokenType.STRING_TYPE,
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =
             VariableDeclarationNode(
                 TokenType.LET,
                 "num",
-                TokenType.NUMBER_TYPE,
-                LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.NUMBERTYPE,
+                LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node3 =
             VariableDeclarationNode(
                 TokenType.LET,
                 "sum",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.PLUS,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -698,7 +698,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "1",
-                    TokenType.NUMBER_LITERAL,
+                    TokenType.NUMBERLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -708,7 +708,7 @@ class FormatterTest {
                 "name",
                 LiteralNode(
                     "micaela",
-                    TokenType.STRING_LITERAL,
+                    TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -717,22 +717,22 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "result",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
                     LiteralNode(
                         "2",
-                        TokenType.NUMBER_LITERAL,
+                        TokenType.NUMBERLITERAL,
                         TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                     ),
                     BinaryOperationNode(
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "3",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.STAR,
@@ -760,26 +760,26 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "name",
-                TokenType.STRING_TYPE,
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =
             VariableDeclarationNode(
                 TokenType.LET,
                 "num",
-                TokenType.NUMBER_TYPE,
-                LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.NUMBERTYPE,
+                LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node3 =
             VariableDeclarationNode(
                 TokenType.LET,
                 "sum",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.PLUS,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -789,7 +789,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "1",
-                    TokenType.NUMBER_LITERAL,
+                    TokenType.NUMBERLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -799,7 +799,7 @@ class FormatterTest {
                 "name",
                 LiteralNode(
                     "micaela",
-                    TokenType.STRING_LITERAL,
+                    TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -808,22 +808,22 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "result",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
                     LiteralNode(
                         "2",
-                        TokenType.NUMBER_LITERAL,
+                        TokenType.NUMBERLITERAL,
                         TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                     ),
                     BinaryOperationNode(
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "3",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.STAR,
@@ -850,19 +850,19 @@ class FormatterTest {
         val node1 =
             AssignmentNode(
                 "name",
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =
             PrintNode(
-                LiteralNode("False", TokenType.BOOLEAN_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                LiteralNode("False", TokenType.BOOLEANLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val list1 = listOf(node1)
         val list2 = listOf(node2)
         val node =
             IfNode(
-                LiteralNode("True", TokenType.BOOLEAN_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                LiteralNode("True", TokenType.BOOLEANLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 CodeBlock(
                     list1,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -885,7 +885,7 @@ class FormatterTest {
                 "name",
                 LiteralNode(
                     "micaela",
-                    TokenType.STRING_LITERAL,
+                    TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -894,7 +894,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "False",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -905,7 +905,7 @@ class FormatterTest {
             IfNode(
                 LiteralNode(
                     "True",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 CodeBlock(
@@ -933,26 +933,26 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "name",
-                TokenType.STRING_TYPE,
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =
             VariableDeclarationNode(
                 TokenType.LET,
                 "num",
-                TokenType.NUMBER_TYPE,
-                LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.NUMBERTYPE,
+                LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node3 =
             VariableDeclarationNode(
                 TokenType.LET,
                 "sum",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.PLUS,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -962,7 +962,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "1",
-                    TokenType.NUMBER_LITERAL,
+                    TokenType.NUMBERLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -972,7 +972,7 @@ class FormatterTest {
                 "name",
                 LiteralNode(
                     "micaela",
-                    TokenType.STRING_LITERAL,
+                    TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -981,22 +981,22 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "result",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
                     LiteralNode(
                         "2",
-                        TokenType.NUMBER_LITERAL,
+                        TokenType.NUMBERLITERAL,
                         TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                     ),
                     BinaryOperationNode(
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "3",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.STAR,
@@ -1011,7 +1011,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "False",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1020,7 +1020,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "False",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1029,7 +1029,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "False",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1040,7 +1040,7 @@ class FormatterTest {
             IfNode(
                 LiteralNode(
                     "True",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 CodeBlock(
@@ -1081,26 +1081,26 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "name",
-                TokenType.STRING_TYPE,
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.STRINGTYPE,
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =
             VariableDeclarationNode(
                 TokenType.LET,
                 "num",
-                TokenType.NUMBER_TYPE,
-                LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                TokenType.NUMBERTYPE,
+                LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node3 =
             VariableDeclarationNode(
                 TokenType.LET,
                 "sum",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                    LiteralNode("2", TokenType.NUMBER_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                    LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                     TokenType.PLUS,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
@@ -1110,7 +1110,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "1",
-                    TokenType.NUMBER_LITERAL,
+                    TokenType.NUMBERLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1120,7 +1120,7 @@ class FormatterTest {
                 "name",
                 LiteralNode(
                     "micaela",
-                    TokenType.STRING_LITERAL,
+                    TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1129,22 +1129,22 @@ class FormatterTest {
             VariableDeclarationNode(
                 TokenType.LET,
                 "result",
-                TokenType.NUMBER_TYPE,
+                TokenType.NUMBERTYPE,
                 BinaryOperationNode(
                     LiteralNode(
                         "2",
-                        TokenType.NUMBER_LITERAL,
+                        TokenType.NUMBERLITERAL,
                         TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                     ),
                     BinaryOperationNode(
                         LiteralNode(
                             "2",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         LiteralNode(
                             "3",
-                            TokenType.NUMBER_LITERAL,
+                            TokenType.NUMBERLITERAL,
                             TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                         ),
                         TokenType.STAR,
@@ -1159,7 +1159,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "False",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1168,7 +1168,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "False",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1177,7 +1177,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "False",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1188,7 +1188,7 @@ class FormatterTest {
             IfNode(
                 LiteralNode(
                     "True",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 CodeBlock(
@@ -1228,19 +1228,19 @@ class FormatterTest {
         val node1 =
             AssignmentNode(
                 "name",
-                LiteralNode("micaela", TokenType.STRING_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                LiteralNode("micaela", TokenType.STRINGLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val node2 =
             PrintNode(
-                LiteralNode("False", TokenType.BOOLEAN_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                LiteralNode("False", TokenType.BOOLEANLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         val list1 = listOf(node1)
         val list2 = listOf(node2)
         val ifNode =
             IfNode(
-                LiteralNode("True", TokenType.BOOLEAN_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                LiteralNode("True", TokenType.BOOLEANLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 CodeBlock(
                     list1,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1254,7 +1254,7 @@ class FormatterTest {
         val list3 = listOf(ifNode)
         val node =
             IfNode(
-                LiteralNode("True", TokenType.BOOLEAN_LITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                LiteralNode("True", TokenType.BOOLEANLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
                 CodeBlock(
                     list3,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1281,7 +1281,7 @@ class FormatterTest {
                 "name",
                 LiteralNode(
                     "micaela",
-                    TokenType.STRING_LITERAL,
+                    TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1290,7 +1290,7 @@ class FormatterTest {
             PrintNode(
                 LiteralNode(
                     "False",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1301,7 +1301,7 @@ class FormatterTest {
             IfNode(
                 LiteralNode(
                     "True",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 CodeBlock(
@@ -1319,7 +1319,7 @@ class FormatterTest {
             IfNode(
                 LiteralNode(
                     "True",
-                    TokenType.BOOLEAN_LITERAL,
+                    TokenType.BOOLEANLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 CodeBlock(
@@ -1360,10 +1360,10 @@ class FormatterTest {
     fun test037_formatASimpleReadEnvFunction() {
         val node =
             FunctionNode(
-                TokenType.READ_ENV,
+                TokenType.READENV,
                 LiteralNode(
                     "env1",
-                    TokenType.STRING_LITERAL,
+                    TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
@@ -1377,10 +1377,10 @@ class FormatterTest {
     fun test038_formatASimpleReadInputFunction() {
         val node =
             FunctionNode(
-                TokenType.READ_INPUT,
+                TokenType.READINPUT,
                 LiteralNode(
                     "hello",
-                    TokenType.STRING_LITERAL,
+                    TokenType.STRINGLITERAL,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
