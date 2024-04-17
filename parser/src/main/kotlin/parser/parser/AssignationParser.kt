@@ -33,6 +33,7 @@ class AssignationParser(
                             createAssignationAst(
                                 tokenList,
                                 it,
+                                type,
                             )
                         }
                     }
@@ -84,10 +85,12 @@ class AssignationParser(
     private fun createAssignationAst(
         tokenList: List<Token>,
         node: AstNode,
+        valueType: TokenType,
     ): AstNode {
         return AssignmentNode(
             tokenList[0].value,
             node,
+            valueType,
             node.position,
         )
     }

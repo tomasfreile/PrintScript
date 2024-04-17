@@ -14,9 +14,9 @@ class DeclarationInterpreter : Interpreter {
         node as VariableDeclarationNode
         val identifier = node.identifier
         val valueType = node.valueType
-        val variableType = node.declarationType
+        val declarationType = node.declarationType
         val value = interpreter.interpret(node.expression, symbolTable)
-        symbolTable[Variable(identifier, valueType, variableType)] = value
+        symbolTable[Variable(identifier, valueType, declarationType)] = value
         return Result(value)
     }
 

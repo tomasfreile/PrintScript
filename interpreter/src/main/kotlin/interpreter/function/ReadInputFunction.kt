@@ -13,7 +13,7 @@ class ReadInputFunction : Function {
         node: FunctionNode,
         symbolTable: MutableMap<Variable, Any>,
     ): Any {
-        val input = readLine() ?: symbolTable.get(getVariable(symbolTable, "input")) ?: throw NullPointerException("No input")
+        val input = readLine() ?: symbolTable[getVariable(symbolTable, "input")] ?: throw NullPointerException("No input")
         return input
     }
 

@@ -52,8 +52,8 @@ class PrintScript10ParserBuilder : ParserBuilder {
 
     private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
         return mapOf(
-            Pair(TokenType.STRINGTYPE, IsStringSyntax()),
             Pair(TokenType.NUMBERTYPE, IsArithmeticSyntax()),
+            Pair(TokenType.STRINGTYPE, IsStringSyntax()),
         )
     }
 
