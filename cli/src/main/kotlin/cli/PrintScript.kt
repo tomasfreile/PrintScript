@@ -82,18 +82,16 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     private fun executeCode(reader: FileReader) {
         while (reader.hasNextLine()) {
             val statements = reader.getNextLine()
+
             var result: InterpreterResult
             for (statement in statements) {
                 try {
                     val ast = parser.createAST(statement)
-                    try {
-                        result = interpreter.interpret(ast, symbolTable) as InterpreterResult
-                        printResults(result)
-                    } catch (e: Exception) {
-                        println("error in interpreting: $e")
-                    }
+                    result = interpreter.interpret(ast, symbolTable) as InterpreterResult
+                    printResults(result)
                 } catch (e: Exception) {
-                    println("error in parsing: $e")
+                    println("error in execution: $e")
+                    break
                 }
             }
         }

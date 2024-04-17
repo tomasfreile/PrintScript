@@ -16,11 +16,20 @@ class FileReader(
     private val lineReader: LineReader = LineReader(version)
 
     fun getNextLine(): List<List<Token>> {
-        val line = reader.readLine() ?: return emptyList()
-        val lineReaderOutput = lineReader.read(line, this.line, unassignedTokens)
-        unassignedTokens = lineReaderOutput.second
+        val line = reader.readLine()
+
+        val lineResult = lineReader.read(line, this.line, unassignedTokens)
+        unassignedTokens = lineResult.second
+        val currenTokens = lineResult.first
         this.line++
-        return lineReaderOutput.first
+
+        if (!hasNextLine() && unassignedTokens.isNotEmpty() && currenTokens.isEmpty()) {
+            val lastStatement = unassignedTokens
+            unassignedTokens = emptyList()
+            return listOf(lastStatement)
+        }
+
+        return currenTokens
     }
 
     fun hasNextLine(): Boolean {
