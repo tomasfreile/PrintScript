@@ -7,6 +7,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
 import formatter.PrintScriptFormatter
+import formatter.PrintScriptFormatterBuilder
 import interpreter.builder.InterpreterBuilder
 import interpreter.interpreter.PrintScriptInterpreter
 import interpreter.result.InterpreterResult
@@ -125,7 +126,10 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
 
     private fun formatCode(reader: FileReader) {
         val formatter =
-            PrintScriptFormatter(requireNotNull(config?.path) { "Expected config file path for formatter." })
+            PrintScriptFormatterBuilder().build(
+                version,
+                config?.path ?: throw NullPointerException("Config file null"),
+            ) as PrintScriptFormatter
         val file = File(source.path)
         var text = ""
         while (reader.hasNextLine()) {
