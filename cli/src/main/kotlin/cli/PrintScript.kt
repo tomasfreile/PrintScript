@@ -6,6 +6,7 @@ import com.github.ajalt.clikt.parameters.arguments.validate
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
+import formatter.PrintScriptFormatter
 import formatter.PrintScriptFormatterBuilder
 import interpreter.builder.InterpreterBuilder
 import interpreter.interpreter.PrintScriptInterpreter
@@ -20,7 +21,7 @@ import parser.parser.Parser
 import parser.parserBuilder.printScript10.PrintScript10ParserBuilder
 import parser.parserBuilder.printScript11.PrintScript11ParserBuilder
 import sca.StaticCodeAnalyzerImpl
-import java.io.BufferedReader
+import token.TokenType
 import java.io.File
 
 class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Source> <Config>") {
@@ -34,6 +35,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     private val source by argument(help = "source file").file(mustExist = true)
 
     private val config by option("-c", help = "config file").file(mustExist = true)
+    private val envFile by option("-e", "--env", help = "environment variables file").file(mustExist = true)
 
     private lateinit var lexer: Lexer
     private lateinit var parser: Parser
@@ -45,13 +47,13 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
         parser = buildParser(version)
         interpreter = InterpreterBuilder().build(version)
 
-        val sentencesList = getSentenceList()
+        val reader = FileReader(source.inputStream(), version)
         try {
             when (operation) {
-                "execute" -> executeCode(sentencesList)
-                "format" -> formatCode(sentencesList)
-                "analyze" -> analyzeCode(sentencesList)
-                "validate" -> validateCode(sentencesList)
+                "execute" -> executeCode(reader)
+                "format" -> formatCode(reader)
+                "analyze" -> analyzeCode(reader)
+                "validate" -> validateCode(reader)
             }
         } catch (ex: Exception) {
             println(ex.message)
@@ -66,37 +68,49 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
         }
     }
 
-    private fun validateCode(sentencesList: List<String>) {
-        for (sentence in sentencesList) {
-            val tokenList = lexer.lex(sentence)
-            parser.createAST(tokenList)
+    private fun validateCode(reader: FileReader) {
+        while (reader.hasNextLine()) {
+            val statements = reader.getNextLine()
+            for (statement in statements) {
+                try {
+                    parser.createAST(statement)
+                } catch (e: Exception) {
+                    println("error in parsing: $e")
+                }
+            }
         }
         println("Validation successful!")
     }
 
-    private fun executeCode(sentencesList: List<String>) {
-        var result: InterpreterResult
-        try {
-            for (sentence in sentencesList) {
+    private fun executeCode(reader: FileReader) {
+        if (envFile != null) {
+            insertEnvironmentVariablesInSymbolTable()
+        }
+        while (reader.hasNextLine()) {
+            val statements = reader.getNextLine()
+
+            var result: InterpreterResult
+            for (statement in statements) {
                 try {
-                    val tokenList = lexer.lex(sentence)
-                    try {
-                        val tree = parser.createAST(tokenList)
-                        try {
-                            result = interpreter.interpret(tree, symbolTable) as InterpreterResult
-                            printResults(result)
-                        } catch (e: Exception) {
-                            println("error in interpreting: $e")
-                        }
-                    } catch (e: Exception) {
-                        println("error in parsing: $e")
-                    }
+                    val ast = parser.createAST(statement)
+                    result = interpreter.interpret(ast, symbolTable) as InterpreterResult
+                    printResults(result)
                 } catch (e: Exception) {
-                    println("error in lexing: $e")
+                    println("error in execution: $e")
+                    break
                 }
             }
-        } catch (e: Exception) {
-            println("error in execution: $e")
+        }
+    }
+
+    private fun insertEnvironmentVariablesInSymbolTable() {
+        // Read file contents line by line
+        val lines = File(envFile!!.path).readLines()
+
+        // Print each line of the file
+        lines.forEach {
+            val pair = it.split("=")
+            symbolTable[Variable(pair[0], TokenType.STRINGTYPE, TokenType.CONST)] = pair[1]
         }
     }
 
@@ -110,80 +124,45 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
         }
     }
 
-    private fun formatCode(sentencesList: List<String>) {
+    private fun formatCode(reader: FileReader) {
         val formatter =
             PrintScriptFormatterBuilder().build(
-                "1.1",
-                requireNotNull(config?.path) { "Expected config file path for formatter." },
-            )
+                version,
+                config?.path ?: throw NullPointerException("Config file null"),
+            ) as PrintScriptFormatter
         val file = File(source.path)
         var text = ""
-        for (sentence in sentencesList) {
-            val tokenList = lexer.lex(sentence)
-            val tree = parser.createAST(tokenList)
-            val line = tree?.let { formatter.format(it) }
-            text += line
+        while (reader.hasNextLine()) {
+            val statements = reader.getNextLine()
+            for (statement in statements) {
+                try {
+                    val ast = parser.createAST(statement)
+                    val line = ast?.let { formatter.format(it) }
+                    text += line
+                } catch (e: Exception) {
+                    println("error in formatting: $e")
+                }
+            }
         }
         file.writeText(text)
     }
 
-    private fun analyzeCode(sentencesList: List<String>) {
+    private fun analyzeCode(reader: FileReader) {
         val sca = StaticCodeAnalyzerImpl(requireNotNull(config?.path) { "Expected config file path for sca." })
-        var errorList = emptyList<String>()
-        for (sentence in sentencesList) {
-            val tokenList = lexer.lex(sentence)
-            val tree = parser.createAST(tokenList)
-            errorList += sca.analyze(tree ?: throw NullPointerException("Null AST tree"))
+        val errorList = mutableListOf<String>()
+        while (reader.hasNextLine()) {
+            val statements = reader.getNextLine()
+            for (statement in statements) {
+                try {
+                    val ast = parser.createAST(statement)
+                    val errors = ast?.let { sca.analyze(it) }
+                    errorList += errors ?: emptyList()
+                } catch (e: Exception) {
+                    println("error in analyzing: $e")
+                }
+            }
         }
         errorList.forEach(::println)
-    }
-
-    private fun getSentenceList(): List<String> {
-        val reader = source.bufferedReader()
-        val sentencesList = mutableListOf<String>()
-        var line: String?
-        while (reader.readLine().also { line = it } != null) {
-            getLine(reader, line!!)?.let { sentencesList.add(it) }
-        }
-        return sentencesList
-    }
-
-    private fun readIfBlock(
-        reader: BufferedReader,
-        line: String,
-    ): String {
-        var result = line
-        val ifLine = line
-        val ifBlock = reader.readLine()
-        val line3 = reader.readLine()
-
-        if (line3 != null && line3.trim() == "} else {") {
-            val elseBlock = reader.readLine()
-            val elseEnd = reader.readLine()
-            result = ifLine + ifBlock + line3 + elseBlock + elseEnd
-        } else {
-            result = ifLine + ifBlock + line3
-        }
-        return result
-    }
-
-    private fun isIfStatement(line: String): Boolean {
-        return line.startsWith("if(") || line.startsWith("if (")
-    }
-
-    private fun getLine(
-        reader: BufferedReader,
-        line: String,
-    ): String? {
-        if (line.isBlank()) {
-            return null // Skip empty lines
-        }
-        var processedLine = line
-        if (isIfStatement(line)) {
-            processedLine = readIfBlock(reader, line)
-        }
-        println("Preprocessed line: $processedLine")
-        return processedLine
     }
 }
 
