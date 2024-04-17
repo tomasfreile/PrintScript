@@ -167,19 +167,19 @@ class PrintScriptInterpreterTest {
 
     @Test
     fun testEnvVariableIsCorrectlyPrinted() {
-        symbolTable[Variable("PRINT_ENV", TokenType.STRING_TYPE, TokenType.CONST)] = "hola"
+        symbolTable[Variable("PRINT_ENV", TokenType.STRINGTYPE, TokenType.CONST)] = "hola"
         val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
-        val literalNode = LiteralNode("PRINT_ENV", TokenType.VALUE_IDENTIFIER_LITERAL, tokenPosition)
-        val tree = FunctionNode(TokenType.READ_ENV, literalNode, tokenPosition)
+        val literalNode = LiteralNode("PRINT_ENV", TokenType.VALUEIDENTIFIERLITERAL, tokenPosition)
+        val tree = FunctionNode(TokenType.READENV, literalNode, tokenPosition)
         val result = interpreter.interpret(tree, symbolTable)
         assertEquals("hola", result) // No Interpreter result because it's an internal test.
     }
 
     @Test
     fun testReadInputCanBePreAssigned() {
-        symbolTable[Variable("input", TokenType.STRING_TYPE, TokenType.LET)] = "hola"
+        symbolTable[Variable("input", TokenType.STRINGTYPE, TokenType.LET)] = "hola"
         val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
-        val tree = FunctionNode(TokenType.READ_INPUT, LiteralNode("Write a number", TokenType.STRING_LITERAL, tokenPosition), tokenPosition)
+        val tree = FunctionNode(TokenType.READINPUT, LiteralNode("Write a number", TokenType.STRINGLITERAL, tokenPosition), tokenPosition)
         val result = interpreter.interpret(tree, symbolTable)
         assertEquals("hola", result)
     }
@@ -196,7 +196,7 @@ class PrintScriptInterpreterTest {
         val string1 = "println('hola');"
         val string2 = "println('chau');"
         val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
-        val literalNode = LiteralNode("true", TokenType.BOOLEAN_LITERAL, tokenPosition)
+        val literalNode = LiteralNode("true", TokenType.BOOLEANLITERAL, tokenPosition)
         val thenBlock = CodeBlock(listOf(getTree(string1)), tokenPosition)
         val elseBlock = CodeBlock(listOf(getTree(string2)), tokenPosition)
         val ifNode = IfNode(literalNode, thenBlock, elseBlock, tokenPosition)
@@ -210,7 +210,7 @@ class PrintScriptInterpreterTest {
         val string1 = "println('hola');"
         val string2 = "println('chau');"
         val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
-        val literalNode = LiteralNode("false", TokenType.BOOLEAN_LITERAL, tokenPosition)
+        val literalNode = LiteralNode("false", TokenType.BOOLEANLITERAL, tokenPosition)
         val thenBlock = CodeBlock(listOf(getTree(string1)), tokenPosition)
         val elseBlock = CodeBlock(listOf(getTree(string2)), tokenPosition)
         val ifNode = IfNode(literalNode, thenBlock, elseBlock, tokenPosition)
@@ -223,7 +223,7 @@ class PrintScriptInterpreterTest {
     fun testIfNodeWithoutElseBlockWhenCOnditionIsFalse() {
         val string1 = "println('hola');"
         val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
-        val literalNode = LiteralNode("false", TokenType.BOOLEAN_LITERAL, tokenPosition)
+        val literalNode = LiteralNode("false", TokenType.BOOLEANLITERAL, tokenPosition)
         val thenBlock = CodeBlock(listOf(getTree(string1)), tokenPosition)
         val elseBlock = NilNode
         val ifNode = IfNode(literalNode, thenBlock, elseBlock, tokenPosition)

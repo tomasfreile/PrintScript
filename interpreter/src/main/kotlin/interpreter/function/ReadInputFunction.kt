@@ -6,14 +6,14 @@ import interpreter.variable.Variable
 import token.TokenType
 
 class ReadInputFunction : Function {
-    override val type: TokenType = TokenType.READ_INPUT
+    override val type: TokenType = TokenType.READINPUT
 
     override fun run(
         interpreter: PrintScriptInterpreter,
         node: FunctionNode,
         symbolTable: MutableMap<Variable, Any>,
     ): Any {
-        val input = readLine() ?: symbolTable.get(getVariable(symbolTable, "input")) ?: throw NullPointerException("No input")
+        val input = readLine() ?: symbolTable[getVariable(symbolTable, "input")] ?: throw NullPointerException("No input")
         return input
     }
 

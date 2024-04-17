@@ -273,9 +273,9 @@ class FormatterTest {
 //    fun test023_formatAnIfOperation() {
 //        val node =
 //            IfNode(
-//                LiteralNode("true", TokenType.BOOLEAN_LITERAL),
-//                AssignmentNode("name", LiteralNode("micaela", TokenType.STRING_LITERAL)),
-//                PrintNode(LiteralNode("False", TokenType.BOOLEAN_LITERAL)),
+//                LiteralNode("true", TokenType.BOOLEANLITERAL),
+//                AssignmentNode("name", LiteralNode("micaela", TokenType.STRINGLITERAL)),
+//                PrintNode(LiteralNode("False", TokenType.BOOLEANLITERAL)),
 //            )
 //        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
 //        val result = formatter.format(node)
@@ -286,9 +286,9 @@ class FormatterTest {
 //    fun test024_formatAnIfOperationWithOtherSetOfRules() {
 //        val node =
 //            IfNode(
-//                LiteralNode("true", TokenType.BOOLEAN_LITERAL),
-//                AssignmentNode("name", LiteralNode("micaela", TokenType.STRING_LITERAL)),
-//                PrintNode(LiteralNode("False", TokenType.BOOLEAN_LITERAL)),
+//                LiteralNode("true", TokenType.BOOLEANLITERAL),
+//                AssignmentNode("name", LiteralNode("micaela", TokenType.STRINGLITERAL)),
+//                PrintNode(LiteralNode("False", TokenType.BOOLEANLITERAL)),
 //            )
 //        val formatter: Formatter = PrintScriptFormatter(formatterPath02)
 //        val result = formatter.format(node)

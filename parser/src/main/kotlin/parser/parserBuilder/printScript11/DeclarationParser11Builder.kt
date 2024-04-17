@@ -6,7 +6,10 @@ import parser.analysis.semantic.BooleanSemantic
 import parser.analysis.semantic.NumberSemantic
 import parser.analysis.semantic.SemanticRule
 import parser.analysis.semantic.StringSemantic
-import parser.analysis.syntax.*
+import parser.analysis.syntax.IsArithmeticSyntax
+import parser.analysis.syntax.IsBooleanSyntax
+import parser.analysis.syntax.IsStringSyntax
+import parser.analysis.syntax.SyntaxRule
 import parser.analysis.syntax.ifSyntax.IsIfElseSyntax
 import parser.nodeBuilder.ArithmeticNodeBuilder
 import parser.nodeBuilder.BooleanNodeBuilder
@@ -31,9 +34,9 @@ class DeclarationParser11Builder : ParserBuilder {
 
     private fun getSemanticMap(): Map<TokenType, SemanticRule> {
         return mapOf(
-            Pair(TokenType.NUMBER_TYPE, NumberSemantic()),
-            Pair(TokenType.STRING_TYPE, StringSemantic()),
-            Pair(TokenType.BOOLEAN_TYPE, BooleanSemantic()),
+            Pair(TokenType.NUMBERTYPE, NumberSemantic()),
+            Pair(TokenType.STRINGTYPE, StringSemantic()),
+            Pair(TokenType.BOOLEANTYPE, BooleanSemantic()),
         )
     }
 
@@ -46,26 +49,26 @@ class DeclarationParser11Builder : ParserBuilder {
 
     private fun getTypeMap(): Map<TokenType, TokenType> {
         return mapOf(
-            Pair(TokenType.NUMBER_LITERAL, TokenType.NUMBER_TYPE),
-            Pair(TokenType.STRING_LITERAL, TokenType.STRING_TYPE),
-            Pair(TokenType.BOOLEAN_LITERAL, TokenType.BOOLEAN_TYPE),
+            Pair(TokenType.NUMBERLITERAL, TokenType.NUMBERTYPE),
+            Pair(TokenType.STRINGLITERAL, TokenType.STRINGTYPE),
+            Pair(TokenType.BOOLEANLITERAL, TokenType.BOOLEANTYPE),
         )
     }
 
     private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
         return mapOf(
-            Pair(TokenType.STRING_TYPE, IsStringSyntax()),
-            Pair(TokenType.NUMBER_TYPE, IsArithmeticSyntax()),
-            Pair(TokenType.BOOLEAN_TYPE, IsBooleanSyntax()),
+            Pair(TokenType.NUMBERTYPE, IsArithmeticSyntax()),
+            Pair(TokenType.STRINGTYPE, IsStringSyntax()),
+            Pair(TokenType.BOOLEANTYPE, IsBooleanSyntax()),
             Pair(TokenType.IF, IsIfElseSyntax()),
         )
     }
 
     private fun getNodeBuilders(): Map<TokenType, NodeBuilder> {
         return mapOf(
-            Pair(TokenType.STRING_TYPE, StringNodeBuilder()),
-            Pair(TokenType.NUMBER_TYPE, ArithmeticNodeBuilder()),
-            Pair(TokenType.BOOLEAN_TYPE, BooleanNodeBuilder()),
+            Pair(TokenType.STRINGTYPE, StringNodeBuilder()),
+            Pair(TokenType.NUMBERTYPE, ArithmeticNodeBuilder()),
+            Pair(TokenType.BOOLEANTYPE, BooleanNodeBuilder()),
         )
     }
 }

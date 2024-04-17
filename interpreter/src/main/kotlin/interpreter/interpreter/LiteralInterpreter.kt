@@ -15,7 +15,7 @@ class LiteralInterpreter(private val literals: List<Literal>) : Interpreter {
     ): Any {
         node as LiteralNode
         val type = node.type
-        if (type == TokenType.VALUE_IDENTIFIER_LITERAL) {
+        if (type == TokenType.VALUEIDENTIFIERLITERAL) {
             val variable = getVariable(symbolTable, node.value)
             val value = symbolTable[variable] ?: throw NullPointerException("Variable not declared: ${variable.name}")
             if (value is NilNode) throw NullPointerException("Variable not initialized: ${variable.name}")

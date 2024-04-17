@@ -19,9 +19,9 @@ class ElseSyntax : SyntaxRule {
     private fun checkStructure(tokenList: List<Token>): Boolean {
         var points = 0
         if (tokenList[0].type == TokenType.ELSE) points += 1
-        if (tokenList[1].type == TokenType.LEFT_BRACE) points += 1
+        if (tokenList[1].type == TokenType.LEFTBRACE) points += 1
         if (hasContent(tokenList)) points += 1
-        if (tokenList[tokenList.size - 1].type == TokenType.RIGHT_BRACE) points += 1
+        if (tokenList[tokenList.size - 1].type == TokenType.RIGHTBRACE) points += 1
         return points == 4
     }
 

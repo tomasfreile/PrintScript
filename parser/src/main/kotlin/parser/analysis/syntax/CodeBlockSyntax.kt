@@ -14,8 +14,8 @@ class CodeBlockSyntax(
     private fun hasValidSeparatorsInContent(content: List<Token>): Boolean {
         return when {
             content.isNotEmpty() -> {
-                hasValidSeparator(content, TokenType.LEFT_PAREN, TokenType.RIGHT_PAREN) &&
-                    hasValidSeparator(content, TokenType.LEFT_BRACE, TokenType.RIGHT_BRACE)
+                hasValidSeparator(content, TokenType.LEFTPAREN, TokenType.RIGHTPAREN) &&
+                    hasValidSeparator(content, TokenType.LEFTBRACE, TokenType.RIGHTBRACE)
             }
             else -> true
         }

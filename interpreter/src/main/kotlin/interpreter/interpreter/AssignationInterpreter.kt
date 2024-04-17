@@ -17,11 +17,21 @@ class AssignationInterpreter : Interpreter {
         val variable: Variable = getVariable(symbolTable, identifier)
         if (variable.declarationType != TokenType.LET) {
             throw UnsupportedOperationException(
-                "Cannot assign a constant.  In position " + node.position.start.string() + ":" + node.position.end.string(),
+                "Cannot assign a constant.  In position " +
+                    node.position.start.string() + ":" + node.position.end.string(),
             )
         }
+
+        if (node.valueType != variable.valueType) {
+            throw UnsupportedOperationException(
+                "Cannot assign a value of type ${node.valueType} " +
+                    "to a variable of type ${variable.valueType}. " +
+                    "In position " + node.position.start.string() + ":" + node.position.end.string(),
+            )
+        }
+        symbolTable[variable] = interpreter.interpret(node.expression, symbolTable)
         val value = interpreter.interpret(node.expression, symbolTable)
-        symbolTable[variable] = value
+
         return Result(value)
     }
 
