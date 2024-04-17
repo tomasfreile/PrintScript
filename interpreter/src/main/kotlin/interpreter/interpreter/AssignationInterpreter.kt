@@ -1,9 +1,10 @@
-package interpreter
+package interpreter.interpreter
 
 import ast.AssignmentNode
 import ast.AstNode
 import interpreter.result.Result
 import interpreter.variable.Variable
+import token.TokenType
 
 class AssignationInterpreter : Interpreter {
     override fun interpret(
@@ -14,7 +15,12 @@ class AssignationInterpreter : Interpreter {
         node as AssignmentNode
         val identifier = node.identifier
         val variable: Variable = getVariable(symbolTable, identifier)
-        val value = interpreter.interpret(node, symbolTable)
+        if (variable.declarationType != TokenType.LET) {
+            throw UnsupportedOperationException(
+                "Cannot assign a constant.  In position " + node.position.start.string() + ":" + node.position.end.string(),
+            )
+        }
+        val value = interpreter.interpret(node.expression, symbolTable)
         symbolTable[variable] = value
         return Result(value)
     }

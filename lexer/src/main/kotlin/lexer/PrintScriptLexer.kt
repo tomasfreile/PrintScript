@@ -1,19 +1,27 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package lexer
 
 import position.Coordinate
 import token.PrintScriptToken
 import token.Token
 import token.TokenType
-import java.util.EnumMap
+import java.util.*
 import java.util.regex.Pattern
 
 class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexer {
+    // Pattern to match any token type
+    private val tokenPattern: Pattern = tokenMap.values.joinToString("|").toRegex().toPattern()
+
+    // Map of token types to their respective regex patterns
+    private val typePatterns: Map<TokenType, Pattern> = tokenMap.entries.associate { (type, pattern) -> type to pattern }
+
     override fun lex(input: String): List<Token> {
-        val tokens = ArrayList<Token>()
+        val tokens = ArrayList<Token>(input.length)
         var line = 0
 
-        input.lines().forEach {
-            tokens.addAll(getTokensByLine(it, tokenMap, line))
+        input.lines().forEach { lineContent ->
+            tokens.addAll(getTokensByLine(lineContent, line))
             line++
         }
 
@@ -22,37 +30,44 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexe
 
     private fun getTokensByLine(
         input: String,
-        tokenMap: EnumMap<TokenType, Pattern>,
         line: Int,
     ): List<Token> {
         val tokens = ArrayList<Token>()
-        val types = tokenMap.keys.toList()
-        val matcher = tokenMap.values.joinToString("|").toRegex().toPattern().matcher(input)
-        var currentIndex = 0 // Track current index in the input string
+        val matcher = tokenPattern.matcher(input)
+        var currentIndex = 0
 
         while (matcher.find()) {
-            val token = matcher.group()
-            val type = types[tokenMap.values.indexOfFirst { it.matcher(token).matches() }]
+            val tokenValue = matcher.group()
+            val type = findTokenType(tokenValue)
             val start = matcher.start()
             val end = matcher.end()
 
-            // Check if there are any characters between the current token and the previous one
             checkIllegalCharsBetweenTokens(input, currentIndex, start, line)
 
-            if (type == TokenType.STRING_LITERAL) {
-                tokens.add(
-                    PrintScriptToken(type, token.substring(1, token.length - 1), Coordinate(line, start + 1), Coordinate(line, end - 1)),
-                )
-            } else {
-                tokens.add(PrintScriptToken(type, token, Coordinate(line, start), Coordinate(line, end)))
-            }
+            val token =
+                if (type == TokenType.STRING_LITERAL) {
+                    PrintScriptToken(
+                        type,
+                        tokenValue.substring(1, tokenValue.length - 1),
+                        Coordinate(line, matcher.start() + 1),
+                        Coordinate(line, matcher.end() - 1),
+                    )
+                } else {
+                    PrintScriptToken(type, tokenValue, Coordinate(line, matcher.start()), Coordinate(line, matcher.end()))
+                }
+            tokens.add(token)
             currentIndex = end
         }
 
-        // Check for invalid characters after the last token
         checkIllegalCharsAfterLastToken(input, currentIndex, line)
 
         return tokens
+    }
+
+    // Function to find the TokenType of a token string
+    private fun findTokenType(token: String): TokenType {
+        val matchedEntry = typePatterns.entries.find { (_, pattern) -> pattern.matcher(token).matches() }
+        return matchedEntry?.key ?: throw IllegalStateException("Token type not found for token: $token")
     }
 
     private fun checkIllegalCharsAfterLastToken(

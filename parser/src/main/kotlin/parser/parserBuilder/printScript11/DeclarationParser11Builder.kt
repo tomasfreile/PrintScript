@@ -1,34 +1,31 @@
-package parser.parserBuilder
+@file:Suppress("ktlint:standard:no-wildcard-imports")
 
-import parser.PrintScriptParser
+package parser.parserBuilder.printScript11
+
 import parser.analysis.semantic.BooleanSemantic
 import parser.analysis.semantic.NumberSemantic
 import parser.analysis.semantic.SemanticRule
 import parser.analysis.semantic.StringSemantic
-import parser.analysis.syntax.IsArithmeticSyntax
-import parser.analysis.syntax.IsBooleanSyntax
-import parser.analysis.syntax.IsStringSyntax
-import parser.analysis.syntax.SyntaxRule
+import parser.analysis.syntax.*
+import parser.analysis.syntax.ifSyntax.IsIfElseSyntax
 import parser.nodeBuilder.ArithmeticNodeBuilder
 import parser.nodeBuilder.BooleanNodeBuilder
 import parser.nodeBuilder.NodeBuilder
 import parser.nodeBuilder.StringNodeBuilder
-import parser.parser.AssignationParser
 import parser.parser.DeclarationParser
 import parser.parser.Parser
-import parser.parser.PrintParser
+import parser.parserBuilder.ParserBuilder
 import token.TokenType
 
-class PrintScriptOnePointOneParserBuilder : PrintScriptParserBuilder {
-    override fun build(): PrintScriptParser {
-        return PrintScriptParser(getParsers())
-    }
-
-    private fun getParsers(): List<Parser> {
-        return listOf(
-            DeclarationParser(TokenType.SEMICOLON, getTypeMap(), getDeclarationList(), getSyntaxMap(), getSemanticMap(), getNodeBuilders()),
-            PrintParser(TokenType.SEMICOLON, getSyntaxMap(), getSemanticMap(), getNodeBuilders()),
-            AssignationParser(TokenType.SEMICOLON, getSyntaxMap(), getSemanticMap(), getNodeBuilders()),
+class DeclarationParser11Builder : ParserBuilder {
+    override fun build(): Parser {
+        return DeclarationParser(
+            TokenType.SEMICOLON,
+            getTypeMap(),
+            getDeclarationList(),
+            getSyntaxMap(),
+            getSemanticMap(),
+            getNodeBuilders(),
         )
     }
 
@@ -60,6 +57,7 @@ class PrintScriptOnePointOneParserBuilder : PrintScriptParserBuilder {
             Pair(TokenType.STRING_TYPE, IsStringSyntax()),
             Pair(TokenType.NUMBER_TYPE, IsArithmeticSyntax()),
             Pair(TokenType.BOOLEAN_TYPE, IsBooleanSyntax()),
+            Pair(TokenType.IF, IsIfElseSyntax()),
         )
     }
 

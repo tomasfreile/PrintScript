@@ -1,7 +1,7 @@
 package parser.analysis.syntax
 
 import parser.InvalidSyntaxException
-import parser.analysis.syntax.common.HasPairOfParen
+import parser.analysis.syntax.common.HasPairSeparator
 import token.Token
 import token.TokenType
 
@@ -83,7 +83,10 @@ class IsArithmeticSyntax : SyntaxRule {
     }
 
     private fun isParenValid(tokenList: List<Token>): Boolean {
-        return HasPairOfParen().checkSyntax(tokenList)
+        return HasPairSeparator(
+            TokenType.LEFT_PAREN,
+            TokenType.RIGHT_PAREN,
+        ).checkSyntax(tokenList)
     }
 
     private fun condition(

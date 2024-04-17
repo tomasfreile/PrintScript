@@ -5,7 +5,7 @@ import ast.PrintNode
 import parser.InvalidSyntaxException
 import parser.analysis.semantic.SemanticRule
 import parser.analysis.syntax.SyntaxRule
-import parser.analysis.syntax.common.HasSentenceSeparator
+import parser.analysis.syntax.common.HasSentenceDelimiter
 import parser.nodeBuilder.NodeBuilder
 import token.Token
 import token.TokenType
@@ -47,7 +47,7 @@ class PrintParser(
 
     private fun preCondition(tokenList: List<Token>): Boolean {
         return tokenList.size >= 4 &&
-            HasSentenceSeparator(separator).checkSyntax(tokenList)
+            HasSentenceDelimiter(separator).checkSyntax(tokenList)
     }
 
     private fun isSemanticValid(
