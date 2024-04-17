@@ -24,7 +24,7 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
             is VariableDeclarationNode -> formatVariableDeclarationNode(astNode, rulesReaderData)
             is AssignmentNode -> formatAssignmentNode(astNode, rulesReaderData)
             is IfNode -> formatIfNode(astNode, rulesReaderData)
-//            is FunctionNode -> formatFunctionNode(astNode, rulesReaderData)
+            is FunctionNode -> formatFunctionNode(astNode, rulesReaderData)
             else -> ""
         }
     }
@@ -107,6 +107,15 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         rules: Map<String, Any>,
     ): String {
         return formatCodeBlockLoop(node, rules, "")
+    }
+
+    private fun formatFunctionNode(
+        node: FunctionNode,
+        rules: Map<String, Any>,
+    ): String {
+        val function = defineFunctionSymbol(node.function)
+        val expression = applyFormat(node.expression, rules)
+        return formatSemicolon("$function($expression)")
     }
 
     private fun formatCodeBlockLoop(
@@ -216,21 +225,11 @@ class PrintScriptFormatter(private val rulesPath: String) : Formatter {
         }
     }
 
-    //    private fun formatFunctionNode(
-//        node: FunctionNode,
-//        rules: Map<String, Any>,
-//    ): String {
-//        val function = defineFunctionSymbol(node.function)
-//        val expression = applyFormat(node.expression, rules)
-//        return "$function($expression)"
-//    }
-
-    //    private fun defineFunctionSymbol(function: TokenType): String {
-//        return when (function) {
-//            TokenType.READ_INPUT -> "readInput"
-//            TokenType.READ_ENV -> "readEnv"
-//            TokenType.WRITE_ENV -> "writeEnv"
-//            else -> ""
-//        }
-//    }
+    private fun defineFunctionSymbol(function: TokenType): String {
+        return when (function) {
+            TokenType.READ_INPUT -> "readInput"
+            TokenType.READ_ENV -> "readEnv"
+            else -> ""
+        }
+    }
 }

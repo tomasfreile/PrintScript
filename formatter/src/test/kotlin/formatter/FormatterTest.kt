@@ -4,6 +4,7 @@ import ast.AssignmentNode
 import ast.AstNode
 import ast.BinaryOperationNode
 import ast.CodeBlock
+import ast.FunctionNode
 import ast.IfNode
 import ast.LiteralNode
 import ast.PrintNode
@@ -1355,8 +1356,41 @@ class FormatterTest {
         )
     }
 
+    @Test
+    fun test037_formatASimpleReadEnvFunction() {
+        val node =
+            FunctionNode(
+                TokenType.READ_ENV,
+                LiteralNode(
+                    "env1",
+                    TokenType.STRING_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(node)
+        assertEquals("readEnv(\"env1\");\n", result)
+    }
+
+    @Test
+    fun test038_formatASimpleReadInputFunction() {
+        val node =
+            FunctionNode(
+                TokenType.READ_INPUT,
+                LiteralNode(
+                    "hello",
+                    TokenType.STRING_LITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
+        val result = formatter.format(node)
+        assertEquals("readInput(\"hello\");\n", result)
+    }
 //    @Test
-//    fun test021_formatASimpleReadInputFunction() {
+//    fun test037_formatASimpleReadInputFunction() {
 //        val string = "condition = readInput(hello);"
 //        val ast = getTree(string)
 //        val formatter: Formatter = PrintScriptFormatter(formatterPath01)
