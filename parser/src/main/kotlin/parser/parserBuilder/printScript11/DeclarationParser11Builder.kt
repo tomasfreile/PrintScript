@@ -2,16 +2,10 @@
 
 package parser.parserBuilder.printScript11
 
-import parser.analysis.semantic.BooleanSemantic
-import parser.analysis.semantic.NumberSemantic
-import parser.analysis.semantic.SemanticRule
-import parser.analysis.semantic.StringSemantic
+import parser.analysis.semantic.*
 import parser.analysis.syntax.*
 import parser.analysis.syntax.ifSyntax.IsIfElseSyntax
-import parser.nodeBuilder.ArithmeticNodeBuilder
-import parser.nodeBuilder.BooleanNodeBuilder
-import parser.nodeBuilder.NodeBuilder
-import parser.nodeBuilder.StringNodeBuilder
+import parser.nodeBuilder.*
 import parser.parser.DeclarationParser
 import parser.parser.Parser
 import parser.parserBuilder.ParserBuilder
@@ -34,6 +28,8 @@ class DeclarationParser11Builder : ParserBuilder {
             Pair(TokenType.NUMBER_TYPE, NumberSemantic()),
             Pair(TokenType.STRING_TYPE, StringSemantic()),
             Pair(TokenType.BOOLEAN_TYPE, BooleanSemantic()),
+            Pair(TokenType.READ_INPUT, FunctionSemantic()),
+            Pair(TokenType.READ_ENV, FunctionSemantic()),
         )
     }
 
@@ -57,6 +53,8 @@ class DeclarationParser11Builder : ParserBuilder {
             Pair(TokenType.STRING_TYPE, IsStringSyntax()),
             Pair(TokenType.NUMBER_TYPE, IsArithmeticSyntax()),
             Pair(TokenType.BOOLEAN_TYPE, IsBooleanSyntax()),
+            Pair(TokenType.READ_INPUT, IsFunctionSyntax()),
+            Pair(TokenType.READ_ENV, IsFunctionSyntax()),
             Pair(TokenType.IF, IsIfElseSyntax()),
         )
     }
@@ -66,6 +64,8 @@ class DeclarationParser11Builder : ParserBuilder {
             Pair(TokenType.STRING_TYPE, StringNodeBuilder()),
             Pair(TokenType.NUMBER_TYPE, ArithmeticNodeBuilder()),
             Pair(TokenType.BOOLEAN_TYPE, BooleanNodeBuilder()),
+            Pair(TokenType.READ_ENV, FunctionNodeBuilder()),
+            Pair(TokenType.READ_INPUT, FunctionNodeBuilder()),
         )
     }
 }

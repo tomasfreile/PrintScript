@@ -356,6 +356,7 @@ class DeclarationPrintScriptParserTest {
         }
     }
 
+    @Test
     fun test016_DeclarationParserFunctionNumberDeclaration() {
         val tokenList =
             listOf(
@@ -379,6 +380,7 @@ class DeclarationPrintScriptParserTest {
         }
     }
 
+    @Test
     fun test017_DeclarationParserFunctionStringInvalidDeclarationBecauseOfNumberTypeDeclaration() {
         val tokenList =
             listOf(
