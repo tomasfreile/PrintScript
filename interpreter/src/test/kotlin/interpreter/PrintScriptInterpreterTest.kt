@@ -97,6 +97,30 @@ class PrintScriptInterpreterTest {
     }
 
     @Test
+    fun testDeclareVariableOfTypeStringWithNumberLiteral() {
+        val string = "let str: string = 3;"
+//        assertThrows<UnsupportedOperationException> { interpreter.interpret(getTree(string), symbolTable) }
+    }
+
+    @Test
+    fun testDeclareVariableWithTypeStringAndThenAssignANumber() {
+        val string = "let str: string;"
+        interpreter.interpret(getTree(string), symbolTable)
+        val string2 = "str = 3;"
+
+        assertThrows<UnsupportedOperationException> { interpreter.interpret(getTree(string2), symbolTable) }
+    }
+
+    @Test
+    fun testDeclareVariableWithTypeNumberAndThenAssignAString() {
+        val string = "let num: number;"
+        interpreter.interpret(getTree(string), symbolTable)
+        val string2 = "num = 'hola';"
+
+        assertThrows<UnsupportedOperationException> { interpreter.interpret(getTree(string2), symbolTable) }
+    }
+
+    @Test
     fun testFloatAndStringConcatenation() {
         val string = "let num: number = 3.14;"
         interpreter.interpret(getTree(string), symbolTable)

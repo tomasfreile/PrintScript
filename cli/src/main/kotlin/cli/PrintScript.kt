@@ -20,6 +20,7 @@ import parser.parser.Parser
 import parser.parserBuilder.printScript10.PrintScript10ParserBuilder
 import parser.parserBuilder.printScript11.PrintScript11ParserBuilder
 import sca.StaticCodeAnalyzerImpl
+import token.TokenType
 import java.io.File
 
 class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Source> <Config>") {
@@ -33,6 +34,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     private val source by argument(help = "source file").file(mustExist = true)
 
     private val config by option("-c", help = "config file").file(mustExist = true)
+    private val envFile by option("-e", "--env", help = "environment variables file").file(mustExist = true)
 
     private lateinit var lexer: Lexer
     private lateinit var parser: Parser
@@ -80,6 +82,9 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     }
 
     private fun executeCode(reader: FileReader) {
+        if (envFile != null) {
+            insertEnvironmentVariablesInSymbolTable()
+        }
         while (reader.hasNextLine()) {
             val statements = reader.getNextLine()
 
@@ -94,6 +99,17 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
                     break
                 }
             }
+        }
+    }
+
+    private fun insertEnvironmentVariablesInSymbolTable() {
+        // Read file contents line by line
+        val lines = File(envFile!!.path).readLines()
+
+        // Print each line of the file
+        lines.forEach {
+            val pair = it.split("=")
+            symbolTable[Variable(pair[0], TokenType.STRINGTYPE, TokenType.CONST)] = pair[1]
         }
     }
 
