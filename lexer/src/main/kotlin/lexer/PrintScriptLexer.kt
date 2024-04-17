@@ -10,10 +10,11 @@ import java.util.*
 import java.util.regex.Matcher
 
 class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, TokenRegexMatcher>) : Lexer {
+    private val types = tokenMap.keys.toList()
+
     override fun lex(input: String): List<Token> {
         val tokens = ArrayList<Token>()
         var line = 0
-        val types = tokenMap.keys.toList()
 
         // For each line in the input
         input.lines().forEach { lineContent ->
@@ -23,6 +24,13 @@ class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, TokenRegexMatche
         }
 
         return tokens
+    }
+
+    override fun lexLine(
+        input: String,
+        lineNumber: Int,
+    ): List<Token> {
+        return getTokensByLine(input, lineNumber, types)
     }
 
     // Function to get tokens by line
