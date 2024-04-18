@@ -61,8 +61,8 @@ class AssignationParser11Builder : ParserBuilder {
     private fun getSyntaxAnalyzer(): SyntaxAnalyzer {
         return SyntaxAnalyzerImpl(
             mapOf(
-                Pair(TokenType.STRINGTYPE, IsStringSyntax()),
                 Pair(TokenType.NUMBERTYPE, IsArithmeticSyntax()),
+                Pair(TokenType.STRINGTYPE, IsStringSyntax()),
                 Pair(TokenType.BOOLEANTYPE, IsBooleanSyntax()),
                 Pair(TokenType.READINPUT, IsReadInputFunctionSyntax()),
                 Pair(TokenType.READENV, IsReadEnvFunctionSyntax()),
