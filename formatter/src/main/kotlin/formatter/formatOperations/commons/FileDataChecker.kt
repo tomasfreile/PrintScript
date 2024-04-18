@@ -1,6 +1,7 @@
 package formatter.formatOperations.commons
 
 class FileDataChecker {
+    // chequea que el dato del mapa este y sea de tipo booleano
     fun checkBooleanData(
         data: Map<String, Any>,
         key: String,
@@ -11,6 +12,7 @@ class FileDataChecker {
         return value
     }
 
+    // chequea que el dato del mapa este y sea de tipo int
     fun checkNumberData(
         data: Map<String, Any>,
         key: String,
