@@ -159,32 +159,76 @@ class ScaTest {
                 TokenType.LET,
                 "variable",
                 TokenType.NUMBERTYPE,
-                LiteralNode("1", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
+                FunctionNode(
+                    TokenType.READINPUT,
+                    LiteralNode(
+                        "1",
+                        TokenType.NUMBERLITERAL,
+                        TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                    ),
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(noReadInputExpressions.analyze(ast).isEmpty())
     }
 
     @Test
-    fun shouldReturnWarningWhenReadInputExpressionsAreDisabledAndReadInputExpressionsArePresent() {
+    fun shouldReturnWarningWhenReadInputExpressionsAreDisabledAndReadInputExpressionsArePresentInDeclaration() {
         val ast =
             VariableDeclarationNode(
                 TokenType.LET,
                 "variable",
                 TokenType.NUMBERTYPE,
-                FunctionNode(
-                    TokenType.READINPUT,
-                    BinaryOperationNode(
-                        LiteralNode("1", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                        LiteralNode("2", TokenType.NUMBERLITERAL, TokenPosition(Coordinate(0, 0), Coordinate(0, 0))),
-                        TokenType.PLUS,
-                        TokenPosition(Coordinate(2, 2), Coordinate(2, 9)),
+                BinaryOperationNode(
+                    FunctionNode(
+                        TokenType.READINPUT,
+                        LiteralNode(
+                            "1",
+                            TokenType.NUMBERLITERAL,
+                            TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                        ),
+                        TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                     ),
+                    LiteralNode(
+                        "2",
+                        TokenType.NUMBERLITERAL,
+                        TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                    ),
+                    TokenType.PLUS,
                     TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
                 ),
                 TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
             )
         assert(noReadInputExpressions.analyze(ast).isNotEmpty())
-        println(noReadInputExpressions.analyze(ast).get(0))
+    }
+
+    @Test
+    fun shouldReturnWarningWhenReadInputExpressionsAreDisabledAndReadInputExpressionsArePresentInAssignment() {
+        val ast =
+            AssignmentNode(
+                "input",
+                BinaryOperationNode(
+                    FunctionNode(
+                        TokenType.READINPUT,
+                        LiteralNode(
+                            "1",
+                            TokenType.NUMBERLITERAL,
+                            TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                        ),
+                        TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                    ),
+                    LiteralNode(
+                        "2",
+                        TokenType.NUMBERLITERAL,
+                        TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                    ),
+                    TokenType.PLUS,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenType.NUMBERTYPE,
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        assert(noReadInputExpressions.analyze(ast).isNotEmpty())
     }
 }
