@@ -1537,4 +1537,138 @@ class FormatterTest {
             result,
         )
     }
+
+    @Test
+    fun test045_formatAnIfInsideIfWithoutElse() {
+        val node1 =
+            AssignmentNode(
+                "name",
+                LiteralNode(
+                    "micaela",
+                    TokenType.STRINGLITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenType.STRINGTYPE,
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        val node2 =
+            PrintNode(
+                LiteralNode(
+                    "True",
+                    TokenType.BOOLEANLITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        val list1 = listOf(node1, node2)
+        val list2 = listOf(NilNode)
+        val insideIf =
+            IfNode(
+                LiteralNode(
+                    "True",
+                    TokenType.BOOLEANLITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                CodeBlock(
+                    list1,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                CodeBlock(
+                    list2,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        val list3 = listOf(insideIf)
+        val node =
+            IfNode(
+                LiteralNode(
+                    "True",
+                    TokenType.BOOLEANLITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                CodeBlock(
+                    list3,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                CodeBlock(
+                    list2,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        val result = formatter1.format(node)
+        assertEquals(
+            "if (True) {\n\tif (True) {\n\t\tname = \"micaela\";\n\t\t\n\t\tprintln(True);\n\t\t\n\t}\n\t\n}\n",
+            result,
+        )
+    }
+
+    @Test
+    fun test046_formatAnIfInsideIfWithoutElseWithOtherSetOfRules() {
+        val node1 =
+            AssignmentNode(
+                "name",
+                LiteralNode(
+                    "micaela",
+                    TokenType.STRINGLITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenType.STRINGTYPE,
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        val node2 =
+            PrintNode(
+                LiteralNode(
+                    "True",
+                    TokenType.BOOLEANLITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        val list1 = listOf(node1, node2)
+        val list2 = listOf(NilNode)
+        val insideIf =
+            IfNode(
+                LiteralNode(
+                    "True",
+                    TokenType.BOOLEANLITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                CodeBlock(
+                    list1,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                CodeBlock(
+                    list2,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        val list3 = listOf(insideIf)
+        val node =
+            IfNode(
+                LiteralNode(
+                    "True",
+                    TokenType.BOOLEANLITERAL,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                CodeBlock(
+                    list3,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                CodeBlock(
+                    list2,
+                    TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+                ),
+                TokenPosition(Coordinate(0, 0), Coordinate(0, 0)),
+            )
+        val result = formatter2.format(node)
+        assertEquals(
+            "if (True) {\n\t\tif (True) {\n\t\t\t\tname=\"micaela\";\n\t\t\t\t\n" +
+                "\t\t\t\t\n" +
+                "\t\t\t\tprintln(True);\n\t\t\t\t\n\t\t}\n\t\t\n}\n",
+            result,
+        )
+    }
 }

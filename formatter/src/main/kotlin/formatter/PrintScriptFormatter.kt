@@ -9,6 +9,7 @@ import ruleReader.RuleReader
 class PrintScriptFormatter(rulesPath: String, private val formattingOperators: List<FormatOperation>) : Formatter {
     private val rulesReaderData = RuleReader(rulesPath).readFile()
 
+    // revisa la lista de operadores de formato y pregunta si puede manejar el nodo, si puede lo formatea
     override fun format(astNode: AstNode): String {
         for (operator in formattingOperators) {
             if (operator.canHandle(astNode)) {
@@ -18,6 +19,7 @@ class PrintScriptFormatter(rulesPath: String, private val formattingOperators: L
         throw UnsupportedOperationException("Unsupported node type: ${astNode.javaClass}")
     }
 
+    // consigue el mapa de reglas
     override fun getRules(): Map<String, Any> {
         return rulesReaderData
     }
