@@ -1,6 +1,6 @@
 package parser.ifParser
 
-import parser.analysis.syntax.ifSyntax.IfSyntax
+import parser.analysis.syntax.rule.ifSyntax.IfSyntax
 import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType

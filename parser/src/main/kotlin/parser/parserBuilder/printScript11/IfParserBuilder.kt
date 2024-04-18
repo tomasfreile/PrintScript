@@ -2,9 +2,9 @@
 
 package parser.parserBuilder.printScript11
 
-import parser.analysis.semantic.*
-import parser.analysis.syntax.*
-import parser.analysis.syntax.ifSyntax.IsIfElseSyntax
+import parser.analysis.semantic.rule.*
+import parser.analysis.syntax.rule.*
+import parser.analysis.syntax.rule.ifSyntax.IsIfElseSyntax
 import parser.parser.IfParser
 import parser.parser.Parser
 import parser.parserBuilder.ParserBuilder

@@ -1,21 +1,22 @@
-@file:Suppress("ktlint:standard:no-wildcard-imports")
-
-package parser.parserBuilder.printScript11
+package parser.parserBuilder.printScript10
 
 import parser.analysis.semantic.analyser.DeclarationSemanticAnalyzer
 import parser.analysis.semantic.analyser.SemanticAnalyzer
-import parser.analysis.semantic.rule.*
+import parser.analysis.semantic.rule.NumberSemantic
+import parser.analysis.semantic.rule.StringSemantic
 import parser.analysis.syntax.analyzer.SyntaxAnalyzer
 import parser.analysis.syntax.analyzer.SyntaxAnalyzerImpl
-import parser.analysis.syntax.rule.*
-import parser.analysis.syntax.rule.ifSyntax.IsIfElseSyntax
-import parser.nodeBuilder.*
+import parser.analysis.syntax.rule.IsArithmeticSyntax
+import parser.analysis.syntax.rule.IsStringSyntax
+import parser.nodeBuilder.ArithmeticNodeBuilder
+import parser.nodeBuilder.NodeBuilder
+import parser.nodeBuilder.StringNodeBuilder
 import parser.parser.DeclarationParser
 import parser.parser.Parser
 import parser.parserBuilder.ParserBuilder
 import token.TokenType
 
-class DeclarationParser11Builder : ParserBuilder {
+class DeclarationParser10Builder : ParserBuilder {
     override fun build(): Parser {
         return DeclarationParser(
             TokenType.SEMICOLON,
@@ -30,7 +31,6 @@ class DeclarationParser11Builder : ParserBuilder {
     private fun getDeclarationList(): List<TokenType> {
         return listOf(
             TokenType.LET,
-            TokenType.CONST,
         )
     }
 
@@ -38,17 +38,6 @@ class DeclarationParser11Builder : ParserBuilder {
         return mapOf(
             Pair(TokenType.NUMBERLITERAL, TokenType.NUMBERTYPE),
             Pair(TokenType.STRINGLITERAL, TokenType.STRINGTYPE),
-            Pair(TokenType.BOOLEANLITERAL, TokenType.BOOLEANTYPE),
-        )
-    }
-
-    private fun getNodeBuilders(): Map<TokenType, NodeBuilder> {
-        return mapOf(
-            Pair(TokenType.STRINGTYPE, StringNodeBuilder()),
-            Pair(TokenType.NUMBERTYPE, ArithmeticNodeBuilder()),
-            Pair(TokenType.BOOLEANTYPE, BooleanNodeBuilder()),
-            Pair(TokenType.READENV, FunctionNodeBuilder()),
-            Pair(TokenType.READINPUT, FunctionNodeBuilder()),
         )
     }
 
@@ -57,9 +46,6 @@ class DeclarationParser11Builder : ParserBuilder {
             mapOf(
                 Pair(TokenType.NUMBERTYPE, listOf(NumberSemantic())),
                 Pair(TokenType.STRINGTYPE, listOf(StringSemantic())),
-                Pair(TokenType.BOOLEANTYPE, listOf(BooleanSemantic())),
-                Pair(TokenType.READENV, listOf(FunctionSemantic())),
-                Pair(TokenType.READINPUT, listOf(FunctionSemantic())),
             ),
             getValidDataTypes(),
         )
@@ -67,9 +53,15 @@ class DeclarationParser11Builder : ParserBuilder {
 
     private fun getValidDataTypes(): Map<TokenType, List<TokenType>> {
         return mapOf(
-            Pair(TokenType.NUMBERTYPE, listOf(TokenType.NUMBERTYPE, TokenType.READINPUT, TokenType.READENV)),
-            Pair(TokenType.STRINGTYPE, listOf(TokenType.STRINGTYPE, TokenType.READENV, TokenType.READINPUT)),
-            Pair(TokenType.BOOLEANTYPE, listOf(TokenType.BOOLEANTYPE, TokenType.READENV, TokenType.READINPUT)),
+            Pair(TokenType.NUMBERTYPE, listOf(TokenType.NUMBERTYPE)),
+            Pair(TokenType.STRINGTYPE, listOf(TokenType.STRINGTYPE)),
+        )
+    }
+
+    private fun getNodeBuilders(): Map<TokenType, NodeBuilder> {
+        return mapOf(
+            Pair(TokenType.STRINGTYPE, StringNodeBuilder()),
+            Pair(TokenType.NUMBERTYPE, ArithmeticNodeBuilder()),
         )
     }
 
@@ -78,10 +70,6 @@ class DeclarationParser11Builder : ParserBuilder {
             mapOf(
                 Pair(TokenType.NUMBERTYPE, IsArithmeticSyntax()),
                 Pair(TokenType.STRINGTYPE, IsStringSyntax()),
-                Pair(TokenType.BOOLEANTYPE, IsBooleanSyntax()),
-                Pair(TokenType.READINPUT, IsReadInputFunctionSyntax()),
-                Pair(TokenType.READENV, IsReadEnvFunctionSyntax()),
-                Pair(TokenType.IF, IsIfElseSyntax()),
             ),
         )
     }

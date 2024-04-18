@@ -6,19 +6,19 @@ import ast.LiteralNode
 import ast.PrintNode
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import parser.analysis.semantic.BooleanSemantic
-import parser.analysis.semantic.NumberSemantic
-import parser.analysis.semantic.SemanticRule
-import parser.analysis.semantic.StringSemantic
-import parser.analysis.syntax.IsArithmeticSyntax
-import parser.analysis.syntax.IsBooleanSyntax
-import parser.analysis.syntax.IsStringSyntax
-import parser.analysis.syntax.SyntaxRule
+import parser.analysis.semantic.rule.BooleanSemantic
+import parser.analysis.semantic.rule.NumberSemantic
+import parser.analysis.semantic.rule.SemanticRule
+import parser.analysis.semantic.rule.StringSemantic
+import parser.analysis.syntax.rule.IsArithmeticSyntax
+import parser.analysis.syntax.rule.IsBooleanSyntax
+import parser.analysis.syntax.rule.IsStringSyntax
+import parser.analysis.syntax.rule.SyntaxRule
 import parser.nodeBuilder.ArithmeticNodeBuilder
 import parser.nodeBuilder.BooleanNodeBuilder
 import parser.nodeBuilder.NodeBuilder
 import parser.nodeBuilder.StringNodeBuilder
-import parser.parser.PrintParser
+import parser.parserBuilder.printScript11.PrintScript11ParserBuilder
 import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
@@ -27,7 +27,7 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class PrintPrintScriptParserTest {
-    private val parse = PrintParser(TokenType.SEMICOLON, getSyntaxMap(), getSemanticMap(), getNodeBuilders())
+    private val parse = PrintScript11ParserBuilder().build()
 
     private fun getSemanticMap(): Map<TokenType, SemanticRule> {
         return mapOf(

@@ -1,6 +1,6 @@
 package parser
 
-import parser.analysis.syntax.ifSyntax.IsIfElseSyntax
+import parser.analysis.syntax.rule.ifSyntax.IsIfElseSyntax
 import token.Token
 import token.TokenType
 

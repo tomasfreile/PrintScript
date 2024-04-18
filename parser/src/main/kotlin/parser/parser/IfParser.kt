@@ -5,10 +5,10 @@ package parser.parser
 import ast.*
 import parser.CodeBlockSeparator
 import parser.InvalidIfStatementException
-import parser.analysis.semantic.SemanticRule
-import parser.analysis.semantic.common.IsNested
-import parser.analysis.syntax.SyntaxRule
-import parser.analysis.syntax.ifSyntax.IsIfElseSyntax
+import parser.analysis.semantic.rule.SemanticRule
+import parser.analysis.semantic.rule.common.IsNested
+import parser.analysis.syntax.rule.SyntaxRule
+import parser.analysis.syntax.rule.ifSyntax.IsIfElseSyntax
 import parser.nodeBuilder.CodeBlockNodeBuilder
 import parser.nodeBuilder.LiteralNodeBuilder
 import position.TokenPosition
