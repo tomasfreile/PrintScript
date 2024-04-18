@@ -33,7 +33,7 @@ class DeclarationParser(
             HasSentenceDelimiter(separator).checkSyntax(tokenList)
     }
 
-    override fun createAST(tokenList: List<Token>): AstNode? {
+    override fun createAST(tokenList: List<Token>): AstNode {
         return when {
             isUninitialized(tokenList) -> createUninitializedDeclarationAst(tokenList)
             else -> buildDeclarationAst(tokenList)
