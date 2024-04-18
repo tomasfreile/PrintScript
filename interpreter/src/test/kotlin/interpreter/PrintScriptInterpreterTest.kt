@@ -13,6 +13,7 @@ import lexer.getTokenMapV11
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import parser.InvalidDataTypeException
 import parser.parserBuilder.printScript11.PrintScript11ParserBuilder
 import position.Coordinate
 import position.TokenPosition
@@ -98,8 +99,8 @@ class PrintScriptInterpreterTest {
 
     @Test
     fun testDeclareVariableOfTypeStringWithNumberLiteral() {
-        val string = "let str: string = 3;"
-//        assertThrows<UnsupportedOperationException> { interpreter.interpret(getTree(string), symbolTable) }
+        val string = "let num: number = 'hola';"
+        assertThrows<InvalidDataTypeException> { interpreter.interpret(getTree(string), symbolTable) }
     }
 
     @Test
