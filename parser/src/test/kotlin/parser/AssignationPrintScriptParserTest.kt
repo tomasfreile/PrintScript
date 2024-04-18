@@ -6,19 +6,7 @@ import ast.FunctionNode
 import ast.LiteralNode
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import parser.analysis.semantic.BooleanSemantic
-import parser.analysis.semantic.NumberSemantic
-import parser.analysis.semantic.SemanticRule
-import parser.analysis.semantic.StringSemantic
-import parser.analysis.syntax.IsArithmeticSyntax
-import parser.analysis.syntax.IsBooleanSyntax
-import parser.analysis.syntax.IsStringSyntax
-import parser.analysis.syntax.SyntaxRule
-import parser.nodeBuilder.ArithmeticNodeBuilder
-import parser.nodeBuilder.BooleanNodeBuilder
-import parser.nodeBuilder.NodeBuilder
-import parser.nodeBuilder.StringNodeBuilder
-import parser.parser.AssignationParser
+import parser.parserBuilder.printScript11.AssignationParser11Builder
 import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
@@ -26,31 +14,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class AssignationPrintScriptParserTest {
-    private val parser = AssignationParser(TokenType.SEMICOLON, getSyntaxMap(), getSemanticMap(), getNodeBuilders())
-
-    private fun getSemanticMap(): Map<TokenType, SemanticRule> {
-        return mapOf(
-            Pair(TokenType.NUMBERTYPE, NumberSemantic()),
-            Pair(TokenType.STRINGTYPE, StringSemantic()),
-            Pair(TokenType.BOOLEANTYPE, BooleanSemantic()),
-        )
-    }
-
-    private fun getSyntaxMap(): Map<TokenType, SyntaxRule> {
-        return mapOf(
-            Pair(TokenType.STRINGTYPE, IsStringSyntax()),
-            Pair(TokenType.NUMBERTYPE, IsArithmeticSyntax()),
-            Pair(TokenType.BOOLEANTYPE, IsBooleanSyntax()),
-        )
-    }
-
-    private fun getNodeBuilders(): Map<TokenType, NodeBuilder> {
-        return mapOf(
-            Pair(TokenType.STRINGTYPE, StringNodeBuilder()),
-            Pair(TokenType.NUMBERTYPE, ArithmeticNodeBuilder()),
-            Pair(TokenType.BOOLEANTYPE, BooleanNodeBuilder()),
-        )
-    }
+    private val parser = AssignationParser11Builder().build()
 
     @Test
     fun test001_AssignationParserSimpleStringAssignation() {
@@ -119,7 +83,7 @@ class AssignationPrintScriptParserTest {
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
-        assertThrows<InvalidAssignationException> {
+        assertThrows<InvalidSyntaxException> {
             parser.createAST(tokenList)
         }
     }
@@ -252,19 +216,20 @@ class AssignationPrintScriptParserTest {
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )
         assertTrue(parser.canHandle(tokenList))
-        assertThrows<InvalidAssignationException> {
+        assertThrows<InvalidSyntaxException> {
             parser.createAST(tokenList)
         }
     }
 
+    @Test
     fun test010_AssignationParserReadInputFunctionExpression() {
         val tokenList =
             listOf(
                 PrintScriptToken(TokenType.VALUEIDENTIFIERLITERAL, "condition", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.ASSIGNATION, "=", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.READINPUT, "readInput", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.READINPUT, "readEnv", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.LEFTPAREN, "(", Coordinate(2, 3), Coordinate(2, 3)),
-                PrintScriptToken(TokenType.STRINGLITERAL, "hello", Coordinate(2, 3), Coordinate(2, 3)),
+                PrintScriptToken(TokenType.STRINGLITERAL, "Users", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.RIGHTPAREN, ")", Coordinate(2, 3), Coordinate(2, 3)),
                 PrintScriptToken(TokenType.SEMICOLON, ";", Coordinate(2, 3), Coordinate(2, 3)),
             )

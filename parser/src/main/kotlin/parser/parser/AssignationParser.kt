@@ -3,17 +3,18 @@ package parser.parser
 import ast.AssignmentNode
 import ast.AstNode
 import parser.InvalidAssignationException
-import parser.analysis.semantic.SemanticRule
-import parser.analysis.syntax.SyntaxRule
-import parser.analysis.syntax.common.HasSentenceDelimiter
+import parser.analysis.Result
+import parser.analysis.semantic.analyser.SemanticAnalyzer
+import parser.analysis.syntax.analyzer.SyntaxAnalyzer
+import parser.analysis.syntax.rule.common.HasSentenceDelimiter
 import parser.nodeBuilder.NodeBuilder
 import token.Token
 import token.TokenType
 
 class AssignationParser(
     private val separator: TokenType,
-    private val expressionsSyntax: Map<TokenType, SyntaxRule>,
-    private val expressionsSemantic: Map<TokenType, SemanticRule>,
+    private val syntaxAnalyzer: SyntaxAnalyzer,
+    private val semanticAnalyzer: SemanticAnalyzer,
     private val nodeBuilders: Map<TokenType, NodeBuilder>,
 ) : Parser {
     override fun canHandle(tokenList: List<Token>): Boolean {
@@ -23,43 +24,33 @@ class AssignationParser(
         }
     }
 
-    override fun createAST(tokenList: List<Token>): AstNode? {
+    override fun createAST(tokenList: List<Token>): AstNode {
         val content = getContent(tokenList)
-        for ((type, _) in expressionsSyntax) {
-            when {
-                isExpressionValid(type, content) -> {
-                    if (isSemanticValid(type, content)) {
-                        return buildNode(content, type)?.let {
-                            createAssignationAst(
-                                tokenList,
-                                it,
-                                type,
-                            )
-                        }
-                    }
-                }
-                else -> continue
+        val contentType = getContentType(content)
+        val result = getResult(tokenList, contentType)
+        return when (result) {
+            Result.Ok -> {
+                createAssignationAst(
+                    tokenList,
+                    createContentNode(content, contentType),
+                    contentType,
+                )
             }
+            else -> throw InvalidAssignationException(
+                "Invalid assignation on line: " + tokenList.first().start.row,
+            )
         }
-        throw InvalidAssignationException(
-            "Invalid assignation on line: " + tokenList.first().start.row,
-        )
     }
 
-    private fun isExpressionValid(
-        tokenType: TokenType,
-        content: List<Token>,
-    ): Boolean {
-        val syntax = expressionsSyntax[tokenType]
-        return syntax != null && syntax.checkSyntax(content)
+    private fun getContentType(content: List<Token>): TokenType {
+        return syntaxAnalyzer.getSyntaxType(content)
     }
 
-    private fun isSemanticValid(
-        tokenType: TokenType,
+    private fun getResult(
         content: List<Token>,
-    ): Boolean {
-        val semantic = expressionsSemantic[tokenType]
-        return semantic != null && semantic.checkSemantic(content)
+        contentType: TokenType,
+    ): Result {
+        return semanticAnalyzer.analyze(content, contentType)
     }
 
     private fun preCondition(tokenList: List<Token>): Boolean {
@@ -74,12 +65,12 @@ class AssignationParser(
         return points == 2
     }
 
-    private fun buildNode(
+    private fun createContentNode(
         expression: List<Token>,
         type: TokenType,
-    ): AstNode? {
-        val builder = nodeBuilders[type]
-        return builder?.build(expression)
+    ): AstNode {
+        val builder = nodeBuilders[type] ?: throw NullPointerException("Build Node problem in Assgnation")
+        return builder.build(expression)
     }
 
     private fun createAssignationAst(
