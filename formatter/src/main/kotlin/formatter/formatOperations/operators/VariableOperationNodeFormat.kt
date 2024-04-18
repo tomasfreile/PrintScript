@@ -4,6 +4,7 @@ import ast.AstNode
 import ast.VariableDeclarationNode
 import formatter.Formatter
 import formatter.formatOperations.FormatOperation
+import formatter.formatOperations.commons.FileDataChecker
 import formatter.formatOperations.commons.FormatSemicolon
 import formatter.formatOperations.commons.HandleSpace
 import token.TokenType
@@ -14,6 +15,7 @@ class VariableOperationNodeFormat(
 ) : FormatOperation {
     private val spaceHandler = HandleSpace()
     private val semicolonHandler = FormatSemicolon()
+    private val fileDataChecker = FileDataChecker()
 
     override fun canHandle(node: AstNode): Boolean {
         return node is VariableDeclarationNode
@@ -24,10 +26,10 @@ class VariableOperationNodeFormat(
         formatter: Formatter,
     ): String {
         node as VariableDeclarationNode
-        val colonBefore = formatter.getRules()["colonBefore"] as Boolean
-        val colonAfter = formatter.getRules()["colonAfter"] as Boolean
-        val equalsBefore = formatter.getRules()["assignationBefore"] as Boolean
-        val equalsAfter = formatter.getRules()["assignationAfter"] as Boolean
+        val colonBefore = fileDataChecker.checkBooleanData(formatter.getRules(), "colonBefore")
+        val colonAfter = fileDataChecker.checkBooleanData(formatter.getRules(), "colonAfter")
+        val equalsBefore = fileDataChecker.checkBooleanData(formatter.getRules(), "assignationBefore")
+        val equalsAfter = fileDataChecker.checkBooleanData(formatter.getRules(), "assignationAfter")
         val variableSymbol = defineVariableSymbol(node.declarationType)
         val identifier = variableSymbol + " " + node.identifier
         val colon = spaceHandler.handleSpaces(":", colonBefore, colonAfter, identifier)

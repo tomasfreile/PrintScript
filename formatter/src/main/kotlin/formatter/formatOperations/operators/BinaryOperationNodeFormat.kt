@@ -36,7 +36,7 @@ class BinaryOperationNodeFormat : FormatOperation {
             TokenType.MINUS -> "-"
             TokenType.STAR -> "*"
             TokenType.SLASH -> "/"
-            else -> ""
+            else -> throw UnsupportedOperationException("Unsupported operator: $operator")
         }
     }
 }
