@@ -4,8 +4,11 @@ import ast.AstNode
 import ast.IfNode
 import formatter.Formatter
 import formatter.formatOperations.FormatOperation
+import formatter.formatOperations.commons.FileDataChecker
 
 class IfNodeFormat : FormatOperation {
+    private val fileDataChecker = FileDataChecker()
+
     override fun canHandle(node: AstNode): Boolean {
         return node is IfNode
     }
@@ -15,7 +18,7 @@ class IfNodeFormat : FormatOperation {
         formatter: Formatter,
     ): String {
         node as IfNode
-        val indentationAmount = formatter.getRules()["ifIndentation"] as Int
+        val indentationAmount = fileDataChecker.checkNumberData(formatter.getRules(), "ifIndentation")
         val condition = formatter.format(node.condition)
         val thenBlock = applyIndentations(formatter.format(node.thenBlock), indentationAmount)
         val elseBlock = formatter.format(node.elseBlock)
