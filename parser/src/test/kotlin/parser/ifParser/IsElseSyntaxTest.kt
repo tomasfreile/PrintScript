@@ -1,7 +1,7 @@
 package parser.ifParser
 
 import org.junit.jupiter.api.Test
-import parser.analysis.syntax.ifSyntax.ElseSyntax
+import parser.analysis.syntax.rule.ifSyntax.ElseSyntax
 import position.Coordinate
 import token.PrintScriptToken
 import token.TokenType
