@@ -33,7 +33,7 @@ fun getTokenMapV10(): EnumMap<TokenType, TokenRegexMatcher> {
     tokenMap[TokenType.VALUEIDENTIFIERLITERAL] = TokenRegexMatcher(TokenType.VALUEIDENTIFIERLITERAL, "[a-zA-Z_][a-zA-Z0-9_]*")
 
     // Invalid
-    tokenMap[TokenType.INVALID] = TokenRegexMatcher(TokenType.INVALID, "[^ \\n]")
+    tokenMap[TokenType.INVALID] = TokenRegexMatcher(TokenType.INVALID, "[^ \\n\\t]")
 
     return tokenMap
 }
