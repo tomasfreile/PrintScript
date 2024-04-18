@@ -6,7 +6,7 @@ import interpreter.variable.Variable
 import token.TokenType
 
 class ReadEnvFunction : Function {
-    override val type: TokenType = TokenType.READ_ENV
+    override val type: TokenType = TokenType.READENV
 
     override fun run(
         interpreter: PrintScriptInterpreter,

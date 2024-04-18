@@ -3,17 +3,18 @@ package parser.parser
 import ast.AstNode
 import ast.PrintNode
 import parser.InvalidSyntaxException
-import parser.analysis.semantic.SemanticRule
-import parser.analysis.syntax.SyntaxRule
-import parser.analysis.syntax.common.HasSentenceSeparator
+import parser.analysis.Result
+import parser.analysis.semantic.analyser.SemanticAnalyzer
+import parser.analysis.syntax.analyzer.SyntaxAnalyzer
+import parser.analysis.syntax.rule.common.HasSentenceDelimiter
 import parser.nodeBuilder.NodeBuilder
 import token.Token
 import token.TokenType
 
 class PrintParser(
     private val separator: TokenType,
-    private val expressionsSyntax: Map<TokenType, SyntaxRule>,
-    private val expressionsSemantic: Map<TokenType, SemanticRule>,
+    private val syntaxAnalyzer: SyntaxAnalyzer,
+    private val semanticAnalyzer: SemanticAnalyzer,
     private val nodeBuilders: Map<TokenType, NodeBuilder>,
 ) : Parser {
     override fun canHandle(tokenList: List<Token>): Boolean {
@@ -23,54 +24,42 @@ class PrintParser(
         }
     }
 
-    override fun createAST(tokenList: List<Token>): AstNode? {
+    override fun createAST(tokenList: List<Token>): AstNode {
         val content = getContent(tokenList)
-        for ((type, _) in expressionsSyntax) {
-            when {
-                isExpressionValid(type, content) -> {
-                    /*
-                        Syntax may be valid, but Semantic doesn't
-                     */
-                    if (isSemanticValid(type, content)) {
-                        return buildNode(content, type)?.let {
-                            createPrintAst(it)
-                        }
-                    }
-                }
-                else -> continue
+        val contentType = getContentType(content)
+        val result = getResult(tokenList, contentType)
+        return when (result) {
+            Result.Ok -> {
+                val node = createContentNode(content, contentType)
+                createPrintAst(node)
             }
+            else -> throw InvalidSyntaxException(
+                "Invalid print on line: " + tokenList.first().start.row,
+            )
         }
-        throw InvalidSyntaxException(
-            "Invalid print on line: " + tokenList.first().start.row,
-        )
+    }
+
+    private fun getContentType(content: List<Token>): TokenType {
+        return syntaxAnalyzer.getSyntaxType(content)
+    }
+
+    private fun getResult(
+        tokenList: List<Token>,
+        contentType: TokenType,
+    ): Result {
+        return semanticAnalyzer.analyze(tokenList, contentType)
     }
 
     private fun preCondition(tokenList: List<Token>): Boolean {
         return tokenList.size >= 4 &&
-            HasSentenceSeparator(separator).checkSyntax(tokenList)
-    }
-
-    private fun isSemanticValid(
-        tokenType: TokenType,
-        content: List<Token>,
-    ): Boolean {
-        val semantic = expressionsSemantic[tokenType]
-        return semantic != null && semantic.checkSemantic(content)
-    }
-
-    private fun isExpressionValid(
-        tokenType: TokenType,
-        content: List<Token>,
-    ): Boolean {
-        val syntax = expressionsSyntax[tokenType]
-        return syntax != null && syntax.checkSyntax(content)
+            HasSentenceDelimiter(separator).checkSyntax(tokenList)
     }
 
     private fun isPrint(tokenList: List<Token>): Boolean {
         var points = 0
         if (tokenList[0].type == TokenType.PRINT) points += 1
-        if (tokenList[1].type == TokenType.LEFT_PAREN) points += 1
-        if (tokenList[tokenList.size - 2].type == TokenType.RIGHT_PAREN) points += 1
+        if (tokenList[1].type == TokenType.LEFTPAREN) points += 1
+        if (tokenList[tokenList.size - 2].type == TokenType.RIGHTPAREN) points += 1
         return points == 3
     }
 
@@ -78,12 +67,12 @@ class PrintParser(
         return tokenList.subList(2, tokenList.size - 2)
     }
 
-    private fun buildNode(
-        expression: List<Token>,
-        type: TokenType,
-    ): AstNode? {
-        val builder = nodeBuilders[type]
-        return builder?.build(expression)
+    private fun createContentNode(
+        content: List<Token>,
+        contentType: TokenType,
+    ): AstNode {
+        val builder = nodeBuilders[contentType] ?: throw NullPointerException("Invalid content type")
+        return builder.build(content)
     }
 
     private fun createPrintAst(node: AstNode): AstNode {

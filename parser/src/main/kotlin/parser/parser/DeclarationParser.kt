@@ -4,9 +4,10 @@ import ast.AstNode
 import ast.NilNode
 import ast.VariableDeclarationNode
 import parser.InvalidDeclarationStatement
-import parser.analysis.semantic.SemanticRule
-import parser.analysis.syntax.SyntaxRule
-import parser.analysis.syntax.common.HasSentenceSeparator
+import parser.analysis.Result
+import parser.analysis.semantic.analyser.SemanticAnalyzer
+import parser.analysis.syntax.analyzer.SyntaxAnalyzer
+import parser.analysis.syntax.rule.common.HasSentenceDelimiter
 import parser.nodeBuilder.NodeBuilder
 import position.TokenPosition
 import token.Token
@@ -16,8 +17,8 @@ class DeclarationParser(
     private val separator: TokenType,
     private val dataTypeMap: Map<TokenType, TokenType>,
     private val declarationType: List<TokenType>,
-    private val expressionsSyntax: Map<TokenType, SyntaxRule>,
-    private val expressionsSemantic: Map<TokenType, SemanticRule>,
+    private val syntaxAnalyzer: SyntaxAnalyzer,
+    private val semanticAnalyzer: SemanticAnalyzer,
     private val nodeBuilders: Map<TokenType, NodeBuilder>,
 ) : Parser {
     override fun canHandle(tokenList: List<Token>): Boolean {
@@ -29,10 +30,10 @@ class DeclarationParser(
 
     private fun preCondition(tokenList: List<Token>): Boolean {
         return tokenList.size >= 4 &&
-            HasSentenceSeparator(separator).checkSyntax(tokenList)
+            HasSentenceDelimiter(separator).checkSyntax(tokenList)
     }
 
-    override fun createAST(tokenList: List<Token>): AstNode? {
+    override fun createAST(tokenList: List<Token>): AstNode {
         return when {
             isUninitialized(tokenList) -> createUninitializedDeclarationAst(tokenList)
             else -> buildDeclarationAst(tokenList)
@@ -46,7 +47,7 @@ class DeclarationParser(
     private fun isDeclaration(tokenList: List<Token>): Boolean {
         var points = 0
         if (hasValidDeclarationType(tokenList[0])) points += 1
-        if (tokenList[1].type == TokenType.VALUE_IDENTIFIER_LITERAL) points += 1
+        if (tokenList[1].type == TokenType.VALUEIDENTIFIERLITERAL) points += 1
         if (tokenList[2].type == TokenType.COLON) points += 1
         if (hasValidType(tokenList[3])) points += 1
         return points == 4
@@ -75,59 +76,42 @@ class DeclarationParser(
         return false
     }
 
-    private fun getExpressionSyntax(token: Token): SyntaxRule? {
-        return expressionsSyntax[token.type]
-    }
-
-    private fun getSemantic(token: Token): SemanticRule? {
-        return expressionsSemantic[token.type]
-    }
-
-    private fun buildDeclarationAst(tokenList: List<Token>): AstNode? {
-        return when {
-            isValidDeclaration(tokenList) -> {
-                val content = getContent(tokenList)
-                buildNode(content, tokenList[3])?.let {
-                    createDeclarationAst(
-                        tokenList,
-                        it,
-                    )
-                }
-            }
+    private fun buildDeclarationAst(tokenList: List<Token>): AstNode {
+        val content = getContent(tokenList)
+        val contentType = getContentType(content)
+        val result = isValidExpression(tokenList, content, contentType)
+        return when (result) {
+            Result.Ok ->
+                createDeclarationAst(
+                    tokenList,
+                    buildNode(content),
+                )
             else -> throw InvalidDeclarationStatement(
-                "Invalid declaration statement on line: " + tokenList.first().start.row,
+                "Invalid declaration on line: " + tokenList.first().start.row,
             )
         }
     }
 
-    private fun isValidDeclaration(tokenList: List<Token>): Boolean {
-        val expressionSyntax = getExpressionSyntax(tokenList[3])
-        val expressionSemantic = getSemantic(tokenList[3])
-        val content = getContent(tokenList)
-        return when {
-            expressionSyntax != null && expressionSemantic != null -> {
-                validate(expressionSyntax, expressionSemantic, content)
-            }
-            else -> false
+    private fun isValidExpression(
+        tokenList: List<Token>,
+        content: List<Token>,
+        contentType: TokenType,
+    ): Result {
+        val syntaxResult = syntaxAnalyzer.analyzeSyntax(content)
+        return when (syntaxResult) {
+            Result.Ok -> semanticAnalyzer.analyze(tokenList, contentType)
+            else -> Result.NOTOK
         }
     }
 
-    private fun validate(
-        expressionSyntax: SyntaxRule,
-        expressionSemantic: SemanticRule,
-        content: List<Token>,
-    ): Boolean {
-        val syntaxResult = expressionSyntax.checkSyntax(content)
-        val semanticResult = expressionSemantic.checkSemantic(content)
-        return syntaxResult && semanticResult
+    private fun buildNode(content: List<Token>): AstNode {
+        val contentType = getContentType(content)
+        val builder = nodeBuilders[contentType] ?: throw NullPointerException("Invalid builder for node")
+        return builder.build(content)
     }
 
-    private fun buildNode(
-        content: List<Token>,
-        token: Token,
-    ): AstNode? {
-        val builder = nodeBuilders[token.type]
-        return builder?.build(content)
+    private fun getContentType(content: List<Token>): TokenType {
+        return syntaxAnalyzer.getSyntaxType(content)
     }
 
     private fun createUninitializedDeclarationAst(tokenList: List<Token>): AstNode {

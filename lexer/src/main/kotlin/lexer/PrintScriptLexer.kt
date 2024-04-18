@@ -1,86 +1,81 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package lexer
 
 import position.Coordinate
 import token.PrintScriptToken
 import token.Token
 import token.TokenType
-import java.util.EnumMap
-import java.util.regex.Pattern
+import java.util.*
+import java.util.regex.Matcher
 
-class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, Pattern>) : Lexer {
+class PrintScriptLexer(private val tokenMap: EnumMap<TokenType, TokenRegexMatcher>) : Lexer {
+    private val types = tokenMap.keys.toList()
+
     override fun lex(input: String): List<Token> {
         val tokens = ArrayList<Token>()
         var line = 0
 
-        input.lines().forEach {
-            tokens.addAll(getTokensByLine(it, tokenMap, line))
+        // For each line in the input
+        input.lines().forEach { lineContent ->
+            // Get the tokens for the current line and add them to the list
+            tokens.addAll(getTokensByLine(lineContent, line, types))
             line++
         }
 
         return tokens
     }
 
+    override fun lexLine(
+        input: String,
+        lineNumber: Int,
+    ): List<Token> {
+        return getTokensByLine(input, lineNumber, types)
+    }
+
+    // Function to get tokens by line
     private fun getTokensByLine(
         input: String,
-        tokenMap: EnumMap<TokenType, Pattern>,
         line: Int,
+        tokenTypes: List<TokenType>,
     ): List<Token> {
         val tokens = ArrayList<Token>()
-        val types = tokenMap.keys.toList()
-        val matcher = tokenMap.values.joinToString("|").toRegex().toPattern().matcher(input)
-        var currentIndex = 0 // Track current index in the input string
+        // Create a matcher for the input string
+        val matcher = TokenRegexMatcher(tokenMap.values.toList()).matcher(input)
 
+        // While there are tokens to match
         while (matcher.find()) {
-            val token = matcher.group()
-            val type = types[tokenMap.values.indexOfFirst { it.matcher(token).matches() }]
-            val start = matcher.start()
-            val end = matcher.end()
-
-            // Check if there are any characters between the current token and the previous one
-            checkIllegalCharsBetweenTokens(input, currentIndex, start, line)
-
-            if (type == TokenType.STRING_LITERAL) {
-                tokens.add(
-                    PrintScriptToken(type, token.substring(1, token.length - 1), Coordinate(line, start + 1), Coordinate(line, end - 1)),
-                )
-            } else {
-                tokens.add(PrintScriptToken(type, token, Coordinate(line, start), Coordinate(line, end)))
+            // Find the token type that matches the current token
+            for (type in tokenTypes) {
+                // If the token type matches the current token
+                if (matcher.group(type.name) != null) {
+                    // Create the token and add it to the list
+                    val token = createToken(type, line, matcher)
+                    tokens.add(token)
+                    break
+                }
             }
-            currentIndex = end
         }
-
-        // Check for invalid characters after the last token
-        checkIllegalCharsAfterLastToken(input, currentIndex, line)
-
         return tokens
     }
 
-    private fun checkIllegalCharsAfterLastToken(
-        input: String,
-        currentIndex: Int,
+    // Function to create a token
+    private fun createToken(
+        type: TokenType,
         line: Int,
-    ) {
-        val remainingInvalidCharIndex = input.substring(currentIndex).indexOfFirst { !it.isWhitespace() }
-        if (remainingInvalidCharIndex != -1) {
-            val remainingInvalidCharPosition = currentIndex + remainingInvalidCharIndex
-            throw IllegalArgumentException(
-                "Invalid character '${input[remainingInvalidCharPosition]}' at line $line, position $remainingInvalidCharPosition",
+        matcher: Matcher,
+    ): Token {
+        return if (type == TokenType.STRINGLITERAL) {
+            // Create string token
+            PrintScriptToken(
+                type,
+                matcher.group().substring(1, matcher.group().length - 1),
+                Coordinate(line, matcher.start() + 1),
+                Coordinate(line, matcher.end() - 1),
             )
-        }
-    }
-
-    private fun checkIllegalCharsBetweenTokens(
-        input: String,
-        currentIndex: Int,
-        start: Int,
-        line: Int,
-    ) {
-        val invalidCharIndex = input.substring(currentIndex, start).indexOfFirst { !it.isWhitespace() }
-        if (invalidCharIndex != -1) {
-            val invalidCharPosition = currentIndex + invalidCharIndex
-            throw IllegalArgumentException(
-                "Invalid character '${input[invalidCharPosition]}' at line $line, position $invalidCharPosition",
-            )
+        } else {
+            // Create regular token
+            PrintScriptToken(type, matcher.group(), Coordinate(line, matcher.start()), Coordinate(line, matcher.end()))
         }
     }
 }

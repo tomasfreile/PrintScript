@@ -3,6 +3,7 @@
 package interpreter.builder
 
 import interpreter.function.ReadEnvFunction
+import interpreter.function.ReadInputFunction
 import interpreter.interpreter.*
 import interpreter.literal.Boolean
 import interpreter.literal.Number
@@ -34,7 +35,7 @@ class InterpreterBuilder {
                 val operationInterpreter =
                     OperationInterpreter(listOf(PlusOperation(), MinusOperation(), SlashOperation(), StarOperation()))
                 val literalInterpreter = LiteralInterpreter(listOf(Number(), String(), Boolean()))
-                val functionInterpreter = FunctionInterpreter(listOf(ReadEnvFunction(), ReadEnvFunction()))
+                val functionInterpreter = FunctionInterpreter(listOf(ReadEnvFunction(), ReadInputFunction()))
                 val interpreters =
                     listOf(
                         operationInterpreter,

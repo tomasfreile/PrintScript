@@ -4,13 +4,13 @@ package sca
 
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.error.YAMLException
-import sca.rules.*
+import sca.rules.Rule
+import sca.rules.matcher.getRuleMatchers
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
-import java.util.*
 
-class YamlReader {
+class YamlReader(private val version: String) {
     private val defaultValues: Map<String, Any> = emptyMap()
 
     fun readYaml(fileName: String): Map<String, Any> {
@@ -39,17 +39,14 @@ class YamlReader {
 
     fun readRules(fileName: String): List<Rule> {
         val yamlMap = readYaml(fileName)
-
-        return listOfNotNull(
-            if (yamlMap["enablePrintExpressions"] as? Boolean == false) PrintShouldNotContainExpressions() else null,
-            if (yamlMap["enableReadInputExpressions"] as? Boolean == false) ReadInputShouldNotContainExpressions() else null,
-            yamlMap["caseConvention"]?.toString()?.uppercase(Locale.getDefault())?.let { convention ->
-                when (convention) {
-                    "SNAKE_CASE" -> NamingConvention.SNAKE_CASE
-                    "CAMEL_CASE" -> NamingConvention.CAMEL_CASE
-                    else -> null
-                }?.let { VariableNamingRule(it) }
-            },
-        )
+        val ruleMatchers = getRuleMatchers(version)
+        val rules = mutableListOf<Rule>()
+        for (matcher in ruleMatchers) {
+            val rule = matcher.addRule(yamlMap)
+            if (rule != null) {
+                rules.add(rule)
+            }
+        }
+        return rules
     }
 }

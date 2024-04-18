@@ -13,7 +13,8 @@ import lexer.getTokenMapV11
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import parser.parserBuilder.PrintScriptOnePointOneParserBuilder
+import parser.InvalidDataTypeException
+import parser.parserBuilder.printScript11.PrintScript11ParserBuilder
 import position.Coordinate
 import position.TokenPosition
 import token.TokenType
@@ -22,7 +23,7 @@ import kotlin.test.assertEquals
 class PrintScriptInterpreterTest {
     private val interpreter = InterpreterBuilder().build("1.1")
     private val lexer = PrintScriptLexer(getTokenMapV11())
-    private val parser = PrintScriptOnePointOneParserBuilder().build()
+    private val parser = PrintScript11ParserBuilder().build()
     private val symbolTable = mutableMapOf<Variable, Any>()
 
     private fun getTree(code: String): AstNode {
@@ -63,6 +64,30 @@ class PrintScriptInterpreterTest {
     }
 
     @Test
+    fun testDivisionPrint() {
+        val string = "println(3 / 3);"
+        val result = interpreter.interpret(getTree(string), symbolTable)
+        result as PrintResult
+        assertEquals("1", result.toPrint)
+    }
+
+    @Test
+    fun testSubPrint() {
+        val string = "println(3 - 3);"
+        val result = interpreter.interpret(getTree(string), symbolTable)
+        result as PrintResult
+        assertEquals("0", result.toPrint)
+    }
+
+    @Test
+    fun testMulPrint() {
+        val string = "println(3 * 3);"
+        val result = interpreter.interpret(getTree(string), symbolTable)
+        result as PrintResult
+        assertEquals("9", result.toPrint)
+    }
+
+    @Test
     fun testDeclareVariableAndThenPrintIt() {
         val string = "let num: number = 3;"
         interpreter.interpret(getTree(string), symbolTable)
@@ -70,6 +95,30 @@ class PrintScriptInterpreterTest {
         val result = interpreter.interpret(getTree(string2), symbolTable)
         result as PrintResult
         assertEquals("3", result.toPrint)
+    }
+
+    @Test
+    fun testDeclareVariableOfTypeStringWithNumberLiteral() {
+        val string = "let num: number = 'hola';"
+        assertThrows<InvalidDataTypeException> { interpreter.interpret(getTree(string), symbolTable) }
+    }
+
+    @Test
+    fun testDeclareVariableWithTypeStringAndThenAssignANumber() {
+        val string = "let str: string;"
+        interpreter.interpret(getTree(string), symbolTable)
+        val string2 = "str = 3;"
+
+        assertThrows<UnsupportedOperationException> { interpreter.interpret(getTree(string2), symbolTable) }
+    }
+
+    @Test
+    fun testDeclareVariableWithTypeNumberAndThenAssignAString() {
+        val string = "let num: number;"
+        interpreter.interpret(getTree(string), symbolTable)
+        val string2 = "num = 'hola';"
+
+        assertThrows<UnsupportedOperationException> { interpreter.interpret(getTree(string2), symbolTable) }
     }
 
     @Test
@@ -95,7 +144,7 @@ class PrintScriptInterpreterTest {
     @Test
     fun testDeclareVariableWithoutValue() {
         val string = "let num: number;"
-        val result = interpreter.interpret(getTree(string), symbolTable)
+        interpreter.interpret(getTree(string), symbolTable)
         assertEquals("num", symbolTable.keys.elementAt(0).name)
     }
 
@@ -143,12 +192,21 @@ class PrintScriptInterpreterTest {
 
     @Test
     fun testEnvVariableIsCorrectlyPrinted() {
-        symbolTable[Variable("PRINT_ENV", TokenType.STRING_TYPE, TokenType.CONST)] = "hola"
+        symbolTable[Variable("PRINT_ENV", TokenType.STRINGTYPE, TokenType.CONST)] = "hola"
         val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
-        val literalNode = LiteralNode("PRINT_ENV", TokenType.VALUE_IDENTIFIER_LITERAL, tokenPosition)
-        val tree = FunctionNode(TokenType.READ_ENV, literalNode, tokenPosition)
+        val literalNode = LiteralNode("PRINT_ENV", TokenType.VALUEIDENTIFIERLITERAL, tokenPosition)
+        val tree = FunctionNode(TokenType.READENV, literalNode, tokenPosition)
         val result = interpreter.interpret(tree, symbolTable)
         assertEquals("hola", result) // No Interpreter result because it's an internal test.
+    }
+
+    @Test
+    fun testReadInputCanBePreAssigned() {
+        symbolTable[Variable("input", TokenType.STRINGTYPE, TokenType.LET)] = "hola"
+        val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
+        val tree = FunctionNode(TokenType.READINPUT, LiteralNode("Write a number", TokenType.STRINGLITERAL, tokenPosition), tokenPosition)
+        val result = interpreter.interpret(tree, symbolTable)
+        assertEquals("hola", result)
     }
 
     @Test
@@ -163,7 +221,7 @@ class PrintScriptInterpreterTest {
         val string1 = "println('hola');"
         val string2 = "println('chau');"
         val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
-        val literalNode = LiteralNode("true", TokenType.BOOLEAN_LITERAL, tokenPosition)
+        val literalNode = LiteralNode("true", TokenType.BOOLEANLITERAL, tokenPosition)
         val thenBlock = CodeBlock(listOf(getTree(string1)), tokenPosition)
         val elseBlock = CodeBlock(listOf(getTree(string2)), tokenPosition)
         val ifNode = IfNode(literalNode, thenBlock, elseBlock, tokenPosition)
@@ -177,12 +235,24 @@ class PrintScriptInterpreterTest {
         val string1 = "println('hola');"
         val string2 = "println('chau');"
         val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
-        val literalNode = LiteralNode("false", TokenType.BOOLEAN_LITERAL, tokenPosition)
+        val literalNode = LiteralNode("false", TokenType.BOOLEANLITERAL, tokenPosition)
         val thenBlock = CodeBlock(listOf(getTree(string1)), tokenPosition)
         val elseBlock = CodeBlock(listOf(getTree(string2)), tokenPosition)
         val ifNode = IfNode(literalNode, thenBlock, elseBlock, tokenPosition)
         val result = interpreter.interpret(ifNode, symbolTable) as MultipleResults
         val printResult = result.values[0] as PrintResult
         assertEquals("chau", printResult.toPrint)
+    }
+
+    @Test
+    fun testIfNodeWithoutElseBlockWhenCOnditionIsFalse() {
+        val string1 = "println('hola');"
+        val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
+        val literalNode = LiteralNode("false", TokenType.BOOLEANLITERAL, tokenPosition)
+        val thenBlock = CodeBlock(listOf(getTree(string1)), tokenPosition)
+        val elseBlock = NilNode
+        val ifNode = IfNode(literalNode, thenBlock, elseBlock, tokenPosition)
+        val result: Result = interpreter.interpret(ifNode, symbolTable) as Result
+        assertEquals(Result(NilNode), result)
     }
 }
