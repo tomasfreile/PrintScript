@@ -5,7 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 class YamlReaderTest {
-    private val yamlReader = YamlReader()
+    private val yamlReader = YamlReader("1.0")
 
     @Test
     fun emptyFileShouldReturnDefaultValues() {
