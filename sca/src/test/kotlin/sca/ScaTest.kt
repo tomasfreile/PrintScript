@@ -10,13 +10,13 @@ import token.TokenType
 
 class ScaTest {
     private val noPrintExpressionsAndCamel =
-        StaticCodeAnalyzerImpl("src/test/resources/NoPrintExpressionsAndCamelCase.yaml")
+        StaticCodeAnalyzerImpl("src/test/resources/NoPrintExpressionsAndCamelCase.yaml", "1.0")
 
     private val printExpressionsAndSnake =
-        StaticCodeAnalyzerImpl("src/test/resources/PrintExpressionsAndSnakeCase.yaml")
+        StaticCodeAnalyzerImpl("src/test/resources/PrintExpressionsAndSnakeCase.yaml", "1.0")
 
     private val noReadInputExpressions =
-        StaticCodeAnalyzerImpl("src/test/resources/NoReadInputExpressions.yaml")
+        StaticCodeAnalyzerImpl("src/test/resources/NoReadInputExpressions.yaml", "1.1")
 
     @Test
     fun shouldReturnEmptyWhenPrintExpressionsAreDisabledAndNoPrintExpressionsArePresent() {

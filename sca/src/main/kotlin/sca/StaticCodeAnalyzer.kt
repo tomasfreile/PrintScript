@@ -6,8 +6,8 @@ interface StaticCodeAnalyzer {
     fun analyze(ast: AstNode): List<String>
 }
 
-class StaticCodeAnalyzerImpl(fileName: String) : StaticCodeAnalyzer {
-    private val rules = YamlReader().readRules(fileName)
+class StaticCodeAnalyzerImpl(fileName: String, version: String) : StaticCodeAnalyzer {
+    private val rules = YamlReader(version).readRules(fileName)
 
     override fun analyze(ast: AstNode): List<String> {
         val report = mutableListOf<String>()

@@ -148,7 +148,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     }
 
     private fun analyzeCode(reader: FileReader) {
-        val sca = StaticCodeAnalyzerImpl(requireNotNull(config?.path) { "Expected config file path for sca." })
+        val sca = StaticCodeAnalyzerImpl(requireNotNull(config?.path) { "Expected config file path for sca." }, version)
         val errorList = mutableListOf<String>()
         while (reader.canContinue()) {
             val statements = reader.getNextLine()
