@@ -42,7 +42,7 @@ class YamlReader {
 
         return listOfNotNull(
             if (yamlMap["enablePrintExpressions"] as? Boolean == false) PrintShouldNotContainExpressions() else null,
-            if (yamlMap["enableReadInputExpressions"] as? Boolean == false) ReadInputShouldNotContainExpressions() else null,
+            if (yamlMap["enableReadInputExpressions"] as? Boolean == false) ReadInputShouldNotBePartOfExpression() else null,
             yamlMap["caseConvention"]?.toString()?.uppercase(Locale.getDefault())?.let { convention ->
                 when (convention) {
                     "SNAKE_CASE" -> NamingConvention.SNAKE_CASE
