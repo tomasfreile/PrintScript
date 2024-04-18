@@ -69,7 +69,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     }
 
     private fun validateCode(reader: FileReader) {
-        while (reader.hasNextLine()) {
+        while (reader.canContinue()) {
             val statements = reader.getNextLine()
             for (statement in statements) {
                 try {
@@ -86,7 +86,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
         if (envFile != null) {
             insertEnvironmentVariablesInSymbolTable()
         }
-        while (reader.hasNextLine()) {
+        while (reader.canContinue()) {
             val statements = reader.getNextLine()
 
             var result: InterpreterResult
@@ -132,7 +132,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
             ) as PrintScriptFormatter
         val file = File(source.path)
         var text = ""
-        while (reader.hasNextLine()) {
+        while (reader.canContinue()) {
             val statements = reader.getNextLine()
             for (statement in statements) {
                 try {
@@ -150,7 +150,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
     private fun analyzeCode(reader: FileReader) {
         val sca = StaticCodeAnalyzerImpl(requireNotNull(config?.path) { "Expected config file path for sca." })
         val errorList = mutableListOf<String>()
-        while (reader.hasNextLine()) {
+        while (reader.canContinue()) {
             val statements = reader.getNextLine()
             for (statement in statements) {
                 try {

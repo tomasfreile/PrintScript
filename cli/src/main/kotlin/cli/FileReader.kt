@@ -23,7 +23,7 @@ class FileReader(
         val currenTokens = lineResult.first
         this.line++
 
-        if (!hasNextLine() && unassignedTokens.isNotEmpty() && currenTokens.isEmpty()) {
+        if (!canContinue() && unassignedTokens.isNotEmpty() && currenTokens.isEmpty()) {
             val lastStatement = unassignedTokens
             unassignedTokens = emptyList()
             return listOf(lastStatement)
@@ -32,7 +32,7 @@ class FileReader(
         return currenTokens
     }
 
-    fun hasNextLine(): Boolean {
+    fun canContinue(): Boolean {
         reader.mark(10000)
         val hasNextLine = reader.readLine() != null
         reader.reset()
@@ -46,16 +46,16 @@ class LineReader(
     private val lexer = LexerBuilder().build(version)
 
     fun read(
-        line: String,
-        lineIndex: Int,
-        prevTokens: List<Token> = emptyList(),
+        lineToLex: String,
+        lineNumber: Int,
+        leftoverTokens: List<Token> = emptyList(),
     ): Pair<List<List<Token>>, List<Token>> {
-        val lineTokens = lexer.lexLine(line, lineIndex)
-        val totalTokens = prevTokens + lineTokens
-        return getStatementsAndRemainingTokens(totalTokens)
+        val lineTokens = lexer.lexLine(lineToLex, lineNumber)
+        val totalTokens = leftoverTokens + lineTokens
+        return getLineStatementsAndLeftoverTokens(totalTokens)
     }
 
-    private fun getStatementsAndRemainingTokens(
+    private fun getLineStatementsAndLeftoverTokens(
         tokens: List<Token>,
         endCondition: EndCondition = SemicolonEndCondition(),
         statements: MutableList<List<Token>> = mutableListOf(),
@@ -72,7 +72,7 @@ class LineReader(
                 }
                 condition.isStatementEnd(token) -> {
                     currentStatement.add(token)
-                    if (condition is RightBraceEndCondition && thereAreTokensLeft(index, tokens) && nextTokenIsElseBlock(tokens, index)) {
+                    if (ifStatmentIsEndingAndElseStatementIsStarting(condition, index, tokens)) {
                         index++
                         continue
                     }
@@ -87,6 +87,12 @@ class LineReader(
         return Pair(statements, currentStatement)
     }
 
+    private fun ifStatmentIsEndingAndElseStatementIsStarting(
+        condition: EndCondition,
+        index: Int,
+        tokens: List<Token>,
+    ) = condition is RightBraceEndCondition && thereAreTokensLeft(index, tokens) && nextTokenIsElse(tokens, index)
+
     private fun thereAreTokensLeft(
         i: Int,
         tokens: List<Token>,
@@ -100,7 +106,7 @@ class LineReader(
         statements: MutableList<List<Token>>,
     ): Pair<List<List<Token>>, List<Token>> {
         currentStatement.add(token)
-        return getStatementsAndRemainingTokens(
+        return getLineStatementsAndLeftoverTokens(
             tokens.subList(index + 1, tokens.size),
             RightBraceEndCondition(),
             statements,
@@ -108,7 +114,7 @@ class LineReader(
         )
     }
 
-    private fun nextTokenIsElseBlock(
+    private fun nextTokenIsElse(
         tokens: List<Token>,
         index: Int,
     ) = tokens.getOrNull(index + 1)?.type == TokenType.ELSE
