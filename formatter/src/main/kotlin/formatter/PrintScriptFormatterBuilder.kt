@@ -12,6 +12,7 @@ import formatter.formatOperations.operators.VariableOperationNodeFormat
 import token.TokenType
 
 class PrintScriptFormatterBuilder : FormatterBuilder {
+    // revisa la versión que le pasaste y llama al metodo correspondiente
     override fun build(
         version: String,
         rulesPath: String,
@@ -23,6 +24,7 @@ class PrintScriptFormatterBuilder : FormatterBuilder {
         }
     }
 
+    // genera el formatter1.0 con sus reglas
     private fun formatter10(rulesPath: String): Formatter {
         val operatorList =
             listOf(
@@ -36,6 +38,7 @@ class PrintScriptFormatterBuilder : FormatterBuilder {
         return PrintScriptFormatter(rulesPath, operatorList)
     }
 
+    // genera el formatter1.1 con sus reglas
     private fun formatter11(rulesPath: String): Formatter {
         val operatorList =
             listOf(
@@ -52,6 +55,7 @@ class PrintScriptFormatterBuilder : FormatterBuilder {
         return PrintScriptFormatter(rulesPath, operatorList)
     }
 
+    // da un mapa de los tokens de tipo permitidos y su string asociado
     private fun getAllowedDeclarationTokens(version: String): Map<TokenType, String> {
         return when (version) {
             "1.0" -> mapOf(TokenType.LET to "let")
@@ -60,6 +64,7 @@ class PrintScriptFormatterBuilder : FormatterBuilder {
         }
     }
 
+    // da un mapa de los tokens de tipo permitidos y su string asociado
     private fun getAllowedValueTypes(version: String): Map<TokenType, String> {
         return when (version) {
             "1.0" -> mapOf(TokenType.NUMBERTYPE to "number", TokenType.STRINGTYPE to "string")

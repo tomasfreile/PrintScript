@@ -1,6 +1,7 @@
 package formatter.formatOperations.commons
 
 class HandleSpace {
+    // maneja que no haya espacios duplicados y que los espacios se asignen correctamente segun las reglas
     fun handleSpaces(
         tokenValue: String,
         spaceBefore: Boolean,
@@ -11,6 +12,7 @@ class HandleSpace {
         return handleAfterSpace(formattedBefore, spaceAfter)
     }
 
+    // maneja que los espacios anterior al token sean correctos
     private fun handleBeforeSpace(
         tokenValue: String,
         spaceBefore: Boolean,
@@ -28,6 +30,7 @@ class HandleSpace {
         }
     }
 
+    // maneja que los espacios despues del token sean correctos
     private fun handleAfterSpace(
         result: String,
         spaceAfter: Boolean,
