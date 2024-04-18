@@ -18,7 +18,27 @@ class IfNodeFormat : FormatOperation {
         val indentationAmount = formatter.getRules()["ifIndentation"] as Int
         val condition = formatter.format(node.condition)
         val thenBlock = applyIndentations(formatter.format(node.thenBlock), indentationAmount)
-        val elseBlock = applyIndentations(formatter.format(node.elseBlock), indentationAmount)
+        val elseBlock = formatter.format(node.elseBlock)
+        return if (elseBlock == "") {
+            formatIf(condition, thenBlock)
+        } else {
+            val indentedElseBlock = applyIndentations(elseBlock, indentationAmount)
+            formatIfElse(condition, thenBlock, indentedElseBlock)
+        }
+    }
+
+    private fun formatIf(
+        condition: String,
+        thenBlock: String,
+    ): String {
+        return "if ($condition) {\n$thenBlock\n}\n"
+    }
+
+    private fun formatIfElse(
+        condition: String,
+        thenBlock: String,
+        elseBlock: String,
+    ): String {
         return "if ($condition) {\n$thenBlock\n} else {\n$elseBlock\n}\n"
     }
 
