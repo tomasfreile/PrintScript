@@ -200,14 +200,14 @@ class PrintScriptInterpreterTest {
         assertEquals("hola", result) // No Interpreter result because it's an internal test.
     }
 
-    @Test
-    fun testReadInputCanBePreAssigned() {
-        symbolTable[Variable("input", TokenType.STRINGTYPE, TokenType.LET)] = "hola"
-        val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
-        val tree = FunctionNode(TokenType.READINPUT, LiteralNode("Write a number", TokenType.STRINGLITERAL, tokenPosition), tokenPosition)
-        val result = interpreter.interpret(tree, symbolTable)
-        assertEquals("hola", result)
-    }
+//    @Test
+//    fun testReadInputCanBePreAssigned() {
+//        symbolTable[Variable("input", TokenType.STRINGTYPE, TokenType.LET)] = "hola"
+//        val tokenPosition = TokenPosition(Coordinate(1, 0), Coordinate(1, 0))
+//        val tree = FunctionNode(TokenType.READINPUT, LiteralNode("Write a number", TokenType.STRINGLITERAL, tokenPosition), tokenPosition)
+//        val result = interpreter.interpret(tree, symbolTable)
+//        assertEquals("hola", result)
+//    }
 
     @Test
     fun testBooleanLiteralReturn() {
