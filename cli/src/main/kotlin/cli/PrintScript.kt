@@ -13,6 +13,7 @@ import interpreter.interpreter.PrintScriptInterpreter
 import interpreter.result.InterpreterResult
 import interpreter.result.MultipleResults
 import interpreter.result.PrintResult
+import interpreter.result.PromptResult
 import interpreter.result.Result
 import interpreter.variable.Variable
 import lexer.Lexer
@@ -121,7 +122,15 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
             is MultipleResults -> for (subResult in result.values) {
                 printResults(subResult)
             } // Run this function for multiple results.
+            is PromptResult -> {
+                printResults(result.printPrompt)
+                assignInputToVariable(result.variable)
+            }
         }
+    }
+
+    private fun assignInputToVariable(variable: Variable) {
+        symbolTable[variable] = readLine() ?: throw NullPointerException("User input is null.")
     }
 
     private fun formatCode(reader: FileReader) {
