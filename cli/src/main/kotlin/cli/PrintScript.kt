@@ -18,8 +18,7 @@ import interpreter.variable.Variable
 import lexer.Lexer
 import lexer.factory.LexerBuilder
 import parser.parser.Parser
-import parser.parserBuilder.printScript10.PrintScript10ParserBuilder
-import parser.parserBuilder.printScript11.PrintScript11ParserBuilder
+import parser.parserBuilder.PrintScriptParserBuilder
 import sca.StaticCodeAnalyzerImpl
 import token.TokenType
 import java.io.File
@@ -44,7 +43,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
 
     override fun run() {
         lexer = LexerBuilder().build(version)
-        parser = buildParser(version)
+        parser = PrintScriptParserBuilder().build(version)
         interpreter = InterpreterBuilder().build(version)
 
         val reader = FileReader(source.inputStream(), version)
@@ -57,14 +56,6 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
             }
         } catch (ex: Exception) {
             println(ex.message)
-        }
-    }
-
-    private fun buildParser(version: String): Parser {
-        return when (version) {
-            "1.0" -> PrintScript10ParserBuilder().build()
-            "1.1" -> PrintScript11ParserBuilder().build()
-            else -> throw IllegalArgumentException("Invalid version $version. Supported versions are 1.0 and 1.1")
         }
     }
 
@@ -86,6 +77,7 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
         if (envFile != null) {
             insertEnvironmentVariablesInSymbolTable()
         }
+        symbolTable.put(Variable("input", TokenType.STRINGTYPE, TokenType.CONST), "hola")
         while (reader.canContinue()) {
             val statements = reader.getNextLine()
 

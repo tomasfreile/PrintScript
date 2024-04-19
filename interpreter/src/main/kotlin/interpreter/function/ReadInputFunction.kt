@@ -2,6 +2,9 @@ package interpreter.function
 
 import ast.FunctionNode
 import interpreter.interpreter.PrintScriptInterpreter
+import interpreter.result.MultipleResults
+import interpreter.result.PrintResult
+import interpreter.result.Result
 import interpreter.variable.Variable
 import token.TokenType
 
@@ -13,8 +16,11 @@ class ReadInputFunction : Function {
         node: FunctionNode,
         symbolTable: MutableMap<Variable, Any>,
     ): Any {
+        val expression = interpreter.interpret(node.expression, symbolTable)
         val input = readLine() ?: symbolTable[getVariable(symbolTable, "input")] ?: throw NullPointerException("No input")
-        return input
+        return MultipleResults(
+            listOf(Result(input), PrintResult(expression as String)),
+        )
     }
 
     override fun canHandle(nodeType: TokenType): Boolean {
