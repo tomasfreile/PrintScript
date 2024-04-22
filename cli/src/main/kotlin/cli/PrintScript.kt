@@ -1,5 +1,6 @@
 package cli
 
+import ast.AstNode
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.validate
@@ -13,6 +14,7 @@ import interpreter.interpreter.PrintScriptInterpreter
 import interpreter.result.InterpreterResult
 import interpreter.result.MultipleResults
 import interpreter.result.PrintResult
+import interpreter.result.PromptResult
 import interpreter.result.Result
 import interpreter.variable.Variable
 import lexer.Lexer
@@ -20,6 +22,7 @@ import lexer.factory.LexerBuilder
 import parser.parser.Parser
 import parser.parserBuilder.PrintScriptParserBuilder
 import sca.StaticCodeAnalyzerImpl
+import token.Token
 import token.TokenType
 import java.io.File
 
@@ -84,7 +87,12 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
             var result: InterpreterResult
             for (statement in statements) {
                 try {
-                    val ast = parser.createAST(statement)
+                    var ast: AstNode = parser.createAST(statement)
+                    if (statementContainsReadInput(statement)) {
+                        val index = getReadInputTokenIndex(statement)
+                        val input = getInput(statement, index)
+                        ast = createNewAst(statement, input, index)
+                    }
                     result = interpreter.interpret(ast, symbolTable) as InterpreterResult
                     printResults(result)
                 } catch (e: Exception) {
@@ -93,6 +101,43 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
                 }
             }
         }
+    }
+
+    private fun createNewAst(
+        statement: List<Token>,
+        input: String,
+        index: Int,
+    ): AstNode {
+        val mutableStatement = statement.toMutableList()
+        val size = mutableStatement.size - 1
+        for (i in index + 1..<size) {
+            mutableStatement.removeAt(index + 1)
+        }
+        mutableStatement[index] = lexer.lex(input)[0]
+        return parser.createAST(mutableStatement)
+    }
+
+    private fun getInput(
+        statement: List<Token>,
+        index: Int,
+    ): String {
+        val promptToken = statement[index + 2]
+        println(promptToken.value)
+        val input = readLine() ?: throw NullPointerException("Input form cli is null")
+        return input
+    }
+
+    private fun statementContainsReadInput(statement: List<Token>): Boolean {
+        return getReadInputTokenIndex(statement) != -1
+    }
+
+    private fun getReadInputTokenIndex(statement: List<Token>): Int {
+        for ((index, token) in statement.withIndex()) {
+            if (token.type == TokenType.READINPUT) {
+                return index
+            }
+        }
+        return -1
     }
 
     private fun insertEnvironmentVariablesInSymbolTable() {
@@ -113,6 +158,9 @@ class PrintScript : CliktCommand(help = "PrintScript <Version> <Operation> <Sour
             is MultipleResults -> for (subResult in result.values) {
                 printResults(subResult)
             } // Run this function for multiple results.
+            is PromptResult -> {
+                printResults(result.printPrompt)
+            }
         }
     }
 
